@@ -34,18 +34,10 @@ class HomeFilePageView extends BasePageView<HomeFilePageCallback> {
       } else if (homeFilePageController.hasPermission.isFalse) {
         return NoDataView(
           text: S.current.noPermissionGrant,
-          button: S.current.toAuthorize,
-          onClick: () {
-            pageCallback.onClickImport();
-          },
         );
       } else if (length == 0) {
         return NoDataView(
-          text: isAndroid ? S.current.noDataAndroid : S.current.noDataIOS,
-          button: S.current.toAuthorize,
-          onClick: () {
-            pageCallback.onClickImport();
-          },
+          text:  S.current.noDataAndroid,
         );
       }
       return VideoGroupListView(
