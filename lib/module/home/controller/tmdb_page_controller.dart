@@ -1,0 +1,10 @@
+/*
+* 作者 Ren
+* 时间  2023/8/31 07:23
+*/
+class TMDBPageController {
+  final TMDB_KEY = '8e8c2612011c6cc6268bd1c17398b738';
+  final TMDB_TOKEN =
+      'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZThjMjYxMjAxMWM2Y2M2MjY4YmQxYzE3Mzk4YjczOCIsInN1YiI6IjY0ZWZjY2Y4OTdhNGU2MDBjNDg2NThiMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ctpO_m79ym3dazsOpcT1cN62ZieD9JD01CI5_89loGE';
+
+}
