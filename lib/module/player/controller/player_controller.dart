@@ -47,7 +47,6 @@ class PlayerController extends GetxController {
   final isFullScreen = false.obs;
 
   final _mediaInfoHelper = MediaInfoHelper.get;
-  // final _mediaInfoDao = MediaInfoDao();
 
   ChewieController? chewieController;
   double? moveStartX;
@@ -138,11 +137,7 @@ class PlayerController extends GetxController {
 
   Future<void> togglePanel() async {
     isShowControlPanel.value = !isShowControlPanel.value;
-    if (isShowControlPanel.value) {
-      startDelayCloseControlPanel();
-    } else {
-      cancelDelayCloseControlPanel();
-    }
+    checkControlPanelStatus();
   }
 
   Future<void> setPlaySpeed(double speed) async {
@@ -153,6 +148,7 @@ class PlayerController extends GetxController {
   Future<void> onMoveStart(double dx) async {
     moveStartX = dx;
     isShowControlPanel.value = true;
+    checkControlPanelStatus();
   }
 
   Future<void> onMove(double dx) async {
@@ -254,6 +250,14 @@ class PlayerController extends GetxController {
   void cancelDelayCloseControlPanel() {
     _controlPanelTimer?.cancel();
     _controlPanelTimer = null;
+  }
+
+  void checkControlPanelStatus(){
+    if (isShowControlPanel.value) {
+      startDelayCloseControlPanel();
+    } else {
+      cancelDelayCloseControlPanel();
+    }
   }
 
   ///

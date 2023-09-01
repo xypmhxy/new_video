@@ -24,11 +24,6 @@ class _PlayerControlPanelState extends State<PlayerControlPanel> {
   late PlayerController playerController = widget.playerController;
 
   @override
-  void didUpdateWidget(covariant PlayerControlPanel oldWidget) {
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
