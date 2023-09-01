@@ -8,8 +8,8 @@ import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/home/page/home_file_page.dart';
 import 'package:free_tube_player/module/home/page/home_folder_page.dart';
 
-class AndroidHomePageView extends StatelessWidget {
-  const AndroidHomePageView({super.key});
+class VideoHomePageView extends StatelessWidget {
+  const VideoHomePageView({super.key});
 
   @override
   Widget build(BuildContext context) {

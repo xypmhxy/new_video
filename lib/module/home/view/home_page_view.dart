@@ -9,7 +9,7 @@ import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/home/callback/home_page_callback.dart';
 import 'package:free_tube_player/module/home/controller/home_page_controller.dart';
-import 'package:free_tube_player/module/home/page/android_home_page.dart';
+import 'package:free_tube_player/module/home/page/video_home_page.dart';
 import 'package:free_tube_player/widget/base_page_view.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
@@ -79,7 +79,7 @@ class HomePageView extends BasePageView<HomePageCallback> {
   Widget _body() {
     return PageView(
       controller: homePageController.pageController,
-      children: const [AndroidHomePage(), AndroidHomePage()],
+      children: const [VideoHomePage(), VideoHomePage()],
       onPageChanged: (index) {
         pageCallback.onPageChanged(index);
       },

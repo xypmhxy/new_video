@@ -14,6 +14,7 @@ import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/helper/clock_helper.dart';
 import 'package:free_tube_player/helper/network_change_helper.dart';
 import 'package:free_tube_player/module/home/page/home_page.dart';
+import 'package:free_tube_player/module/home/page/ios_home_page.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/permission_utils.dart';
 import 'package:free_tube_player/utils/x_screen.dart';

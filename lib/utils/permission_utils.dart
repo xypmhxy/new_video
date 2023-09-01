@@ -4,6 +4,7 @@
 */
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/channel/default_method_channel.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -13,7 +14,10 @@ class PermissionUtils {
     if (androidSDKInt >= 33) {
       return Permission.videos.isGranted;
     }
-    return Permission.storage.isGranted;
+    if (isAndroid) {
+      return Permission.storage.isGranted;
+    }
+    return Permission.photos.isGranted;
   }
 
   static Future<PermissionStatus> requestVideoStorage() async {
@@ -21,7 +25,10 @@ class PermissionUtils {
     if (androidSDKInt >= 33) {
       return Permission.videos.request();
     }
-    return Permission.storage.request();
+    if (isAndroid) {
+      return Permission.storage.request();
+    }
+    return Permission.photos.request();
   }
 
   static Future<bool> hasImageStorage() async {
