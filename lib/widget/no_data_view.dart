@@ -28,6 +28,7 @@ class NoDataView extends StatelessWidget {
           assetName: Assets.svgNoData,
           size: 236,
         ),
+        const Height(16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: TextView.primary(text, fontSize: 16, textAlign: TextAlign.center, fontWeight: FontWeight.w500),

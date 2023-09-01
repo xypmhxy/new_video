@@ -33,20 +33,22 @@ class HomeFolderPageView extends BasePageView<HomeFilePageCallback> {
               child: SizedBox(width: 48, height: 48, child: CircularProgressIndicator()),
             ));
       } else if (homeFolderPageController.hasPermission.isFalse) {
-        return NoDataView(
-          text: S.current.noPermissionGrant,
-          button: S.current.toAuthorize,
-          onClick: () {
-            pageCallback.onClickImport();
-          },
+        return Container(
+          margin: const EdgeInsets.only(top: 64),
+          child: NoDataView(
+            text: S.current.noPermissionGrant,
+            button: S.current.toAuthorize,
+            onClick: () {
+              pageCallback.onClickToAuthorize();
+            },
+          ),
         );
       } else if (length == 0) {
-        return NoDataView(
-          text: isAndroid ? S.current.noDataAndroid : S.current.noDataIOS,
-          button: S.current.toAuthorize,
-          onClick: () {
-            pageCallback.onClickImport();
-          },
+        return Container(
+          margin: const EdgeInsets.only(top: 64),
+          child: NoDataView(
+            text: S.current.noDataAndroid,
+          ),
         );
       }
       return VideoGroupListView(

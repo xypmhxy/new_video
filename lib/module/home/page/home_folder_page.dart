@@ -85,7 +85,7 @@ class _HomeFolderPageState extends State<HomeFolderPage>
   }
 
   @override
-  void onClickImport() {
+  void onClickToAuthorize() {
     _homeFolderPageController.openSetting();
   }
 }

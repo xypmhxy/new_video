@@ -1,28 +1,36 @@
-import 'package:app_settings/app_settings.dart';
+import 'dart:async';
+
 import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/video_group.dart';
-import 'package:free_tube_player/db/dao/media_info_dao.dart';
-import 'package:free_tube_player/extension/date_time_extension.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
-import 'package:free_tube_player/utils/date_utils.dart';
-import 'package:free_tube_player/utils/media_info_utils.dart';
+import 'package:free_tube_player/module/home/controller/android_home_page_controller.dart';
 import 'package:free_tube_player/utils/permission_utils.dart';
 import 'package:free_tube_player/utils/toast_utils.dart';
-import 'package:free_tube_player/utils/video_utils.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:photo_gallery/photo_gallery.dart';
 
 class BaseAndroidVideoController extends BaseController implements OnMediaInfoChangedListener {
   static const tag = 'HomeFilePageController';
   final videoGroupList = RxList<VideoGroup>();
   final _mediaInfoHelper = MediaInfoHelper.get;
   final hasPermission = false.obs;
+  StreamSubscription? _streamSubscription;
+  AndroidHomePageController? _androidHomePageController;
 
   BaseAndroidVideoController() {
     _mediaInfoHelper.addWatcher(this);
+    _androidHomePageController = Get.find<AndroidHomePageController>();
+    _streamSubscription = _androidHomePageController?.stream.listen((event) {
+      if (hasPermission.isFalse) checkPermission();
+    });
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _streamSubscription?.cancel();
   }
 
   Future<void> checkPermission() async {
@@ -33,6 +41,7 @@ class BaseAndroidVideoController extends BaseController implements OnMediaInfoCh
     } else {
       final permissionStatus = await PermissionUtils.requestVideoStorage();
       if (permissionStatus.isGranted) {
+        this.hasPermission.value = true;
         queryVideos();
       } else {
         ToastUtils.show(S.current.noPermissionToast);
@@ -40,8 +49,7 @@ class BaseAndroidVideoController extends BaseController implements OnMediaInfoCh
     }
   }
 
-  Future<void> queryVideos() async {
-  }
+  Future<void> queryVideos() async {}
 
   Future<void> rename(MediaInfo mediaInfo, String newName) async {
     videoGroupList.refresh();
@@ -63,7 +71,7 @@ class BaseAndroidVideoController extends BaseController implements OnMediaInfoCh
   }
 
   Future<void> openSetting() async {
-    AppSettings.openDateSettings();
+    _androidHomePageController?.toAuthorize();
   }
 
   @override

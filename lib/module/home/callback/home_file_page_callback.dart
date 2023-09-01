@@ -12,5 +12,5 @@ abstract class HomeFilePageCallback {
 
   void onClickAll(VideoGroup videoGroup);
 
-  void onClickImport();
+  void onClickToAuthorize();
 }

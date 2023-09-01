@@ -28,6 +28,7 @@ class HomeFolderPageController extends BaseAndroidVideoController {
         MediaInfo? mediaInfo = await _mediaInfoDao.queryByAssetId(medium.id);
         if (mediaInfo == null) {
           mediaInfo = await MediaInfoUtils.createMediaInfoByMedium(medium);
+          if (mediaInfo == null) continue;
           await _mediaInfoDao.insert(mediaInfo);
         }
         if (mediaInfo.isDelete) continue;

@@ -32,12 +32,22 @@ class HomeFilePageView extends BasePageView<HomeFilePageCallback> {
               child: SizedBox(width: 48, height: 48, child: CircularProgressIndicator()),
             ));
       } else if (homeFilePageController.hasPermission.isFalse) {
-        return NoDataView(
-          text: S.current.noPermissionGrant,
+        return Container(
+          margin: const EdgeInsets.only(top: 64),
+          child: NoDataView(
+            text: S.current.noPermissionGrant,
+            button: S.current.toAuthorize,
+            onClick: () {
+              pageCallback.onClickToAuthorize();
+            },
+          ),
         );
       } else if (length == 0) {
-        return NoDataView(
-          text:  S.current.noDataAndroid,
+        return Container(
+          margin: const EdgeInsets.only(top: 64),
+          child: NoDataView(
+            text: S.current.noDataAndroid,
+          ),
         );
       }
       return VideoGroupListView(

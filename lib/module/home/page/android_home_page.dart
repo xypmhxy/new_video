@@ -4,7 +4,9 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/module/home/controller/android_home_page_controller.dart';
 import 'package:free_tube_player/module/home/view/android_home_page_view.dart';
+import 'package:get/get.dart';
 
 class AndroidHomePage extends StatefulWidget {
   const AndroidHomePage({super.key});
@@ -14,6 +16,8 @@ class AndroidHomePage extends StatefulWidget {
 }
 
 class _AndroidHomePageState extends State<AndroidHomePage> with AutomaticKeepAliveClientMixin {
+  final _androidHomePageController = Get.put(AndroidHomePageController());
+
   @override
   bool get wantKeepAlive => true;
 

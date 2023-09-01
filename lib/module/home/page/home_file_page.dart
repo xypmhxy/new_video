@@ -23,7 +23,7 @@ class HomeFilePage extends StatefulWidget {
 }
 
 class _HomeFilePageState extends State<HomeFilePage>
-    with WidgetsBindingObserver, AutomaticKeepAliveClientMixin
+    with AutomaticKeepAliveClientMixin
     implements HomeFilePageCallback {
   final _homeFilePageController = HomeFilePageController();
   final _impMoreAction = ImpMoreAction();
@@ -31,23 +31,8 @@ class _HomeFilePageState extends State<HomeFilePage>
   @override
   void initState() {
     _homeFilePageController.checkPermission();
-    WidgetsBinding.instance.addObserver(this);
+    PermissionUtils.requestIDFA();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (isIOS){
-      _homeFilePageController.checkPermission();
-      PermissionUtils.requestIDFA();
-    }
-    super.didChangeAppLifecycleState(state);
   }
 
   @override
@@ -89,7 +74,7 @@ class _HomeFilePageState extends State<HomeFilePage>
   }
 
   @override
-  void onClickImport() {
+  void onClickToAuthorize() {
     _homeFilePageController.openSetting();
   }
 }

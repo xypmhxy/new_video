@@ -35,7 +35,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: isDebug ? 3 : 6), value: 0);
+        AnimationController(vsync: this, duration: const Duration(seconds: isDebug ? 1 : 3), value: 0);
     _animationController.forward();
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -57,7 +57,6 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     _networkChangeSubs = NetworkChangeHelper.get.watchNetworkChange.listen((event) {
       ClockHelper.instance.requestClock();
     });
-    Future.delayed(const Duration(seconds: 3)).then((value) => PermissionUtils.requestIDFA());
   }
 
   @override

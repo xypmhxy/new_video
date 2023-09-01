@@ -69,6 +69,6 @@ class _HistoryPageState extends State<HistoryPage> implements HistoryPageCallbac
   }
 
   @override
-  void onClickImport() {
+  void onClickToAuthorize() {
   }
 }
