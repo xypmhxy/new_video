@@ -6,8 +6,8 @@
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppUtils {
-  static String appName = 'MeTube';
-  static String packageName = "com.nl.free.tube";
+  static String appName = 'New Video';
+  static String packageName = "com.nn.nn.bb";
   static String version = "";
   static String buildNumber = "";
 

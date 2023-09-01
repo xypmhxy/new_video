@@ -5,8 +5,10 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/home/controller/home_file_page_controller.dart';
+import 'package:free_tube_player/module/home/controller/home_folder_page_controller.dart';
 import 'package:free_tube_player/module/home/page/home_file_page.dart';
-import 'package:free_tube_player/module/home/page/home_folder_page.dart';
+import 'package:get/get.dart';
 
 class VideoHomePageView extends StatelessWidget {
   const VideoHomePageView({super.key});
@@ -40,6 +42,15 @@ class VideoHomePageView extends StatelessWidget {
   }
 
   Widget _tabView() {
-    return const Expanded(child: TabBarView(children: [HomeFilePage(), HomeFolderPage()]));
+    return Expanded(
+        child: TabBarView(children: [
+      HomeFilePage(
+        videoController: Get.find<HomeFilePageController>(),
+      ),
+      HomeFilePage(
+        videoController: Get.find<HomeFolderPageController>(),
+      ),
+      // HomeFolderPage()
+    ]));
   }
 }

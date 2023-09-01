@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/video_group.dart';
@@ -11,7 +12,7 @@ import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class BaseAndroidVideoController extends BaseController implements OnMediaInfoChangedListener {
+class BaseVideoController extends BaseController implements OnMediaInfoChangedListener {
   static const tag = 'HomeFilePageController';
   final videoGroupList = RxList<VideoGroup>();
   final _mediaInfoHelper = MediaInfoHelper.get;
@@ -19,7 +20,7 @@ class BaseAndroidVideoController extends BaseController implements OnMediaInfoCh
   StreamSubscription? _streamSubscription;
   AndroidHomePageController? _androidHomePageController;
 
-  BaseAndroidVideoController() {
+  BaseVideoController() {
     _mediaInfoHelper.addWatcher(this);
     _androidHomePageController = Get.find<AndroidHomePageController>();
     _streamSubscription = _androidHomePageController?.stream.listen((event) {
@@ -46,6 +47,9 @@ class BaseAndroidVideoController extends BaseController implements OnMediaInfoCh
       } else {
         ToastUtils.show(S.current.noPermissionToast);
       }
+    }
+    if (isIOS) {
+      PermissionUtils.requestIDFA();
     }
   }
 

@@ -8,13 +8,13 @@ import 'package:free_tube_player/db/dao/media_info_dao.dart';
 import 'package:free_tube_player/extension/date_time_extension.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
-import 'package:free_tube_player/module/home/controller/base_android_video_controller.dart';
+import 'package:free_tube_player/module/home/controller/base_video_controller.dart';
 import 'package:free_tube_player/utils/date_utils.dart';
 import 'package:free_tube_player/utils/media_info_utils.dart';
 import 'package:free_tube_player/utils/video_utils.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 
-class HomeFilePageController extends BaseAndroidVideoController implements OnMediaInfoChangedListener {
+class HomeFilePageController extends BaseVideoController implements OnMediaInfoChangedListener {
   final _mediaInfoDao = MediaInfoDao();
 
   @override
