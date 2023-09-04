@@ -1,4 +1,5 @@
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/extension/duration_extension.dart';
 
 class TMDBInfo {
   int tmdbId = 0;
@@ -14,9 +15,19 @@ class TMDBInfo {
   double voteAverage = 0.0;
   int voteCount = 0;
 
+  //detail api
+  List<String> genres = [];
+  int runTime = 0;
+
+  //cast
+  List<Cast> casts = [];
+
+  TMDBInfo();
+
   TMDBInfo.fromMap(Map map) {
     tmdbId = map['id'] ?? 0;
-    title = map['title'] ?? MediaInfo.defaultTitle;
+    final titleTemp = map['title'];
+    title = titleTemp ?? map['name'] ?? MediaInfo.defaultTitle;
     originalTitle = map['original_title'] ?? MediaInfo.defaultTitle;
     overview = map['overview'] ?? '';
     backdropPath = map['backdrop_path'] ?? '';
@@ -28,4 +39,13 @@ class TMDBInfo {
     voteAverage = map['vote_average'] ?? 0.0;
     voteCount = map['vote_count'] ?? 0;
   }
+
+  String get score => voteAverage.toStringAsFixed(1);
+
+  String get moveDuration => Duration(minutes: runTime).toSimpleString();
+}
+
+class Cast{
+  String name = '';
+  String profilePath = '';
 }

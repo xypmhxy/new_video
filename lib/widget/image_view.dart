@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/widget/image_placeholder_view.dart';
 
 class AutoImageView extends StatelessWidget {
   final String? imageUrl;
@@ -87,6 +88,7 @@ class ImageView extends StatelessWidget {
       double? height,
       BoxFit? fit,
       Map<String, String>? httpHeaders,
+      double? placeholderIconSize,
       LoadingErrorWidgetBuilder? errorBuilder,
       PlaceholderWidgetBuilder? placeholderBuilder}) = _NetworkImageView;
 
@@ -154,6 +156,7 @@ class _NetworkImageView extends ImageView {
   final double? size;
   final double? width;
   final double? height;
+  final double? placeholderIconSize;
   final BoxFit? fit;
   final Map<String, String>? httpHeaders;
   final LoadingErrorWidgetBuilder? errorBuilder;
@@ -164,6 +167,7 @@ class _NetworkImageView extends ImageView {
       this.size,
       this.width,
       this.height,
+      this.placeholderIconSize,
       this.fit,
       this.httpHeaders,
       this.errorBuilder,
@@ -175,7 +179,13 @@ class _NetworkImageView extends ImageView {
           width: size ?? width,
           height: size ?? height,
           fit: fit ?? BoxFit.cover,
-          errorWidget: errorBuilder,
-          placeholder: placeholderBuilder,
+          errorWidget: errorBuilder ??
+              (_, __, ___) {
+                return ImagePlaceHolderView(iconSize: placeholderIconSize ?? 48.0);
+              },
+          placeholder: placeholderBuilder ??
+              (_, __) {
+                return ImagePlaceHolderView(iconSize: placeholderIconSize ?? 48.0);
+              },
         ));
 }

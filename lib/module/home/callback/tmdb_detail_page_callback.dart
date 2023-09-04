@@ -4,10 +4,7 @@
 */
 import 'package:free_tube_player/bean/tmdb/tmdb_info.dart';
 
-abstract class TMDBPageCallback {
-  void refreshTrending();
-
-  void loadMoreTrending();
-
+abstract class TMDBDetailPageCallback{
+  void onClickBack();
   void onClickItem(TMDBInfo tmdbInfo);
 }

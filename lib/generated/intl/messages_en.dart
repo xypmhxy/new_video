@@ -47,11 +47,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "noDataIOS": MessageLookupByLibrary.simpleMessage(
             "No song found, please check permission"),
         "noPermissionGrant": MessageLookupByLibrary.simpleMessage(
-            "To grant permission, please grant manually"),
+            "To grant permission, please grant manually then restart"),
         "noPermissionToast": MessageLookupByLibrary.simpleMessage(
             "Grant permissions to get video files in your phone"),
+        "noRecommended": MessageLookupByLibrary.simpleMessage("No recommended"),
         "paramsVideos": m0,
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
+        "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "saveToGalleryFailed":
             MessageLookupByLibrary.simpleMessage("Save to gallery failed"),

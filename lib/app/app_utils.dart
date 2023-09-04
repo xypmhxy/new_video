@@ -9,7 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 class AppUtils {
   static String appName = 'New Video';
-  static String packageName = "com.nn.nn.bb";
+  static String packageName = "com.nn.nn.nn";
   static String version = "";
   static String buildNumber = "";
   static String countryCode = "us";
@@ -27,6 +27,7 @@ class AppUtils {
     countryCode = countryCode.toLowerCase();
 
     language = systemLocale.languageCode;
+    language = language.contains('zh') ? 'en' : language;
   }
 
   static String get privacyUrl => 'https://sites.google.com/view/freetuber-privacy/';

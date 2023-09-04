@@ -16,6 +16,7 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   XScreen.portrait();
+  XScreen.statusBarContentColor(isWhite: true);
   await SPUtils.init();
   try {
     FirebaseHelper.get.initFirebase();

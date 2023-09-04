@@ -8,6 +8,7 @@ class Assets {
   static const String fontsCabinSemiBold = 'assets/fonts/Cabin-SemiBold.ttf';
   static const String imagesCorrect = 'images/correct.png';
   static const String imagesError = 'images/error.png';
+  static const String imagesImagePlaceholder360 = 'images/image_placeholder_360.png';
   static const String imagesSplashAppIcon = 'images/splash_app_icon.png';
   static const String imagesWarning = 'images/warning.png';
   static const String svgDelete = 'assets/svg/delete.svg';

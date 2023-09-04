@@ -30,5 +30,8 @@
   "noPermissionGrant": "To grant permission, please grant manually then restart",
   "noDataAndroid": "No song found",
   "noDataIOS": "No song found, please check permission",
-  "toAuthorize": "To authorize"
+  "toAuthorize": "To authorize",
+  "recommended": "Recommended",
+  "noRecommended": "No recommended"
+
 }

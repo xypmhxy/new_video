@@ -330,10 +330,10 @@ class S {
     );
   }
 
-  /// `To grant permission, please grant manually`
+  /// `To grant permission, please grant manually then restart`
   String get noPermissionGrant {
     return Intl.message(
-      'To grant permission, please grant manually',
+      'To grant permission, please grant manually then restart',
       name: 'noPermissionGrant',
       desc: '',
       args: [],
@@ -365,6 +365,26 @@ class S {
     return Intl.message(
       'To authorize',
       name: 'toAuthorize',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recommended`
+  String get recommended {
+    return Intl.message(
+      'Recommended',
+      name: 'recommended',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No recommended`
+  String get noRecommended {
+    return Intl.message(
+      'No recommended',
+      name: 'noRecommended',
       desc: '',
       args: [],
     );

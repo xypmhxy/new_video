@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,5 +25,15 @@ class PageNavigation {
 
   static closeAndReturnData<T>({T? result}) {
     Get.back(result: result);
+  }
+
+  static Future<T?>? startSamePage<T>(Widget newPage) {
+    return navigator?.push(
+      MaterialPageRoute(
+        builder: (_) {
+          return newPage;
+        },
+      ),
+    );
   }
 }

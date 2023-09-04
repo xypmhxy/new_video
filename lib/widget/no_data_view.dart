@@ -13,20 +13,21 @@ import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 
 class NoDataView extends StatelessWidget {
+  final double? iconSize;
   final String text;
   final String? button;
   final VoidCallback? onClick;
 
-  const NoDataView({super.key, required this.text, this.button, this.onClick});
+  const NoDataView({super.key, required this.text, this.iconSize, this.button, this.onClick});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SVGView(
+        SVGView(
           assetName: Assets.svgNoData,
-          size: 236,
+          size: iconSize ?? 236,
         ),
         const Height(16),
         Padding(
