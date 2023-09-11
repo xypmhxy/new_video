@@ -16,10 +16,10 @@ import 'package:get/get.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   XScreen.portrait();
-  XScreen.statusBarContentColor(isWhite: true);
   await SPUtils.init();
+  XScreen.statusBarContentColor(isWhite: AppThemeController.getThemeMode() == ThemeMode.light);
   try {
-    FirebaseHelper.get.initFirebase();
+    await FirebaseHelper.get.initFirebase();
   } catch (_) {}
   runApp(const MyApp());
 }

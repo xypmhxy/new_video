@@ -6,14 +6,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/helper/ad_manager.dart';
 import 'package:free_tube_player/app/app_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
+import 'package:free_tube_player/blindness/blindness_helper.dart';
 import 'package:free_tube_player/db/database_manager.dart';
 import 'package:free_tube_player/generated/assets.dart';
-import 'package:free_tube_player/helper/clock_helper.dart';
 import 'package:free_tube_player/helper/network_change_helper.dart';
 import 'package:free_tube_player/module/home/page/home_page.dart';
+import 'package:free_tube_player/module/userHome/page/user_home_tab_page.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:free_tube_player/widget/divider.dart';
@@ -33,35 +35,49 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(seconds: isDebug ? 1 : 3), value: 0);
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 8), value: 0);
     _animationController.forward();
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        PageNavigation.startNewPageAndCloseAll(const HomePage());
-      }
-    });
     initImportant();
     super.initState();
-  }
-
-  Future<void> initImportant() async {
-    await AppUtils.initAppInfo();
-    initOther();
-  }
-
-  Future<void> initOther() async {
-    DatabaseManager.get.setup().whenComplete(() {});
-    ClockHelper.instance.requestClock();
-    _networkChangeSubs = NetworkChangeHelper.get.watchNetworkChange.listen((event) {
-      ClockHelper.instance.requestClock();
-    });
   }
 
   @override
   void dispose() {
     _networkChangeSubs?.cancel();
+    _animationController.stop();
+    _animationController.dispose();
     super.dispose();
+  }
+
+  Future<void> initImportant() async {
+    await AppUtils.initAppInfo();
+    await AppUtils.onAppLaunch();
+    initOther();
+  }
+
+  Future<void> initOther() async {
+    DatabaseManager.get.setup().whenComplete(() {});
+    AppUtils.queryNetworkInfo();
+    BlindnessHelper.instance.requestClock();
+    _networkChangeSubs = NetworkChangeHelper.get.watchNetworkChange.listen((event) {
+      BlindnessHelper.instance.requestClock();
+    });
+    NetworkChangeHelper.get.initListener();
+    ADManager.instance.updateConfig();
+    ADManager.instance.startWatchConfig();
+    ADManager.instance.initADMob();
+    startLoadAD();
+    serverConfig.fetchConfig();
+  }
+
+  Future<void> startLoadAD() async {
+    final openADFuture = ADManager.instance.loadOpenAD();
+    ADManager.instance.loadPlayAD();
+    ADManager.instance.loadSettingRewardAD();
+    await Future.any([openADFuture, Future.delayed(const Duration(seconds: 8))]);
+    await _animationController.animateTo(1.0, duration: const Duration(milliseconds: 500));
+    await ADManager.instance.tryShowOpenAD();
+    PageNavigation.startNewPageAndCloseAll(isUserMode ? const UserHomeTabPage() : const HomePage());
   }
 
   @override

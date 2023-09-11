@@ -68,7 +68,7 @@ class _PlayerNormalControlPanelState extends State<PlayerNormalControlPanel> {
         margin: EdgeInsets.only(top: XScreen.getStatusBarH(context) + 15),
         child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: screenWidth / 2.5),
-            child: TextView.primary(playerController.mediaInfo?.title ?? '',
+            child: TextView.primary(playerController.nowPlayMedia?.title ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 height: 1.1,

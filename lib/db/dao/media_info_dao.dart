@@ -21,6 +21,10 @@ class MediaInfoDao {
     return _isar.mediaInfos.filter().identifyEqualTo(identify).findFirst();
   }
 
+  Future<MediaInfo?> queryYoutubeId(String youtubeId) {
+    return _isar.mediaInfos.filter().youtubeIdEqualTo(youtubeId).findFirst();
+  }
+
   Future<List<MediaInfo>> queryAllPlayHistory() {
     return _isar.mediaInfos.filter().playHistoryIsNotNull().findAll();
   }

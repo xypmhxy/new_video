@@ -3,9 +3,11 @@
 * 时间  2023/8/12 08:36
 */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/helper/ad_manager.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/base/base_controller.dart';
@@ -70,7 +72,12 @@ class EditPageController extends BaseController {
       showToast("Error on cover exportation initialization.");
       return;
     }
-
+    final awaitReward = await showReward();
+    if (awaitReward == false) {
+      exportingProgress.value = null;
+      saving.value = false;
+      return;
+    }
     await ExportService.runFFmpegCommand(
       execute,
       onProgress: (stats) {
@@ -92,6 +99,12 @@ class EditPageController extends BaseController {
     final config = VideoFFmpegVideoEditorConfig(
       _videoEditorController,
     );
+
+    final awaitReward = await showReward();
+    if (awaitReward == false) {
+      exportingProgress.value = null;
+      return;
+    }
 
     await ExportService.runFFmpegCommand(
       await config.getExecuteConfig(),
@@ -122,5 +135,18 @@ class EditPageController extends BaseController {
         showToast(S.current.saveToGalleryFailed);
       }
     }
+  }
+
+  Future<bool> showReward() async {
+    ADManager.instance.loadSettingRewardAD();
+    Completer<bool> completer = Completer();
+    final result = await ADManager.instance.tryShowSettingReward(onReward: (_) {
+      completer.complete(true);
+    });
+    if (result == false) {
+      ToastUtils.show(S.current.rewardNotLoad);
+      return false;
+    }
+    return completer.future;
   }
 }

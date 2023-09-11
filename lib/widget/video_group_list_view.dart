@@ -24,46 +24,52 @@ class VideoGroupListView extends StatelessWidget {
   final GetxController controller;
   final Function(MediaInfo mediaInfo, VideoGroup videoGroup)? onItemMoreClick;
 
-  const VideoGroupListView({super.key,
-    required this.controller,
-    required this.videoGroupList,
-    this.onItemClick,
-    this.onItemMoreClick,
-    this.onClickAll});
+  const VideoGroupListView(
+      {super.key,
+      required this.controller,
+      required this.videoGroupList,
+      this.onItemClick,
+      this.onItemMoreClick,
+      this.onClickAll});
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: 12),
         itemBuilder: (_, index) {
-          return GetBuilder(id: videoGroupList[index].title, init: controller, builder: (_) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: GestureDetector(
-                      onTap: () {
-                        onClickAll?.call(videoGroupList[index]);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextView.primary(
-                            videoGroupList[index].title,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          TextView.primary('${S.current.paramsVideos(videoGroupList[index].mediaInfoList.length)} >',
-                              color: AppThemeController.textPrimaryColor(context).withOpacity(.75), fontSize: 13)
-                        ],
-                      )),
-                ),
-                const Height(8),
-                _childListView(videoGroupList[index].mediaInfoList, videoGroupList[index])
-              ],
-            );
-          });
+          return GetBuilder(
+              id: videoGroupList[index].title,
+              init: controller,
+              builder: (_) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: GestureDetector(
+                          onTap: () {
+                            onClickAll?.call(videoGroupList[index]);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextView.primary(
+                                videoGroupList[index].title,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              TextView.primary(
+                                  '${S.current.paramsVideos(videoGroupList[index].mediaInfoList.length)} >',
+                                  color: AppThemeController.textPrimaryColor(context).withOpacity(.75),
+                                  fontSize: 13)
+                            ],
+                          )),
+                    ),
+                    const Height(8),
+                    _childListView(videoGroupList[index].mediaInfoList, videoGroupList[index])
+                  ],
+                );
+              });
         },
         separatorBuilder: (_, index) {
           return const Height(12);
@@ -95,16 +101,18 @@ class VideoGroupListView extends StatelessWidget {
                             borderRadius: getBorderRadius(4),
                             child: Stack(
                               children: [
-                                ImageView.memory(
-                                  imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
-                                  width: 144,
-                                  height: 86,
-                                ),
+                                Hero(
+                                    tag: mediaInfo.identify,
+                                    child: ImageView.memory(
+                                      imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
+                                      width: 144,
+                                      height: 86,
+                                    )),
                                 Positioned(
                                     bottom: 6,
                                     left: 4,
                                     child: TextView.primary(
-                                      Duration(milliseconds: mediaInfo.duration).toSimpleString(),
+                                      mediaInfo.durationFormat,
                                       color: Colors.white,
                                       fontSize: 11,
                                     )),

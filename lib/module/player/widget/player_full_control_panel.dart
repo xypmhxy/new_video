@@ -54,7 +54,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
           children: [
             _button(Icons.arrow_back_rounded, onPressed: widget.onBackPressed, size: 28),
             const Width(12),
-            TextView.primary(playerController.mediaInfo?.title ?? '',
+            TextView.primary(playerController.nowPlayMedia?.title ?? '',
                 height: 1.1, color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)
           ],
         ));

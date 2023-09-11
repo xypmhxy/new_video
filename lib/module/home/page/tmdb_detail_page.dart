@@ -9,7 +9,6 @@ import 'package:free_tube_player/module/home/callback/tmdb_detail_page_callback.
 import 'package:free_tube_player/module/home/controller/tmdb_detail_page_controller.dart';
 import 'package:free_tube_player/module/home/view/tbdm_detail_page_view.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
-import 'package:get/get.dart';
 
 class TMDBDetailPage extends StatefulWidget {
   final TMDBInfo tmdbInfo;

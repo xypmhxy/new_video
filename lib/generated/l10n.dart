@@ -389,6 +389,36 @@ class S {
       args: [],
     );
   }
+
+  /// `The video ad has not been loaded yet. Please try again later`
+  String get rewardNotLoad {
+    return Intl.message(
+      'The video ad has not been loaded yet. Please try again later',
+      name: 'rewardNotLoad',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shorts`
+  String get shorts {
+    return Intl.message(
+      'Shorts',
+      name: 'shorts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Library`
+  String get library {
+    return Intl.message(
+      'Library',
+      name: 'library',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

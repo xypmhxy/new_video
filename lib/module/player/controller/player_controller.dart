@@ -10,6 +10,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
+import 'package:free_tube_player/ad/helper/ad_manager.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
@@ -55,6 +56,7 @@ class PlayerController extends GetxController {
   double? currentBrightness;
   Timer? _timer;
   Timer? _controlPanelTimer;
+  Completer<bool>? _adShowCompleter;
 
   void _init() {
     playStatus.listen((playStatus) {
@@ -65,12 +67,13 @@ class PlayerController extends GetxController {
   }
 
   Future<void> playNew(MediaInfo mediaInfo) async {
+    _showAD();
     await release();
     _mediaInfo.value = mediaInfo;
     preparePlay();
   }
 
-  MediaInfo? get mediaInfo => _mediaInfo.value;
+  MediaInfo? get nowPlayMedia => _mediaInfo.value;
 
   Rxn<MediaInfo> get mediaInfoRx => _mediaInfo;
 
@@ -80,8 +83,8 @@ class PlayerController extends GetxController {
       chewieController?.removeListener(_videoPlayerListener);
     }
     VideoPlayerController videoPlayerController;
-    if (mediaInfo?.isLocalVideo ?? false) {
-      videoPlayerController = VideoPlayerController.file(File(mediaInfo!.localPath!));
+    if (nowPlayMedia?.isLocalVideo ?? false) {
+      videoPlayerController = VideoPlayerController.file(File(nowPlayMedia!.localPath!));
     } else if (_mediaInfo.value?.downloadPath?.isNotEmpty ?? false) {
       videoPlayerController = VideoPlayerController.file(File(_mediaInfo.value!.downloadPath!));
     } else {
@@ -102,8 +105,11 @@ class PlayerController extends GetxController {
         });
     chewieController?.videoPlayerController.addListener(_videoPlayerListener);
     chewieController?.videoPlayerController.initialize().then((value) async {
-      if (mediaInfo?.historyPosition != null) {
-        await seekTo(Duration(milliseconds: mediaInfo!.historyPosition!));
+      if (nowPlayMedia?.historyPosition != null) {
+        await seekTo(Duration(milliseconds: nowPlayMedia!.historyPosition!));
+      }
+      if (_adShowCompleter?.isCompleted == false) {
+        await _adShowCompleter?.future;
       }
       chewieController?.play();
     }).onError((error, stackTrace) {
@@ -120,6 +126,7 @@ class PlayerController extends GetxController {
   Future<void> clickPlay() async {
     chewieController?.togglePause();
     saveHistoryPosition();
+    _showAD();
   }
 
   Future<void> forward10Seconds() async {
@@ -235,8 +242,8 @@ class PlayerController extends GetxController {
   }
 
   Future<void> saveHistoryPosition() async {
-    if (mediaInfo == null || positionMill < 0) return;
-    await _mediaInfoHelper.savePlayPosition(mediaInfo!, positionMill);
+    if (nowPlayMedia == null || positionMill < 0) return;
+    await _mediaInfoHelper.savePlayPosition(nowPlayMedia!, positionMill);
   }
 
   void startDelayCloseControlPanel() {
@@ -252,7 +259,7 @@ class PlayerController extends GetxController {
     _controlPanelTimer = null;
   }
 
-  void checkControlPanelStatus(){
+  void checkControlPanelStatus() {
     if (isShowControlPanel.value) {
       startDelayCloseControlPanel();
     } else {
@@ -308,7 +315,14 @@ class PlayerController extends GetxController {
   }
 
   void sendMediaInfoEvent() {
-    if (mediaInfo == null) return;
-    MediaInfoHelper.get.sendChangeEvent(MediaInfoChangeWatcher(mediaInfo: mediaInfo!, type: DBChangeType.update));
+    if (nowPlayMedia == null) return;
+    MediaInfoHelper.get.sendChangeEvent(MediaInfoChangeWatcher(mediaInfo: nowPlayMedia!, type: DBChangeType.update));
+  }
+
+  Future<void> _showAD() async {
+    ADManager.instance.loadPlayAD();
+    _adShowCompleter = Completer();
+    await ADManager.instance.tryShowPlayAD();
+    _adShowCompleter?.complete(true);
   }
 }

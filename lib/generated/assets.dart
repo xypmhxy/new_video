@@ -10,11 +10,25 @@ class Assets {
   static const String imagesError = 'images/error.png';
   static const String imagesImagePlaceholder360 = 'images/image_placeholder_360.png';
   static const String imagesSplashAppIcon = 'images/splash_app_icon.png';
+  static const String imagesThemeIcon128 = 'images/theme_icon_128.png';
   static const String imagesWarning = 'images/warning.png';
   static const String svgDelete = 'assets/svg/delete.svg';
   static const String svgDeleteHistory = 'assets/svg/delete_history.svg';
   static const String svgEditor = 'assets/svg/editor.svg';
+  static const String svgHomeLibraryNormal = 'assets/svg/home_library_normal.svg';
+  static const String svgHomeLibrarySelect = 'assets/svg/home_library_select.svg';
+  static const String svgHomeLocalFileNormal = 'assets/svg/home_local_file_normal.svg';
+  static const String svgHomeLocalFileSelect = 'assets/svg/home_local_file_select.svg';
+  static const String svgHomeMovieNormal = 'assets/svg/home_movie_normal.svg';
+  static const String svgHomeMovieSelect = 'assets/svg/home_movie_select.svg';
+  static const String svgHomeNormal = 'assets/svg/home_normal.svg';
+  static const String svgHomeSearch = 'assets/svg/home_search.svg';
+  static const String svgHomeSelect = 'assets/svg/home_select.svg';
+  static const String svgHomeShortVideoNormal = 'assets/svg/home_short_video_normal.svg';
+  static const String svgHomeShortVideoSelect = 'assets/svg/home_short_video_select.svg';
   static const String svgNoData = 'assets/svg/no_data.svg';
+  static const String svgSelect = 'assets/svg/select.svg';
+  static const String svgSetting = 'assets/svg/setting.svg';
   static const String svgVideoEditor = 'assets/svg/video_editor.svg';
 
 }

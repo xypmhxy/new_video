@@ -80,6 +80,7 @@ class HomePageView extends BasePageView<HomePageCallback> {
   Widget _body() {
     return PageView(
       controller: homePageController.pageController,
+      physics: const NeverScrollableScrollPhysics(),
       children: const [VideoHomePage(), TMDBPage()],
       onPageChanged: (index) {
         pageCallback.onPageChanged(index);

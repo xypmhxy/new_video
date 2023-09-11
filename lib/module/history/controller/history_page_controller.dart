@@ -41,7 +41,7 @@ class HistoryPageController extends BaseController {
       final value = entry.value;
       final dateTime = DateTime.fromMillisecondsSinceEpoch(key);
       final videoGroup = VideoGroup(dateTime.format(format: DateFormats.mo_d), value, key);
-      videoGroupList.value.add(videoGroup);
+      videoGroupList.add(videoGroup);
     }
     videoGroupList.sort((a, b) {
       final aDate = a.date;

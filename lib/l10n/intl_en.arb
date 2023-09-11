@@ -32,6 +32,9 @@
   "noDataIOS": "No song found, please check permission",
   "toAuthorize": "To authorize",
   "recommended": "Recommended",
-  "noRecommended": "No recommended"
+  "noRecommended": "No recommended",
+  "rewardNotLoad": "The video ad has not been loaded yet. Please try again later",
+  "shorts": "Shorts",
+  "library": "Library"
 
 }

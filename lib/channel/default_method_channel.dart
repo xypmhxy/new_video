@@ -13,4 +13,8 @@ class DefaultMethodChannel {
     final sdkInt = await _channel.invokeMethod('getAndroidSDKInt');
     return (sdkInt as int?) ?? 23;
   }
+
+  static Future<String?> getMobileOperator() async {
+    return _channel.invokeMethod('getMobileOperator');
+  }
 }

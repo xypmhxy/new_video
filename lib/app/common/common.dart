@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:free_tube_player/blindness/blindness_helper.dart';
+import 'package:free_tube_player/firebase/server_config.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:get/get.dart';
 
@@ -14,6 +16,8 @@ const isDebug = kDebugMode;
 const isProfile = kProfileMode;
 const isRelease = kReleaseMode;
 
+bool get isUserMode => BlindnessHelper.instance.isUserMode;
+
 double get screenWidth => XScreen.getInstance().screenWidth;
 
 double get screenHeight => XScreen.getInstance().screenHeight;
@@ -25,6 +29,8 @@ double get bottomBarHeight => XScreen.getInstance().bottomBarHeight;
 double get statusBarHeight => XScreen.getInstance().statusBarHeight;
 
 String tubeFontFamily = 'MeTubeFont';
+
+ServerConfig serverConfig = ServerConfig();
 
 Future<void> vibrate() async {
   await HapticFeedback.vibrate();

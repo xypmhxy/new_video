@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/module/player/callback/player_page_callback.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/player_page_controller.dart';
@@ -28,7 +29,7 @@ class PlayerPageView extends BasePageView<PlayerPageCallback> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: ColorRes.backgroundColor,
       body: Column(
         children: [_playerWidget()],
       ),
@@ -43,13 +44,18 @@ class PlayerPageView extends BasePageView<PlayerPageCallback> {
       child: Obx(() {
         if (playerController.playStatus.value == PlayStatus.loading ||
             playerController.playStatus.value == PlayStatus.none) {
+          final ratio = playerController.nowPlayMedia?.getVideoRatio() ?? 1.78;
           return Stack(
             children: [
-              AutoImageView(
-                imageData: Uint8List.fromList(playerController.mediaInfo?.localBytesThumbnail ?? []),
-                fit: BoxFit.cover,
-                width: screenWidth,
-                height: screenHeight,
+              Center(
+                child: Hero(
+                    tag: playerController.nowPlayMedia?.identify ?? '?',
+                    child: AutoImageView(
+                      imageData: Uint8List.fromList(playerController.nowPlayMedia?.localBytesThumbnail ?? []),
+                      fit: BoxFit.cover,
+                      width: screenWidth,
+                      height: screenWidth / ratio,
+                    )),
               ),
               const Center(
                 child: SizedBox(
@@ -65,16 +71,6 @@ class PlayerPageView extends BasePageView<PlayerPageCallback> {
           controller: playerController.chewieController!,
         );
       }),
-    );
-  }
-
-  Widget _loadingContent() {
-    return const Center(
-      child: SizedBox(
-        width: 48,
-        height: 48,
-        child: CircularProgressIndicator(),
-      ),
     );
   }
 }

@@ -42,6 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "free": MessageLookupByLibrary.simpleMessage("Free"),
         "history": MessageLookupByLibrary.simpleMessage("History"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
+        "library": MessageLookupByLibrary.simpleMessage("Library"),
         "movie": MessageLookupByLibrary.simpleMessage("Movie"),
         "noDataAndroid": MessageLookupByLibrary.simpleMessage("No song found"),
         "noDataIOS": MessageLookupByLibrary.simpleMessage(
@@ -55,11 +56,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
         "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
+        "rewardNotLoad": MessageLookupByLibrary.simpleMessage(
+            "The video ad has not been loaded yet. Please try again later"),
         "saveToGalleryFailed":
             MessageLookupByLibrary.simpleMessage("Save to gallery failed"),
         "saveToGallerySuccess": MessageLookupByLibrary.simpleMessage(
             "Save to gallery successfully"),
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
+        "shorts": MessageLookupByLibrary.simpleMessage("Shorts"),
         "toAuthorize": MessageLookupByLibrary.simpleMessage("To authorize"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
         "trim": MessageLookupByLibrary.simpleMessage("Trim"),

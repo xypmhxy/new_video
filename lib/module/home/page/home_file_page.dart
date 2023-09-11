@@ -15,7 +15,8 @@ import 'package:free_tube_player/utils/page_navigation.dart';
 
 class HomeFilePage extends StatefulWidget {
   final BaseVideoController videoController;
-  const HomeFilePage({super.key,required this.videoController});
+
+  const HomeFilePage({super.key, required this.videoController});
 
   @override
   State<HomeFilePage> createState() => _HomeFilePageState();

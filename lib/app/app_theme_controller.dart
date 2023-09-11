@@ -22,6 +22,7 @@ class AppThemeController extends GetxController {
     const primaryColor = ColorRes.themeColor;
     final backgroundColor = isLight ? Colors.white : ColorRes.backgroundColor;
     final textColor = isLight ? ColorRes.backgroundColor : ColorRes.textPrimaryColor;
+    const accentTextColor = ColorRes.accentTextColor;
     final surfaceColor = isLight ? ColorRes.colorF5F5F5 : Colors.black12;
     final disabledColor = isLight ? ColorRes.negativeColor : ColorRes.negativeDarkColor;
     final iconThemeData = IconThemeData(color: textColor, size: 24);
@@ -32,6 +33,7 @@ class AppThemeController extends GetxController {
         primaryColor: primaryColor,
         brightness: brightness,
         disabledColor: disabledColor,
+        splashColor: primaryColor.withOpacity(.1),
         colorScheme: ColorScheme(
             brightness: brightness,
             primary: primaryColor,
@@ -55,7 +57,7 @@ class AppThemeController extends GetxController {
             titleMedium: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
-                color: primaryColor,
+                color: accentTextColor,
                 fontFamily: tubeFontFamily,
                 fontFamilyFallback: fontFamilyFallback)),
         iconTheme: iconThemeData,
@@ -118,7 +120,7 @@ class AppThemeController extends GetxController {
       themeData(context).textTheme.titleLarge?.color ?? ColorRes.textPrimaryColor;
 
   static Color textAccentColor(BuildContext context) =>
-      themeData(context).textTheme.titleSmall?.color ?? ColorRes.textPrimaryColor;
+      themeData(context).textTheme.titleMedium?.color ?? ColorRes.textPrimaryColor;
 
   static ButtonStyle? buttonBackgroundColor(BuildContext context) => themeData(context).textButtonTheme.style;
 

@@ -51,7 +51,7 @@ class HomeFilePageController extends BaseVideoController implements OnMediaInfoC
       final formats = nowDateTime.year == dateTime.year ? DateFormats.mo_d : DateFormats.y_mo_d;
       final title = dateTime.isToday() ? S.current.today : dateTime.format(format: formats);
       final videoGroup = VideoGroup(title, mediaInfoList.reversed.toList(), key);
-      videoGroupList.value.add(videoGroup);
+      videoGroupList.add(videoGroup);
     }
     videoGroupList.sort((a, b) {
       final aDate = a.date;
