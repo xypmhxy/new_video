@@ -28,7 +28,7 @@ class _UserYoutubeChildPageState extends State<UserYoutubeChildPage> {
 
   @override
   void initState() {
-    youtubeController.queryTabVideos(isForce: widget.youtubeHomeTab.isAll);
+    youtubeController.queryTabVideos(isAll: widget.youtubeHomeTab.isAll);
     super.initState();
   }
 

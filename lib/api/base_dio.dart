@@ -8,17 +8,14 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 
-class BaseDio{
+class BaseDio {
   Dio dio = Dio();
 
-
-  Future<Response?> executePost({required String url, dynamic data, Map? header}) async {
+  Future<Response?> executePost({required String url, dynamic data, Map<String, dynamic>? header}) async {
     try {
       dio.options.connectTimeout = const Duration(seconds: 15);
       dio.options.receiveTimeout = const Duration(seconds: 15);
-      if(header == null){
-        dio.options.headers.addAll(getHeader());
-      }
+      dio.options.headers.addAll(header ?? getHeader());
       return dio.post(url, data: data);
     } on TimeoutException catch (_) {
       LogUtils.e('$url 请求超时');
