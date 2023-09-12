@@ -36,6 +36,8 @@ class YoutubeHomeApi extends BaseDio {
         final contents = tabs.first['tabRenderer']?['content']?['richGridRenderer']?['contents'] ?? [];
         final mediaList = await YoutubeParseUtils.parseVideoRender(contents);
         homeTabs.first.mediaInfos = mediaList;
+        final continuation = getContinuation(contents);
+        homeTabs.first.continuation = continuation;
         return homeTabs;
       }
     } catch (e) {
@@ -97,16 +99,8 @@ class YoutubeHomeApi extends BaseDio {
         }
         if (items == null || items.isEmpty) continue;
         final mediaList = await YoutubeParseUtils.parseVideoRender(items);
-        String? newContinuation;
-        try {
-          final item = items.firstWhereOrNull((element) =>
-              element["continuationItemRenderer"]?["continuationEndpoint"]?["continuationCommand"]?["token"] != null);
-          final continuation =
-              item["continuationItemRenderer"]?["continuationEndpoint"]?["continuationCommand"]?["token"];
-          newContinuation = continuation;
-          LogUtils.i("continuation=$continuation");
-        } catch (_) {}
-        onContinuation?.call(newContinuation);
+        final continuation = getContinuation(items);
+        onContinuation?.call(continuation);
         if (mediaList.isNotEmpty) return mediaList;
       }
       return [];
@@ -114,5 +108,20 @@ class YoutubeHomeApi extends BaseDio {
       LogUtils.e(e.toString());
       return [];
     }
+  }
+
+  String getContinuation(List contents) {
+    final items = contents.reversed.toList();
+    for (final item in items) {
+      try {
+        final continuation =
+            item["continuationItemRenderer"]?["continuationEndpoint"]?["continuationCommand"]?["token"];
+        if (continuation != null) {
+          LogUtils.i("continuation=$continuation");
+          return continuation;
+        }
+      } catch (_) {}
+    }
+    return '';
   }
 }
