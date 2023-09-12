@@ -4,7 +4,9 @@
 */
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
+import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
+import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/home/callback/tmdb_page_callback.dart';
 import 'package:free_tube_player/module/home/controller/tmdb_page_controller.dart';
 import 'package:free_tube_player/widget/base_page_view.dart';
@@ -22,8 +24,19 @@ class TMDBPageView extends BasePageView<TMDBPageCallback> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _content(),
+    return SafeArea(
+        top: isUserMode,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [Height(isUserMode ? 24 : 0), _title(), _content()],
+        ));
+  }
+
+  Widget _title() {
+    if (isUserMode == false) return const SizedBox();
+    return Container(
+      margin: const EdgeInsets.only(left: 20,bottom: 12),
+      child: TextView.primary(S.current.movie, fontSize: 22, fontWeight: FontWeight.bold),
     );
   }
 
@@ -32,19 +45,20 @@ class TMDBPageView extends BasePageView<TMDBPageCallback> {
   }
 
   Widget _listViewContent() {
-    return SmartRefresher(
-        controller: _tmdbController.refreshController,
-        enablePullDown: true,
-        enablePullUp: true,
-        scrollDirection: Axis.vertical,
-        header: const RefreshHeaderView(),
-        onLoading: () {
-          pageCallback.loadMoreTrending();
-        },
-        onRefresh: () {
-          pageCallback.refreshTrending();
-        },
-        child: _gridView());
+    return Expanded(
+        child: SmartRefresher(
+            controller: _tmdbController.refreshController,
+            enablePullDown: true,
+            enablePullUp: true,
+            scrollDirection: Axis.vertical,
+            header: const RefreshHeaderView(),
+            onLoading: () {
+              pageCallback.loadMoreTrending();
+            },
+            onRefresh: () {
+              pageCallback.refreshTrending();
+            },
+            child: _gridView()));
   }
 
   Widget _gridView() {

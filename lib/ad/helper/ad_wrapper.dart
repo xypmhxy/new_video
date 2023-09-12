@@ -49,7 +49,7 @@ class ADWrapper {
   Future<bool> loadAD({ADLoadCallback? callBack, int allowRetryCount = 0}) async {
     Completer<bool> loadCompleter = Completer();
     if (isDebug) {
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
       loadCompleter.complete(false);
       return false;
     }

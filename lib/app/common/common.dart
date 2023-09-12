@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:free_tube_player/blindness/blindness_helper.dart';
 import 'package:free_tube_player/firebase/server_config.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,8 @@ final isPad = Get.context?.isTablet ?? false;
 const isDebug = kDebugMode;
 const isProfile = kProfileMode;
 const isRelease = kReleaseMode;
+
+bool get isUserMode => BlindnessHelper.instance.isUserMode;
 
 double get screenWidth => XScreen.getInstance().screenWidth;
 

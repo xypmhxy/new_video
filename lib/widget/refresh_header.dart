@@ -7,7 +7,9 @@ import 'package:free_tube_player/widget/loading_view.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class RefreshHeaderView extends RefreshIndicator {
-  const RefreshHeaderView({super.key});
+  final double? margin;
+
+  const RefreshHeaderView({super.key, this.margin});
 
   @override
   State<RefreshHeaderView> createState() => _RefreshHeaderViewState();
@@ -16,10 +18,12 @@ class RefreshHeaderView extends RefreshIndicator {
 class _RefreshHeaderViewState extends RefreshIndicatorState<RefreshHeaderView> {
   @override
   Widget buildContent(BuildContext context, RefreshStatus mode) {
-    return const UnconstrainedBox(
-      child: LoadingView(
-        size: 32,
-      ),
+    return UnconstrainedBox(
+      child: Container(
+          margin: EdgeInsets.only(bottom: widget.margin ?? 0),
+          child: const LoadingView(
+            size: 32,
+          )),
     );
   }
 }
