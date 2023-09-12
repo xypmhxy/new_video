@@ -181,13 +181,11 @@ class _NetworkImageView extends ImageView {
           fit: fit ?? BoxFit.cover,
           errorWidget: errorBuilder ??
               (_, __, ___) {
-                return ImagePlaceHolderView(
-                    iconSize: placeholderIconSize ?? 48.0, width: size ?? width, height: size ?? height);
+                return ImagePlaceHolderView(iconSize: placeholderIconSize ?? 48.0);
               },
           placeholder: placeholderBuilder ??
               (_, __) {
-                return ImagePlaceHolderView(
-                    iconSize: placeholderIconSize ?? 48.0, width: size ?? width, height: size ?? height);
+                return ImagePlaceHolderView(iconSize: placeholderIconSize ?? 48.0);
               },
         ));
 }

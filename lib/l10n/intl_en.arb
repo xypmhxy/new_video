@@ -33,8 +33,5 @@
   "toAuthorize": "To authorize",
   "recommended": "Recommended",
   "noRecommended": "No recommended",
-  "rewardNotLoad": "The video ad has not been loaded yet. Please try again later",
-  "shorts": "Shorts",
-  "library": "Library"
-
+  "rewardNotLoad": "The video ad has not been loaded yet. Please try again later"
 }

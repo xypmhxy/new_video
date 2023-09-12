@@ -6,7 +6,6 @@
 import 'dart:typed_data';
 
 import 'package:free_tube_player/extension/date_time_extension.dart';
-import 'package:free_tube_player/extension/duration_extension.dart';
 import 'package:isar/isar.dart';
 
 part 'media_info.g.dart';
@@ -81,68 +80,6 @@ class MediaInfo {
     this.localBytesThumbnail,
   });
 
-  MediaInfo.fromMap(Map map) {
-    title = map['title'] ?? defaultTitle;
-    author = map['author'] ?? defaultAuthor;
-    width = map['width'];
-    height = map['height'];
-    createDate = map['createDate'] ?? 0;
-    updateDate = map['updateDate'] ?? 0;
-    duration = map['duration'] ?? 0;
-    byteSize = map['byteSize'];
-    isDelete = map['isDelete'] ?? false;
-    playHistory = map['playHistory'];
-    suffix = map['suffix'] ?? '';
-    sourceType = map['sourceType'] ?? map['youtubeId'] != null ? SourceType.youtube : SourceType.local;
-    downloadStatus = map['downloadStatus'] ?? DownloadStatus.none;
-    assetsCreateDate = map['assetsCreateDate'] ?? 0;
-    assetsId = map['assetsId'];
-    directoryId = map['directoryId'];
-    directoryName = map['directoryName'];
-    localPath = map['localPath'];
-    localBytesThumbnail = map['localBytesThumbnail'];
-    youtubeId = map['youtubeId'];
-    thumbnail = map['thumbnail'];
-    authorThumbnail = map['authorThumbnail'];
-    description = map['description'];
-    publishedTime = map['publishedTime'];
-    viewCountText = map['viewCountText'];
-    downloadPath = map['downloadPath'];
-    downloadProgress = map['downloadProgress'];
-  }
-
-  Map toJson() {
-    return {
-      'title': title,
-      'author': author,
-      'width': width,
-      'height': height,
-      'createDate': createDate,
-      'updateDate': updateDate,
-      'duration': duration,
-      'byteSize': byteSize,
-      'isDelete': isDelete,
-      'playHistory': playHistory,
-      'suffix': suffix,
-      'sourceType': sourceType,
-      'downloadStatus': downloadStatus,
-      'assetsCreateDate': assetsCreateDate,
-      'assetsId': assetsId,
-      'directoryId': directoryId,
-      'directoryName': directoryName,
-      'localPath': localPath,
-      'localBytesThumbnail': localBytesThumbnail,
-      'youtubeId': youtubeId,
-      'thumbnail': thumbnail,
-      'authorThumbnail': authorThumbnail,
-      'description': description,
-      'publishedTime': publishedTime,
-      'viewCountText': viewCountText,
-      'downloadPath': downloadPath,
-      'downloadProgress': downloadProgress,
-    };
-  }
-
   bool get isLocalVideo => sourceType == SourceType.local;
 
   String get identify => _getIdentify();
@@ -160,8 +97,6 @@ class MediaInfo {
   String get createDateFormat => DateTime.fromMillisecondsSinceEpoch(createDate).format();
 
   String get updateDateFormat => DateTime.fromMillisecondsSinceEpoch(updateDate).format();
-
-  String get durationFormat => Duration(milliseconds: duration).toSimpleString();
 
   String formatSize() {
     if (byteSize == null || byteSize == 0) return '0MB';

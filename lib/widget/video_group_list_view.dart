@@ -112,7 +112,7 @@ class VideoGroupListView extends StatelessWidget {
                                     bottom: 6,
                                     left: 4,
                                     child: TextView.primary(
-                                      mediaInfo.durationFormat,
+                                      Duration(milliseconds: mediaInfo.duration).toSimpleString(),
                                       color: Colors.white,
                                       fontSize: 11,
                                     )),

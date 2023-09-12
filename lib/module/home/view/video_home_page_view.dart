@@ -15,25 +15,21 @@ class VideoHomePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        top: isUserMode,
-        child: Container(
-            margin: EdgeInsets.only(top: isUserMode ? 16 : 0),
-            child: DefaultTabController(
-                length: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [_tabBar(), _tabView()],
-                ))));
+    return DefaultTabController(
+        length: 2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [_tabBar(), _tabView()],
+        ));
   }
 
   Widget _tabBar() {
     return TabBar(
         isScrollable: true,
         labelStyle: TextStyle(
-            fontSize: 22, fontWeight: FontWeight.bold, fontFamily: tubeFontFamily, fontStyle: FontStyle.italic),
+            fontSize: 20, fontWeight: FontWeight.w500, fontFamily: tubeFontFamily, fontStyle: FontStyle.italic),
         unselectedLabelStyle: TextStyle(
-            fontSize: 22, fontWeight: FontWeight.bold, fontFamily: tubeFontFamily, fontStyle: FontStyle.italic),
+            fontSize: 20, fontWeight: FontWeight.w500, fontFamily: tubeFontFamily, fontStyle: FontStyle.italic),
         indicator: const BoxDecoration(),
         tabs: [
           Tab(

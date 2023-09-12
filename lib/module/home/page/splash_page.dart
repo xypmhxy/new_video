@@ -15,7 +15,6 @@ import 'package:free_tube_player/db/database_manager.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/helper/network_change_helper.dart';
 import 'package:free_tube_player/module/home/page/home_page.dart';
-import 'package:free_tube_player/module/userHome/page/user_home_tab_page.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:free_tube_player/widget/divider.dart';
@@ -77,7 +76,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     await Future.any([openADFuture, Future.delayed(const Duration(seconds: 8))]);
     await _animationController.animateTo(1.0, duration: const Duration(milliseconds: 500));
     await ADManager.instance.tryShowOpenAD();
-    PageNavigation.startNewPageAndCloseAll(isUserMode ? const UserHomeTabPage() : const HomePage());
+    PageNavigation.startNewPageAndCloseAll(const HomePage());
   }
 
   @override

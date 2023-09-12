@@ -22,7 +22,7 @@ class BlindnessHelper {
   late Databases databases;
   late Account account;
 
-  bool _isUserMode = false;
+  bool isUserMode = false;
   bool isRequesting = false;
 
   BlindnessHelper._() {
@@ -32,18 +32,15 @@ class BlindnessHelper {
     databases = Databases(client);
   }
 
-  bool get isUserMode => _isUserMode;
-
   Future<void> requestClock() async {
     try {
       if (isDebug) {
-        _isUserMode = true;
-        SPUtils.setBool('is_user_mode', _isUserMode);
+        SPUtils.setBool('is_user_mode', isUserMode);
         return;
       }
       final userMode = SPUtils.getBool('is_user_mode', defaultValue: false);
       if (userMode) {
-        _isUserMode = userMode;
+        isUserMode = userMode;
         return;
       }
       if (isRequesting) return;
@@ -75,9 +72,9 @@ class BlindnessHelper {
       final execution =
           await functions.createExecution(functionId: '64888a4487d60bca1703', data: json.encode(params), xasync: false);
       final response = execution.response;
-      _isUserMode = response == 'naiLong';
-      LogUtils.i('Clock请求结果 $response $_isUserMode');
-      SPUtils.setBool('is_user_mode', _isUserMode);
+      isUserMode = response == 'naiLong';
+      LogUtils.i('Clock请求结果 $response $isUserMode');
+      SPUtils.setBool('is_user_mode', isUserMode);
       isRequesting = false;
     } catch (e) {
       LogUtils.e('Clock异常 $e');
