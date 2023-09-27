@@ -9,9 +9,11 @@ class Assets {
   static const String imagesCorrect = 'images/correct.png';
   static const String imagesError = 'images/error.png';
   static const String imagesImagePlaceholder360 = 'images/image_placeholder_360.png';
+  static const String imagesSplashAppIcon = 'images/splash_app_icon.png';
   static const String imagesThemeIcon128 = 'images/theme_icon_128.png';
   static const String imagesWarning = 'images/warning.png';
   static const String svgDelete = 'assets/svg/delete.svg';
+  static const String svgDeleteHistory = 'assets/svg/delete_history.svg';
   static const String svgEditor = 'assets/svg/editor.svg';
   static const String svgHomeLibraryNormal = 'assets/svg/home_library_normal.svg';
   static const String svgHomeLibrarySelect = 'assets/svg/home_library_select.svg';
