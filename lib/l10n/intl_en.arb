@@ -28,13 +28,15 @@
   "today": "Today",
   "deleteFailed": "Delete Failed",
   "noPermissionGrant": "To grant permission, please grant manually then restart",
-  "noDataAndroid": "No song found",
-  "noDataIOS": "No song found, please check permission",
+  "noDataAndroid": "No video found",
+  "noDataIOS": "No video found, please check permission",
+  "noData": "No video found",
+  "noDataClickRetry": "No video found, please click retry",
   "toAuthorize": "To authorize",
   "recommended": "Recommended",
   "noRecommended": "No recommended",
   "rewardNotLoad": "The video ad has not been loaded yet. Please try again later",
   "shorts": "Shorts",
-  "library": "Library"
-
+  "library": "Library",
+  "live": "Live"
 }

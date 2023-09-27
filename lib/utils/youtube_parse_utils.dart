@@ -61,10 +61,6 @@ class YoutubeParseUtils {
           ?['thumbnail']?['thumbnails'] as List?;
       final authorThumbnail = authorThumbnails?.last?['url'] ?? '';
 
-      if (duration <= 0) {
-        continue;
-      }
-
       final map = {
         'title': title,
         'author': author,

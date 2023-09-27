@@ -117,7 +117,6 @@ class YoutubeHomeApi extends BaseDio {
         final continuation =
             item["continuationItemRenderer"]?["continuationEndpoint"]?["continuationCommand"]?["token"];
         if (continuation != null) {
-          LogUtils.i("continuation=$continuation");
           return continuation;
         }
       } catch (_) {}

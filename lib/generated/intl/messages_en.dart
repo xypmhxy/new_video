@@ -43,10 +43,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "history": MessageLookupByLibrary.simpleMessage("History"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "library": MessageLookupByLibrary.simpleMessage("Library"),
+        "live": MessageLookupByLibrary.simpleMessage("Live"),
         "movie": MessageLookupByLibrary.simpleMessage("Movie"),
-        "noDataAndroid": MessageLookupByLibrary.simpleMessage("No song found"),
+        "noData": MessageLookupByLibrary.simpleMessage("No video found"),
+        "noDataAndroid": MessageLookupByLibrary.simpleMessage("No video found"),
+        "noDataClickRetry": MessageLookupByLibrary.simpleMessage(
+            "No video found, please click retry"),
         "noDataIOS": MessageLookupByLibrary.simpleMessage(
-            "No song found, please check permission"),
+            "No video found, please check permission"),
         "noPermissionGrant": MessageLookupByLibrary.simpleMessage(
             "To grant permission, please grant manually then restart"),
         "noPermissionToast": MessageLookupByLibrary.simpleMessage(

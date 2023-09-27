@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:free_tube_player/blindness/blindness_helper.dart';
 import 'package:free_tube_player/firebase/server_config.dart';
+import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:get/get.dart';
 
 const appwriteEndpoint = 'http://43.134.112.233/v1';
 const appwriteProjectId = '6487492f900e0d4b1160';
+
+UserPlayerController userPlayerController = UserPlayerController();
 
 final isAndroid = GetPlatform.isAndroid;
 final isIOS = GetPlatform.isIOS;

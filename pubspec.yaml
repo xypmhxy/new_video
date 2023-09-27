@@ -70,6 +70,7 @@ dependencies:
   google_mobile_ads: ^3.0.0
   uuid: ^4.0.0
   crypto: ^3.0.2
+  youtube_explode_dart: ^2.0.2
 
 dependency_overrides:
   video_player:

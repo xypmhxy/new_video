@@ -11,7 +11,7 @@ import 'package:isar/isar.dart';
 
 part 'media_info.g.dart';
 
-enum SourceType { local, youtube }
+enum SourceType { local, youtube, bilibili }
 
 enum DownloadStatus { none, waiting, downloading, pause, success, failed }
 
@@ -33,6 +33,8 @@ class MediaInfo {
   int? byteSize;
   bool isDelete = false;
   PlayHistory? playHistory;
+  List<VideoSource>? videoSources;
+  List<AudioSource>? audioSources;
   String suffix = '';
   @enumerated
   SourceType sourceType = SourceType.local;
@@ -185,6 +187,14 @@ class MediaInfo {
     return width! / height!;
   }
 
+  bool isNeedAudioTrack({int targetResolution = 720}) {
+    return targetResolution >= 1080 || sourceType == SourceType.bilibili;
+  }
+
+  VideoSource? getVideoSource(int width) {
+    return videoSources?.firstWhere((element) => element.width == width && element.isOnlyVideo == false);
+  }
+
   @override
   String toString() {
     return 'title= $title author= $author id= $id youtubeId= $youtubeId createDate= $createDate '
@@ -199,4 +209,44 @@ class PlayHistory {
   int? playPosition;
 
   PlayHistory({this.firstPlayDate, this.recentPlayDate, this.playPosition});
+}
+
+@embedded
+class VideoSource {
+  String url;
+  String? label;
+  String? format;
+  int? byteSize;
+  int? bitrate;
+  int? width;
+  int? height;
+  bool isOnlyVideo;
+
+  VideoSource(
+      {required this.url,
+      this.label,
+      this.format,
+      this.bitrate,
+      this.byteSize,
+      this.width,
+      this.height,
+      this.isOnlyVideo = false});
+
+  int getResolution() {
+    if (width == null || height == null) return 0;
+    if (width! >= height!) {
+      return height!;
+    } else {
+      return width!;
+    }
+  }
+}
+
+@embedded
+class AudioSource {
+  String url;
+  int? byteSize;
+  int? bitrate;
+
+  AudioSource({required this.url, this.bitrate, this.byteSize});
 }

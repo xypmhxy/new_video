@@ -8,11 +8,14 @@ import 'package:free_tube_player/app/app_utils.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/generated/assets.dart';
+import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/userHome/controller/user_youtube_home_controller.dart';
 import 'package:free_tube_player/module/userHome/page/user_youtube_child_page.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/image_view.dart';
+import 'package:free_tube_player/widget/loading_view.dart';
+import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
@@ -88,8 +91,19 @@ class _UserYoutubeHomeState extends State<UserYoutubeHome> with AutomaticKeepAli
   }
 
   Widget _tabContent() {
-    return Obx(() => Expanded(
-        child: DefaultTabController(
+    return Obx(() {
+      Widget child = const Center(child: LoadingView());
+      if (youtubeController.isLoading) {
+        child = const Center(child: LoadingView());
+      } else if (youtubeController.isEmpty) {
+        child = Center(
+            child: GestureDetector(
+                onTap: () {
+                  youtubeController.requestTabs();
+                },
+                child: NoDataView(text: S.current.noDataClickRetry)));
+      } else {
+        child = DefaultTabController(
             length: youtubeController.youtubeHomeTabs.length,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -97,7 +111,10 @@ class _UserYoutubeHomeState extends State<UserYoutubeHome> with AutomaticKeepAli
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [_tabBar(), const Height(16), _tabView()],
               ),
-            ))));
+            ));
+      }
+      return Expanded(child: child);
+    });
   }
 
   Widget _tabBar() {

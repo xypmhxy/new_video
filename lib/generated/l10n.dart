@@ -340,21 +340,41 @@ class S {
     );
   }
 
-  /// `No song found`
+  /// `No video found`
   String get noDataAndroid {
     return Intl.message(
-      'No song found',
+      'No video found',
       name: 'noDataAndroid',
       desc: '',
       args: [],
     );
   }
 
-  /// `No song found, please check permission`
+  /// `No video found, please check permission`
   String get noDataIOS {
     return Intl.message(
-      'No song found, please check permission',
+      'No video found, please check permission',
       name: 'noDataIOS',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No video found`
+  String get noData {
+    return Intl.message(
+      'No video found',
+      name: 'noData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No video found, please click retry`
+  String get noDataClickRetry {
+    return Intl.message(
+      'No video found, please click retry',
+      name: 'noDataClickRetry',
       desc: '',
       args: [],
     );
@@ -415,6 +435,16 @@ class S {
     return Intl.message(
       'Library',
       name: 'library',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Live`
+  String get live {
+    return Intl.message(
+      'Live',
+      name: 'live',
       desc: '',
       args: [],
     );
