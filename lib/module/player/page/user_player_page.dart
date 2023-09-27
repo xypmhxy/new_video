@@ -6,6 +6,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
+import 'package:free_tube_player/module/player/controller/user_player_page_controller.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
 import 'package:get/get.dart';
@@ -18,15 +19,23 @@ class UserPlayerPage extends StatefulWidget {
 }
 
 class _UserPlayerPageState extends State<UserPlayerPage> {
+  final _userPlayerPageController = UserPlayerPageController();
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: SafeArea(child: Column(children: [_playerWidget()])));
+  void initState() {
+    _userPlayerPageController.requestRecommend(userPlayerController.nowPlayingMedia?.youtubeId ?? '');
+    super.initState();
   }
 
   @override
   void dispose() {
     userPlayerController.stop();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: SafeArea(child: Column(children: [_playerWidget()])));
   }
 
   Widget _playerWidget() {
@@ -51,7 +60,7 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
                     )),
               ),
               const Center(
-                child: LoadingView(),
+                child: LoadingView(size: 36),
               )
             ],
           );
