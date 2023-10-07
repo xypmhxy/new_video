@@ -21,6 +21,7 @@ import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:get/get.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 enum PlayStatus { none, loading, playing, pause }
 
@@ -61,7 +62,10 @@ class PlayerController extends GetxController {
   void _init() {
     playStatus.listen((playStatus) {
       if (playStatus == PlayStatus.playing) {
+        WakelockPlus.enable();
         startPositionRecordTimer();
+      } else {
+        WakelockPlus.disable();
       }
     });
   }
@@ -124,9 +128,12 @@ class PlayerController extends GetxController {
   }
 
   Future<void> clickPlay() async {
+    if (isPlaying == false) {
+      _showAD();
+    }
     chewieController?.togglePause();
     saveHistoryPosition();
-    _showAD();
+    checkControlPanelStatus();
   }
 
   Future<void> forward10Seconds() async {
@@ -138,6 +145,7 @@ class PlayerController extends GetxController {
   Future<void> seekTo(Duration position) async {
     this.position.value = position;
     movePosition.refresh();
+    checkControlPanelStatus();
     await chewieController?.seekTo(position);
     saveHistoryPosition();
   }
@@ -148,6 +156,8 @@ class PlayerController extends GetxController {
   }
 
   Future<void> setPlaySpeed(double speed) async {
+    cancelDelayCloseControlPanel();
+    isShowControlPanel.value = false;
     await chewieController?.videoPlayerController.setPlaybackSpeed(speed);
     playSpeed.value = speed;
   }
@@ -155,7 +165,6 @@ class PlayerController extends GetxController {
   Future<void> onMoveStart(double dx) async {
     moveStartX = dx;
     isShowControlPanel.value = true;
-    checkControlPanelStatus();
   }
 
   Future<void> onMove(double dx) async {
@@ -246,9 +255,9 @@ class PlayerController extends GetxController {
     await _mediaInfoHelper.savePlayPosition(nowPlayMedia!, positionMill);
   }
 
-  void startDelayCloseControlPanel() {
+  void startDelayCloseControlPanel({int seconds = 3}) {
     cancelDelayCloseControlPanel();
-    _controlPanelTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _controlPanelTimer = Timer.periodic( Duration(seconds: seconds), (timer) {
       isShowControlPanel.value = false;
       cancelDelayCloseControlPanel();
     });
@@ -259,9 +268,17 @@ class PlayerController extends GetxController {
     _controlPanelTimer = null;
   }
 
-  void checkControlPanelStatus() {
+  void checkControlPanelStatus({int seconds = 3}) {
     if (isShowControlPanel.value) {
-      startDelayCloseControlPanel();
+      startDelayCloseControlPanel(seconds: seconds);
+    } else {
+      cancelDelayCloseControlPanel();
+    }
+  }
+
+  void showControlPanelLongTime() {
+    if (isShowControlPanel.value) {
+      startDelayCloseControlPanel(seconds: 30);
     } else {
       cancelDelayCloseControlPanel();
     }

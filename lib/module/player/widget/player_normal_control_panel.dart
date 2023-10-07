@@ -80,29 +80,34 @@ class _PlayerNormalControlPanelState extends State<PlayerNormalControlPanel> {
   }
 
   Widget _playSpeed() {
+    return Positioned(top: XScreen.getStatusBarH(context) + 12, right: 20, child: _speedDropDown());
+  }
+
+  Widget _speedDropDown() {
     const textColor = Colors.white;
-    return Positioned(
-        top: XScreen.getStatusBarH(context) + 12,
-        right: 20,
-        child: Obx(() => DropdownButton(
-            value: PlayerController.get.playSpeed.value,
-            elevation: 0,
-            isDense: true,
-            itemHeight: null,
-            underline: const SizedBox(),
-            icon: const SizedBox(),
-            dropdownColor: ColorRes.backgroundColor,
-            items: const [
-              DropdownMenuItem(value: 0.5, child: TextView.primary('0.5x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 0.75, child: TextView.primary('0.75x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 1.0, child: TextView.primary('1.0x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 1.25, child: TextView.primary('1.25x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 1.5, child: TextView.primary('1.5x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 17))
-            ],
-            onChanged: (value) {
-              PlayerController.get.setPlaySpeed(value ?? 1.0);
-            })));
+    return Obx(() => PopupMenuButton<double>(
+          itemBuilder: (context) {
+            return <PopupMenuItem<double>>[
+              const PopupMenuItem(value: 0.5, child: TextView.primary('0.5x', color: textColor, fontSize: 17)),
+              const PopupMenuItem(value: 0.75, child: TextView.primary('0.75x', color: textColor, fontSize: 17)),
+              const PopupMenuItem(value: 1.0, child: TextView.primary('1.0x', color: textColor, fontSize: 17)),
+              const PopupMenuItem(value: 1.25, child: TextView.primary('1.25x', color: textColor, fontSize: 17)),
+              const PopupMenuItem(value: 1.5, child: TextView.primary('1.5x', color: textColor, fontSize: 17)),
+              const PopupMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 17))
+            ];
+          },
+          iconSize: 1,
+          onCanceled: () {
+            PlayerController.get.startDelayCloseControlPanel();
+          },
+          onOpened: () {
+            PlayerController.get.showControlPanelLongTime();
+          },
+          onSelected: (value) {
+            PlayerController.get.setPlaySpeed(value);
+          },
+          child: TextView.primary('${PlayerController.get.playSpeed.value}',fontSize: 17,),
+        ));
   }
 
   Widget _movePositionWidget() {
