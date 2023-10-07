@@ -6,7 +6,6 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
-import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
