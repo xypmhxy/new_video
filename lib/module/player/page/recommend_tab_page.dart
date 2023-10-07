@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/player/controller/recommend_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_page_controller.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
@@ -13,18 +14,20 @@ import 'package:free_tube_player/widget/video_item_view.dart';
 import 'package:get/get.dart';
 
 class RecommendTabPage extends StatefulWidget {
-  final UserPlayerPageController pageController;
 
-  const RecommendTabPage({super.key, required this.pageController});
+  const RecommendTabPage({super.key});
 
   @override
   State<RecommendTabPage> createState() => _RecommendTabPageState();
 }
 
 class _RecommendTabPageState extends State<RecommendTabPage> with AutomaticKeepAliveClientMixin {
+
+  final _recommendController = RecommendController();
+
   @override
   void initState() {
-    widget.pageController.requestRecommend(userPlayerController.nowPlayingMedia?.youtubeId ?? '');
+    _recommendController.requestRecommend(userPlayerController.nowPlayingMedia?.youtubeId ?? '');
     super.initState();
   }
 
@@ -35,16 +38,16 @@ class _RecommendTabPageState extends State<RecommendTabPage> with AutomaticKeepA
   Widget build(BuildContext context) {
     super.build(context);
     return Obx(() {
-      if (widget.pageController.recommendViewStatus.value == ViewStatus.loading) {
+      if (_recommendController.viewStatus.value == ViewStatus.loading) {
         return const Center(
           child: LoadingView(
             size: 40,
           ),
         );
-      } else if (widget.pageController.recommendViewStatus.value == ViewStatus.empty) {
+      } else if (_recommendController.viewStatus.value == ViewStatus.empty) {
         return GestureDetector(
             onTap: () {
-              widget.pageController.requestRecommend(userPlayerController.nowPlayingMedia?.youtubeId ?? '');
+              _recommendController.requestRecommend(userPlayerController.nowPlayingMedia?.youtubeId ?? '');
             },
             child: NoDataView(
               text: S.current.noDataClickRetry,
@@ -52,9 +55,9 @@ class _RecommendTabPageState extends State<RecommendTabPage> with AutomaticKeepA
             ));
       }
       return ListView.separated(
-        itemCount: widget.pageController.recommendVideos.length,
+        itemCount: _recommendController.recommendVideos.length,
         itemBuilder: (_, index) {
-          final mediaInfo = widget.pageController.recommendVideos[index];
+          final mediaInfo = _recommendController.recommendVideos[index];
           return VideoItemView(mediaInfo: mediaInfo);
         },
         separatorBuilder: (_, index) {

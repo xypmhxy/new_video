@@ -10,6 +10,7 @@ import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_page_controller.dart';
+import 'package:free_tube_player/module/player/page/comment_tab_page.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
@@ -239,12 +240,8 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
 
   Widget _tabBarView() {
     return TabBarView(children: [
-      RecommendTabPage(
-        pageController: _userPlayerPageController,
-      ),
-      RecommendTabPage(
-        pageController: _userPlayerPageController,
-      )
+      const RecommendTabPage(),
+      Obx(() => CommentTabPage(video: _userPlayerPageController.video.value)),
     ]);
   }
 
