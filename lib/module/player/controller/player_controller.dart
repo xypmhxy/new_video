@@ -187,16 +187,19 @@ class PlayerController extends GetxController {
   void toggleFullScreen() {
     chewieController?.toggleFullScreen();
     isFullScreen.value = chewieController?.isFullScreen ?? false;
+    checkControlPanelStatus();
   }
 
   void enterFullScreen() {
     isFullScreen.value = true;
     chewieController?.enterFullScreen();
+    checkControlPanelStatus();
   }
 
   void exitFullScreen() {
     isFullScreen.value = false;
     chewieController?.exitFullScreen();
+    checkControlPanelStatus();
   }
 
   void onBackPressed() {
