@@ -53,11 +53,15 @@ class MediaInfo {
   String? youtubeId;
   String? thumbnail;
   String? authorThumbnail;
+  String? authorId;
   String? description;
   String? publishedTime;
   String? viewCountText;
   String? downloadPath;
   double? downloadProgress;
+  bool isLike = false;
+  int? likeCount;
+  int? dislikeCount;
 
   MediaInfo();
 
@@ -106,11 +110,15 @@ class MediaInfo {
     youtubeId = map['youtubeId'];
     thumbnail = map['thumbnail'];
     authorThumbnail = map['authorThumbnail'];
+    authorId = map['authorId'];
     description = map['description'];
     publishedTime = map['publishedTime'];
     viewCountText = map['viewCountText'];
     downloadPath = map['downloadPath'];
     downloadProgress = map['downloadProgress'];
+    isLike = map['isLike'] ?? false;
+    likeCount = map['likeCount'];
+    dislikeCount = map['dislikeCount'];
   }
 
   Map toJson() {
@@ -137,11 +145,15 @@ class MediaInfo {
       'youtubeId': youtubeId,
       'thumbnail': thumbnail,
       'authorThumbnail': authorThumbnail,
+      'authorId': authorId,
       'description': description,
       'publishedTime': publishedTime,
       'viewCountText': viewCountText,
       'downloadPath': downloadPath,
       'downloadProgress': downloadProgress,
+      'isLike': isLike,
+      'likeCount': likeCount,
+      'dislikeCount': dislikeCount,
     };
   }
 
@@ -193,6 +205,30 @@ class MediaInfo {
 
   VideoSource? getVideoSource(int width) {
     return videoSources?.firstWhere((element) => element.width == width && element.isOnlyVideo == false);
+  }
+
+  String formatLikeCount() {
+    if (likeCount == null) return '-';
+    if (likeCount! >= 1000000) {
+      final likeK = (likeCount! / 1000000).toStringAsFixed(1);
+      return '${likeK}M';
+    } else if (likeCount! >= 10000) {
+      final likeK = (likeCount! / 1000).toStringAsFixed(1);
+      return '${likeK}K';
+    }
+    return '$likeCount';
+  }
+
+  String formatDislikeCount() {
+    if (dislikeCount == null) return '-';
+    if (dislikeCount! >= 1000000) {
+      final likeK = (dislikeCount! / 1000000).toStringAsFixed(1);
+      return '${likeK}M';
+    } else if (dislikeCount! >= 10000) {
+      final likeK = (dislikeCount! / 1000).toStringAsFixed(1);
+      return '${likeK}K';
+    }
+    return '$dislikeCount';
   }
 
   @override

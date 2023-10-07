@@ -4,12 +4,20 @@
 */
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/generated/assets.dart';
+import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_page_controller.dart';
+import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
+import 'package:free_tube_player/widget/svg_view.dart';
+import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
+
+import 'recommend_tab_page.dart';
 
 class UserPlayerPage extends StatefulWidget {
   const UserPlayerPage({super.key});
@@ -23,19 +31,55 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
 
   @override
   void initState() {
-    _userPlayerPageController.requestRecommend(userPlayerController.nowPlayingMedia?.youtubeId ?? '');
+    _userPlayerPageController.requestWatchPageInfo(userPlayerController.nowPlayingMedia!);
+    _userPlayerPageController.requestAuthorInfo(userPlayerController.nowPlayingMedia?.authorId ?? '');
     super.initState();
   }
 
   @override
   void dispose() {
     userPlayerController.stop();
+    _userPlayerPageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SafeArea(child: Column(children: [_playerWidget()])));
+    return Scaffold(
+        body: SafeArea(
+            child: Column(children: [
+      _playerWidget(),
+      _videoInfoRecommend(),
+    ])));
+  }
+
+  Widget _videoInfoRecommend() {
+    return Expanded(
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: DefaultTabController(
+                length: 2,
+                child: NestedScrollView(
+                  headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                      _height(16),
+                      _title(),
+                      _height(16),
+                      _controlBar(),
+                      _height(16),
+                      _authorInfo(),
+                      _height(4),
+                      SliverAppBar(
+                          leading: const SizedBox(),
+                          backgroundColor: AppThemeController.backgroundColor(context),
+                          toolbarHeight: 52,
+                          pinned: true,
+                          flexibleSpace: _tabBar()),
+                      _height(8),
+                    ];
+                  },
+                  body: _tabBarView(),
+                ))));
   }
 
   Widget _playerWidget() {
@@ -70,5 +114,146 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
         );
       }),
     );
+  }
+
+  Widget _title() {
+    return SliverToBoxAdapter(
+      child: Obx(() {
+        final mediaInfo = userPlayerController.nowPlayingMedia;
+        final viewCountText = mediaInfo?.viewCountText ?? '';
+        final publishedTime = mediaInfo?.publishedTime ?? '';
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextView.primary(
+              mediaInfo?.title ?? '',
+              fontSize: 18,
+              maxLines: 3,
+              fontWeight: FontWeight.w600,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const Height(6),
+            TextView.accent('$viewCountText  ·  $publishedTime',
+                color: AppThemeController.textPrimaryColor(context).withOpacity(.7),
+                fontWeight: FontWeight.normal,
+                fontSize: 12)
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _controlBar() {
+    return SliverToBoxAdapter(
+      child: Obx(() {
+        final mediaInfo = userPlayerController.nowPlayingMedia;
+        final isLike = mediaInfo?.isLike ?? false;
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _controlItem(isLike ? Assets.svgLikeSelect : Assets.svgLike, mediaInfo?.formatLikeCount() ?? '-',
+                color: isLike ? AppThemeController.primaryThemeColor(context) : null),
+            _controlItem(Assets.svgDislike, S.current.dislike),
+            _controlItem(Assets.svgDownload, S.current.download),
+            _controlItem(Assets.svgShare, S.current.share),
+          ],
+        );
+      }),
+    );
+  }
+
+  Widget _controlItem(String svg, String text, {Color? color}) {
+    return Wrap(
+      spacing: 6,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      direction: Axis.vertical,
+      children: [
+        SVGView(
+          assetName: svg,
+          size: 24,
+          color: color ?? AppThemeController.textPrimaryColor(context),
+        ),
+        TextView.primary(text, fontSize: 12)
+      ],
+    );
+  }
+
+  Widget _authorInfo() {
+    return SliverToBoxAdapter(
+      child: Obx(() {
+        final mediaInfo = userPlayerController.nowPlayingMedia;
+        final authorInfo = _userPlayerPageController.authorInfo;
+        final subscribeCount = authorInfo.value?.subscribeCount;
+        final videoCount = authorInfo.value?.videoCountText;
+        return Row(
+          children: [
+            ClipOval(
+              child: AutoImageView(
+                imageUrl: mediaInfo?.authorThumbnail ?? '',
+                size: 50,
+              ),
+            ),
+            const Width(12),
+            Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: screenWidth * .7),
+                child: TextView.primary(
+                  mediaInfo?.author ?? '',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const Height(4),
+              Visibility(
+                  visible: subscribeCount != null || videoCount != null,
+                  child: TextView.accent(
+                    '${subscribeCount ?? ''}  ·  ${S.current.paramsVideos('$videoCount')}',
+                    fontSize: 12,
+                  ))
+            ])
+          ],
+        );
+      }),
+    );
+  }
+
+  TabBar _tabBar() {
+    return TabBar(
+        indicatorPadding: const EdgeInsets.only(bottom: 8),
+        indicatorSize: TabBarIndicatorSize.label,
+        labelPadding: const EdgeInsets.only(right: 20),
+        splashFactory: NoSplash.splashFactory,
+        isScrollable: true,
+        indicatorColor: AppThemeController.primaryThemeColor(context),
+        tabs: [
+          Tab(
+            text: S.current.recommended,
+          ),
+          Tab(
+            text: S.current.comment,
+          )
+        ]);
+  }
+
+  Widget _tabBarView() {
+    return TabBarView(children: [
+      RecommendTabPage(
+        pageController: _userPlayerPageController,
+      ),
+      RecommendTabPage(
+        pageController: _userPlayerPageController,
+      )
+    ]);
+  }
+
+  Widget _height(double height) {
+    return SliverToBoxAdapter(child: Height(height));
+  }
+
+  Widget _divider() {
+    return SliverToBoxAdapter(
+        child: Divider(height: 36, thickness: .3, color: AppThemeController.textAccentColor(context)));
   }
 }

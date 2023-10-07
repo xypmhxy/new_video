@@ -50,18 +50,18 @@ class UserPlayerController {
 
   Future<void> playNewSource(MediaInfo mediaInfo) async {
     _nowPlayingMedia.value = mediaInfo;
-    // await stop();
-    // await requestPlaySource(mediaInfo);
-    // if (mediaInfo.videoSources == null) return;
-    // const targetResolution = 720;
-    // final playVideoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
-    // if (playVideoSource == null) return;
-    // String? audioUrl;
-    // if (mediaInfo.isNeedAudioTrack(targetResolution: targetResolution)) {
-    //   audioUrl = mediaInfo.audioSources?.first.url;
-    // }
-    // await _chewiePlayerImpl.playNewSource(playVideoSource.url, audioUrl: audioUrl);
-    // setupStreams();
+    await stop();
+    await requestPlaySource(mediaInfo);
+    if (mediaInfo.videoSources == null) return;
+    const targetResolution = 720;
+    final playVideoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
+    if (playVideoSource == null) return;
+    String? audioUrl;
+    if (mediaInfo.isNeedAudioTrack(targetResolution: targetResolution)) {
+      audioUrl = mediaInfo.audioSources?.first.url;
+    }
+    await _chewiePlayerImpl.playNewSource(playVideoSource.url, audioUrl: audioUrl);
+    setupStreams();
   }
 
   Future<void> play({bool isByUser = false}) async {
@@ -259,6 +259,10 @@ class UserPlayerController {
     } catch (e) {
       LogUtils.e('获取播放链接错误 ${e.toString()}');
     }
+  }
+
+  void refreshMediaInfo(){
+    _nowPlayingMedia.refresh();
   }
 
   ChewieController get chewieController => _chewiePlayerImpl.chewieController!;

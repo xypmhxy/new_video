@@ -38,5 +38,11 @@
   "rewardNotLoad": "The video ad has not been loaded yet. Please try again later",
   "shorts": "Shorts",
   "library": "Library",
-  "live": "Live"
+  "live": "Live",
+  "like": "Like",
+  "dislike": "Dislike",
+  "download": "Download",
+  "share": "Share",
+  "save": "Save",
+  "comment": "Comment"
 }

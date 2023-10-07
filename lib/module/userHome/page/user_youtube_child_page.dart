@@ -4,18 +4,14 @@
 */
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
-import 'package:free_tube_player/app/common/decoration.dart';
-import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/bean/home/youtube_home_tab.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/module/userHome/controller/user_youtube_child_controller.dart';
 import 'package:free_tube_player/widget/divider.dart';
-import 'package:free_tube_player/widget/image_button.dart';
-import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/refresh_header.dart';
-import 'package:free_tube_player/widget/text_view.dart';
+import 'package:free_tube_player/widget/video_item_view.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -59,81 +55,7 @@ class _UserYoutubeChildPageState extends State<UserYoutubeChildPage> with Automa
                   onTap: () {
                     startUserPlayPage(mediaInfo: mediaInfo);
                   },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        children: [
-                          ClipRRect(
-                              borderRadius: getBorderRadius(16),
-                              child: ImageView.network(
-                                imageUrl: mediaInfo.thumbnail ?? '',
-                                height: screenWidth * 0.5,
-                                width: screenWidth - 40,
-                              )),
-                          Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child: Container(
-                                decoration: allRadiusDecoration(8,
-                                    color: mediaInfo.duration == 0 ? ColorRes.themeColor : ColorRes.backgroundColor),
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                child: TextView.primary(
-                                    mediaInfo.duration == 0 ? S.current.live : mediaInfo.durationFormat,
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal),
-                              )),
-                          Positioned(
-                              bottom: 10,
-                              left: 10,
-                              child: Container(
-                                decoration: allRadiusDecoration(8, color: ColorRes.backgroundColor),
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                child: TextView.primary(mediaInfo.viewCountText ?? '',
-                                    fontSize: 12, color: Colors.white, fontWeight: FontWeight.normal),
-                              )),
-                        ],
-                      ),
-                      const Height(16),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipOval(
-                            child: ImageView.network(
-                              imageUrl: mediaInfo.authorThumbnail ?? '',
-                              size: 48,
-                            ),
-                          ),
-                          const Width(12),
-                          Expanded(
-                              child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextView.primary(
-                                mediaInfo.title,
-                                fontSize: 16,
-                                maxLines: 2,
-                                fontWeight: FontWeight.bold,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const Height(4),
-                              TextView.accent('${mediaInfo.author}  ·  ${mediaInfo.publishedTime}', fontSize: 12)
-                            ],
-                          )),
-                          const Width(8),
-                          ImageButton(
-                              onPressed: () {},
-                              splashRadius: 20,
-                              child: const Icon(
-                                Icons.more_vert_rounded,
-                                size: 22,
-                              ))
-                        ],
-                      ),
-                    ],
-                  ));
+                  child: VideoItemView(mediaInfo: mediaInfo));
             },
             separatorBuilder: (_, index) {
               return const Height(20);

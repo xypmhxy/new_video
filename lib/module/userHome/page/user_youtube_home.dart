@@ -45,7 +45,7 @@ class _UserYoutubeHomeState extends State<UserYoutubeHome> with AutomaticKeepAli
     return Scaffold(
       body: SafeArea(
           child: Column(
-        children: [const Height(24), _toolBar(), const Height(32), _tabContent()],
+        children: [const Height(24), _toolBar(), const Height(16), _tabContent()],
       )),
     );
   }

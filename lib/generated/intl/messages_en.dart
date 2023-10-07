@@ -27,6 +27,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "clearHistory": MessageLookupByLibrary.simpleMessage("Clear history"),
+        "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "confirmDelete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this video?"),
@@ -34,6 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "darkMode": MessageLookupByLibrary.simpleMessage("Dark Mode"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "deleteFailed": MessageLookupByLibrary.simpleMessage("Delete Failed"),
+        "dislike": MessageLookupByLibrary.simpleMessage("Dislike"),
+        "download": MessageLookupByLibrary.simpleMessage("Download"),
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "exportCover": MessageLookupByLibrary.simpleMessage("Export cover"),
         "exportVideo": MessageLookupByLibrary.simpleMessage("Export video"),
@@ -43,6 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "history": MessageLookupByLibrary.simpleMessage("History"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "library": MessageLookupByLibrary.simpleMessage("Library"),
+        "like": MessageLookupByLibrary.simpleMessage("Like"),
         "live": MessageLookupByLibrary.simpleMessage("Live"),
         "movie": MessageLookupByLibrary.simpleMessage("Movie"),
         "noData": MessageLookupByLibrary.simpleMessage("No video found"),
@@ -62,11 +66,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "rewardNotLoad": MessageLookupByLibrary.simpleMessage(
             "The video ad has not been loaded yet. Please try again later"),
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "saveToGalleryFailed":
             MessageLookupByLibrary.simpleMessage("Save to gallery failed"),
         "saveToGallerySuccess": MessageLookupByLibrary.simpleMessage(
             "Save to gallery successfully"),
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
+        "share": MessageLookupByLibrary.simpleMessage("Share"),
         "shorts": MessageLookupByLibrary.simpleMessage("Shorts"),
         "toAuthorize": MessageLookupByLibrary.simpleMessage("To authorize"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
