@@ -152,9 +152,10 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _controlItem(isLike ? Assets.svgLikeSelect : Assets.svgLike, mediaInfo?.formatLikeCount() ?? '-',
+            _controlItem(isLike ? Assets.svgLikeSelect : Assets.svgLikeNormal, mediaInfo?.formatLikeCount() ?? '-',
                 color: isLike ? AppThemeController.primaryThemeColor(context) : null),
-            _controlItem(Assets.svgDislike, S.current.dislike),
+            _controlItem(isLike ? Assets.svgLoopSelect : Assets.svgLoopNormal, S.current.loop,
+                color: isLike ? AppThemeController.primaryThemeColor(context) : null),
             _controlItem(Assets.svgDownload, S.current.download),
             _controlItem(Assets.svgShare, S.current.share),
           ],

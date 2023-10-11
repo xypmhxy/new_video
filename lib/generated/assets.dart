@@ -30,7 +30,10 @@ class Assets {
   static const String svgHomeShortVideoNormal = 'assets/svg/home_short_video_normal.svg';
   static const String svgHomeShortVideoSelect = 'assets/svg/home_short_video_select.svg';
   static const String svgLike = 'assets/svg/like.svg';
+  static const String svgLikeNormal = 'assets/svg/like_normal.svg';
   static const String svgLikeSelect = 'assets/svg/like_select.svg';
+  static const String svgLoopNormal = 'assets/svg/loop_normal.svg';
+  static const String svgLoopSelect = 'assets/svg/loop_select.svg';
   static const String svgNoData = 'assets/svg/no_data.svg';
   static const String svgSelect = 'assets/svg/select.svg';
   static const String svgSetting = 'assets/svg/setting.svg';

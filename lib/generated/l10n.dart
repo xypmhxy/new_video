@@ -509,6 +509,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Playlist`
+  String get playlist {
+    return Intl.message(
+      'Playlist',
+      name: 'playlist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loop`
+  String get loop {
+    return Intl.message(
+      'Loop',
+      name: 'loop',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

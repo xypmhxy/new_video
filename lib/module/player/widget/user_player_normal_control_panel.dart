@@ -8,7 +8,6 @@ import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
-import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:free_tube_player/widget/divider.dart';
@@ -40,8 +39,8 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
           alignment: Alignment.center,
           children: [
             _background(),
-            _backButton(),
-            _title(),
+            _titleBar(),
+            // _title(),
             _playSpeed(),
             // _dragPositionWidget(),
             _playWidget(),
@@ -55,6 +54,12 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
         child: Container(
       color: Colors.black12,
     ));
+  }
+
+  Widget _titleBar() {
+    return Row(
+      children: [_backButton(), const Width(12), _title()],
+    );
   }
 
   Widget _backButton() {
@@ -95,7 +100,7 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
         top: XScreen.getStatusBarH(context) + 12,
         right: 20,
         child: Obx(() => DropdownButton(
-            value: PlayerController.get.playSpeed.value,
+            value: userPlayerController.playSpeed.value,
             elevation: 0,
             isDense: true,
             itemHeight: null,
@@ -111,7 +116,7 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
               DropdownMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 17))
             ],
             onChanged: (value) {
-              PlayerController.get.setPlaySpeed(value ?? 1.0);
+              userPlayerController.setPlaybackSpeed(value ?? 1.0);
             })));
   }
 
@@ -137,8 +142,8 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
               _button(Icons.replay_10_rounded, size: 43, onPressed: playerController.back10seconds),
               const Width(28),
               Obx(
-                () => _button(PlayerController.get.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                    onPressed: playerController.togglePlay, size: PlayerController.get.isPlaying ? 48 : 54),
+                () => _button(playerController.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                    onPressed: playerController.togglePlay, size: playerController.isPlaying ? 48 : 54),
               ),
               const Width(28),
               _button(Icons.forward_10_rounded, size: 43, onPressed: playerController.forward10Seconds)

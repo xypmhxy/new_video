@@ -44,5 +44,7 @@
   "download": "Download",
   "share": "Share",
   "save": "Save",
-  "comment": "Comment"
+  "comment": "Comment",
+  "playlist": "Playlist",
+  "loop": "Loop"
 }
