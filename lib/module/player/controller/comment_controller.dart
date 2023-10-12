@@ -6,8 +6,6 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class CommentController {
   final _youtubeExplode = YoutubeExplode();
-  final recommendVideos = <MediaInfo>[].obs;
-  final recommendViewStatus = ViewStatus.none.obs;
   final commentsList = Rxn<CommentsList>();
   final viewStatus = ViewStatus.none.obs;
 
@@ -16,7 +14,12 @@ class CommentController {
       viewStatus.value = ViewStatus.failed;
       return;
     }
+    viewStatus.value = ViewStatus.loading;
     commentsList.value = await _youtubeExplode.videos.comments.getComments(video);
-    print('object');
+    if (commentsList.value == null) {
+      viewStatus.value = ViewStatus.failed;
+    } else {
+      viewStatus.value = ViewStatus.success;
+    }
   }
 }
