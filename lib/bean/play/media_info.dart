@@ -259,7 +259,7 @@ class VideoSource {
   bool isOnlyVideo;
 
   VideoSource(
-      {required this.url,
+      {this.url = '',
       this.label,
       this.format,
       this.bitrate,
@@ -284,5 +284,5 @@ class AudioSource {
   int? byteSize;
   int? bitrate;
 
-  AudioSource({required this.url, this.bitrate, this.byteSize});
+  AudioSource({this.url = '', this.bitrate, this.byteSize});
 }

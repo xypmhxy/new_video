@@ -27,161 +27,198 @@ const MediaInfoSchema = CollectionSchema(
       name: r'assetsId',
       type: IsarType.string,
     ),
-    r'author': PropertySchema(
+    r'audioSources': PropertySchema(
       id: 2,
+      name: r'audioSources',
+      type: IsarType.objectList,
+      target: r'AudioSource',
+    ),
+    r'author': PropertySchema(
+      id: 3,
       name: r'author',
       type: IsarType.string,
     ),
+    r'authorId': PropertySchema(
+      id: 4,
+      name: r'authorId',
+      type: IsarType.string,
+    ),
     r'authorThumbnail': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'authorThumbnail',
       type: IsarType.string,
     ),
     r'byteSize': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'byteSize',
       type: IsarType.long,
     ),
     r'createDate': PropertySchema(
-      id: 5,
+      id: 7,
       name: r'createDate',
       type: IsarType.long,
     ),
     r'createDateFormat': PropertySchema(
-      id: 6,
+      id: 8,
       name: r'createDateFormat',
       type: IsarType.string,
     ),
     r'description': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'description',
       type: IsarType.string,
     ),
     r'directoryId': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'directoryId',
       type: IsarType.long,
     ),
     r'directoryName': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'directoryName',
       type: IsarType.string,
     ),
+    r'dislikeCount': PropertySchema(
+      id: 12,
+      name: r'dislikeCount',
+      type: IsarType.long,
+    ),
     r'downloadPath': PropertySchema(
-      id: 10,
+      id: 13,
       name: r'downloadPath',
       type: IsarType.string,
     ),
     r'downloadProgress': PropertySchema(
-      id: 11,
+      id: 14,
       name: r'downloadProgress',
       type: IsarType.double,
     ),
     r'downloadStatus': PropertySchema(
-      id: 12,
+      id: 15,
       name: r'downloadStatus',
       type: IsarType.byte,
       enumMap: _MediaInfodownloadStatusEnumValueMap,
     ),
     r'duration': PropertySchema(
-      id: 13,
+      id: 16,
       name: r'duration',
       type: IsarType.long,
     ),
+    r'durationFormat': PropertySchema(
+      id: 17,
+      name: r'durationFormat',
+      type: IsarType.string,
+    ),
     r'height': PropertySchema(
-      id: 14,
+      id: 18,
       name: r'height',
       type: IsarType.long,
     ),
     r'historyPosition': PropertySchema(
-      id: 15,
+      id: 19,
       name: r'historyPosition',
       type: IsarType.long,
     ),
     r'historyProgress': PropertySchema(
-      id: 16,
+      id: 20,
       name: r'historyProgress',
       type: IsarType.double,
     ),
     r'identify': PropertySchema(
-      id: 17,
+      id: 21,
       name: r'identify',
       type: IsarType.string,
     ),
     r'isDelete': PropertySchema(
-      id: 18,
+      id: 22,
       name: r'isDelete',
       type: IsarType.bool,
     ),
+    r'isLike': PropertySchema(
+      id: 23,
+      name: r'isLike',
+      type: IsarType.bool,
+    ),
     r'isLocalVideo': PropertySchema(
-      id: 19,
+      id: 24,
       name: r'isLocalVideo',
       type: IsarType.bool,
     ),
+    r'likeCount': PropertySchema(
+      id: 25,
+      name: r'likeCount',
+      type: IsarType.long,
+    ),
     r'localBytesThumbnail': PropertySchema(
-      id: 20,
+      id: 26,
       name: r'localBytesThumbnail',
       type: IsarType.byteList,
     ),
     r'localPath': PropertySchema(
-      id: 21,
+      id: 27,
       name: r'localPath',
       type: IsarType.string,
     ),
     r'playHistory': PropertySchema(
-      id: 22,
+      id: 28,
       name: r'playHistory',
       type: IsarType.object,
       target: r'PlayHistory',
     ),
     r'publishedTime': PropertySchema(
-      id: 23,
+      id: 29,
       name: r'publishedTime',
       type: IsarType.string,
     ),
     r'sourceType': PropertySchema(
-      id: 24,
+      id: 30,
       name: r'sourceType',
       type: IsarType.byte,
       enumMap: _MediaInfosourceTypeEnumValueMap,
     ),
     r'suffix': PropertySchema(
-      id: 25,
+      id: 31,
       name: r'suffix',
       type: IsarType.string,
     ),
     r'thumbnail': PropertySchema(
-      id: 26,
+      id: 32,
       name: r'thumbnail',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 27,
+      id: 33,
       name: r'title',
       type: IsarType.string,
     ),
     r'updateDate': PropertySchema(
-      id: 28,
+      id: 34,
       name: r'updateDate',
       type: IsarType.long,
     ),
     r'updateDateFormat': PropertySchema(
-      id: 29,
+      id: 35,
       name: r'updateDateFormat',
       type: IsarType.string,
     ),
+    r'videoSources': PropertySchema(
+      id: 36,
+      name: r'videoSources',
+      type: IsarType.objectList,
+      target: r'VideoSource',
+    ),
     r'viewCountText': PropertySchema(
-      id: 30,
+      id: 37,
       name: r'viewCountText',
       type: IsarType.string,
     ),
     r'width': PropertySchema(
-      id: 31,
+      id: 38,
       name: r'width',
       type: IsarType.long,
     ),
     r'youtubeId': PropertySchema(
-      id: 32,
+      id: 39,
       name: r'youtubeId',
       type: IsarType.string,
     )
@@ -193,7 +230,11 @@ const MediaInfoSchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {},
-  embeddedSchemas: {r'PlayHistory': PlayHistorySchema},
+  embeddedSchemas: {
+    r'PlayHistory': PlayHistorySchema,
+    r'VideoSource': VideoSourceSchema,
+    r'AudioSource': AudioSourceSchema
+  },
   getId: _mediaInfoGetId,
   getLinks: _mediaInfoGetLinks,
   attach: _mediaInfoAttach,
@@ -212,7 +253,27 @@ int _mediaInfoEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final list = object.audioSources;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        final offsets = allOffsets[AudioSource]!;
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount +=
+              AudioSourceSchema.estimateSize(value, offsets, allOffsets);
+        }
+      }
+    }
+  }
   bytesCount += 3 + object.author.length * 3;
+  {
+    final value = object.authorId;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   {
     final value = object.authorThumbnail;
     if (value != null) {
@@ -238,6 +299,7 @@ int _mediaInfoEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.durationFormat.length * 3;
   bytesCount += 3 + object.identify.length * 3;
   {
     final value = object.localBytesThumbnail;
@@ -275,6 +337,20 @@ int _mediaInfoEstimateSize(
   bytesCount += 3 + object.title.length * 3;
   bytesCount += 3 + object.updateDateFormat.length * 3;
   {
+    final list = object.videoSources;
+    if (list != null) {
+      bytesCount += 3 + list.length * 3;
+      {
+        final offsets = allOffsets[VideoSource]!;
+        for (var i = 0; i < list.length; i++) {
+          final value = list[i];
+          bytesCount +=
+              VideoSourceSchema.estimateSize(value, offsets, allOffsets);
+        }
+      }
+    }
+  }
+  {
     final value = object.viewCountText;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -297,42 +373,59 @@ void _mediaInfoSerialize(
 ) {
   writer.writeLong(offsets[0], object.assetsCreateDate);
   writer.writeString(offsets[1], object.assetsId);
-  writer.writeString(offsets[2], object.author);
-  writer.writeString(offsets[3], object.authorThumbnail);
-  writer.writeLong(offsets[4], object.byteSize);
-  writer.writeLong(offsets[5], object.createDate);
-  writer.writeString(offsets[6], object.createDateFormat);
-  writer.writeString(offsets[7], object.description);
-  writer.writeLong(offsets[8], object.directoryId);
-  writer.writeString(offsets[9], object.directoryName);
-  writer.writeString(offsets[10], object.downloadPath);
-  writer.writeDouble(offsets[11], object.downloadProgress);
-  writer.writeByte(offsets[12], object.downloadStatus.index);
-  writer.writeLong(offsets[13], object.duration);
-  writer.writeLong(offsets[14], object.height);
-  writer.writeLong(offsets[15], object.historyPosition);
-  writer.writeDouble(offsets[16], object.historyProgress);
-  writer.writeString(offsets[17], object.identify);
-  writer.writeBool(offsets[18], object.isDelete);
-  writer.writeBool(offsets[19], object.isLocalVideo);
-  writer.writeByteList(offsets[20], object.localBytesThumbnail);
-  writer.writeString(offsets[21], object.localPath);
+  writer.writeObjectList<AudioSource>(
+    offsets[2],
+    allOffsets,
+    AudioSourceSchema.serialize,
+    object.audioSources,
+  );
+  writer.writeString(offsets[3], object.author);
+  writer.writeString(offsets[4], object.authorId);
+  writer.writeString(offsets[5], object.authorThumbnail);
+  writer.writeLong(offsets[6], object.byteSize);
+  writer.writeLong(offsets[7], object.createDate);
+  writer.writeString(offsets[8], object.createDateFormat);
+  writer.writeString(offsets[9], object.description);
+  writer.writeLong(offsets[10], object.directoryId);
+  writer.writeString(offsets[11], object.directoryName);
+  writer.writeLong(offsets[12], object.dislikeCount);
+  writer.writeString(offsets[13], object.downloadPath);
+  writer.writeDouble(offsets[14], object.downloadProgress);
+  writer.writeByte(offsets[15], object.downloadStatus.index);
+  writer.writeLong(offsets[16], object.duration);
+  writer.writeString(offsets[17], object.durationFormat);
+  writer.writeLong(offsets[18], object.height);
+  writer.writeLong(offsets[19], object.historyPosition);
+  writer.writeDouble(offsets[20], object.historyProgress);
+  writer.writeString(offsets[21], object.identify);
+  writer.writeBool(offsets[22], object.isDelete);
+  writer.writeBool(offsets[23], object.isLike);
+  writer.writeBool(offsets[24], object.isLocalVideo);
+  writer.writeLong(offsets[25], object.likeCount);
+  writer.writeByteList(offsets[26], object.localBytesThumbnail);
+  writer.writeString(offsets[27], object.localPath);
   writer.writeObject<PlayHistory>(
-    offsets[22],
+    offsets[28],
     allOffsets,
     PlayHistorySchema.serialize,
     object.playHistory,
   );
-  writer.writeString(offsets[23], object.publishedTime);
-  writer.writeByte(offsets[24], object.sourceType.index);
-  writer.writeString(offsets[25], object.suffix);
-  writer.writeString(offsets[26], object.thumbnail);
-  writer.writeString(offsets[27], object.title);
-  writer.writeLong(offsets[28], object.updateDate);
-  writer.writeString(offsets[29], object.updateDateFormat);
-  writer.writeString(offsets[30], object.viewCountText);
-  writer.writeLong(offsets[31], object.width);
-  writer.writeString(offsets[32], object.youtubeId);
+  writer.writeString(offsets[29], object.publishedTime);
+  writer.writeByte(offsets[30], object.sourceType.index);
+  writer.writeString(offsets[31], object.suffix);
+  writer.writeString(offsets[32], object.thumbnail);
+  writer.writeString(offsets[33], object.title);
+  writer.writeLong(offsets[34], object.updateDate);
+  writer.writeString(offsets[35], object.updateDateFormat);
+  writer.writeObjectList<VideoSource>(
+    offsets[36],
+    allOffsets,
+    VideoSourceSchema.serialize,
+    object.videoSources,
+  );
+  writer.writeString(offsets[37], object.viewCountText);
+  writer.writeLong(offsets[38], object.width);
+  writer.writeString(offsets[39], object.youtubeId);
 }
 
 MediaInfo _mediaInfoDeserialize(
@@ -344,40 +437,56 @@ MediaInfo _mediaInfoDeserialize(
   final object = MediaInfo();
   object.assetsCreateDate = reader.readLong(offsets[0]);
   object.assetsId = reader.readStringOrNull(offsets[1]);
-  object.author = reader.readString(offsets[2]);
-  object.authorThumbnail = reader.readStringOrNull(offsets[3]);
-  object.byteSize = reader.readLongOrNull(offsets[4]);
-  object.createDate = reader.readLong(offsets[5]);
-  object.description = reader.readStringOrNull(offsets[7]);
-  object.directoryId = reader.readLongOrNull(offsets[8]);
-  object.directoryName = reader.readStringOrNull(offsets[9]);
-  object.downloadPath = reader.readStringOrNull(offsets[10]);
-  object.downloadProgress = reader.readDoubleOrNull(offsets[11]);
+  object.audioSources = reader.readObjectList<AudioSource>(
+    offsets[2],
+    AudioSourceSchema.deserialize,
+    allOffsets,
+    AudioSource(),
+  );
+  object.author = reader.readString(offsets[3]);
+  object.authorId = reader.readStringOrNull(offsets[4]);
+  object.authorThumbnail = reader.readStringOrNull(offsets[5]);
+  object.byteSize = reader.readLongOrNull(offsets[6]);
+  object.createDate = reader.readLong(offsets[7]);
+  object.description = reader.readStringOrNull(offsets[9]);
+  object.directoryId = reader.readLongOrNull(offsets[10]);
+  object.directoryName = reader.readStringOrNull(offsets[11]);
+  object.dislikeCount = reader.readLongOrNull(offsets[12]);
+  object.downloadPath = reader.readStringOrNull(offsets[13]);
+  object.downloadProgress = reader.readDoubleOrNull(offsets[14]);
   object.downloadStatus = _MediaInfodownloadStatusValueEnumMap[
-          reader.readByteOrNull(offsets[12])] ??
+          reader.readByteOrNull(offsets[15])] ??
       DownloadStatus.none;
-  object.duration = reader.readLong(offsets[13]);
-  object.height = reader.readLongOrNull(offsets[14]);
+  object.duration = reader.readLong(offsets[16]);
+  object.height = reader.readLongOrNull(offsets[18]);
   object.id = id;
-  object.isDelete = reader.readBool(offsets[18]);
-  object.localBytesThumbnail = reader.readByteList(offsets[20]);
-  object.localPath = reader.readStringOrNull(offsets[21]);
+  object.isDelete = reader.readBool(offsets[22]);
+  object.isLike = reader.readBool(offsets[23]);
+  object.likeCount = reader.readLongOrNull(offsets[25]);
+  object.localBytesThumbnail = reader.readByteList(offsets[26]);
+  object.localPath = reader.readStringOrNull(offsets[27]);
   object.playHistory = reader.readObjectOrNull<PlayHistory>(
-    offsets[22],
+    offsets[28],
     PlayHistorySchema.deserialize,
     allOffsets,
   );
-  object.publishedTime = reader.readStringOrNull(offsets[23]);
+  object.publishedTime = reader.readStringOrNull(offsets[29]);
   object.sourceType =
-      _MediaInfosourceTypeValueEnumMap[reader.readByteOrNull(offsets[24])] ??
+      _MediaInfosourceTypeValueEnumMap[reader.readByteOrNull(offsets[30])] ??
           SourceType.local;
-  object.suffix = reader.readString(offsets[25]);
-  object.thumbnail = reader.readStringOrNull(offsets[26]);
-  object.title = reader.readString(offsets[27]);
-  object.updateDate = reader.readLong(offsets[28]);
-  object.viewCountText = reader.readStringOrNull(offsets[30]);
-  object.width = reader.readLongOrNull(offsets[31]);
-  object.youtubeId = reader.readStringOrNull(offsets[32]);
+  object.suffix = reader.readString(offsets[31]);
+  object.thumbnail = reader.readStringOrNull(offsets[32]);
+  object.title = reader.readString(offsets[33]);
+  object.updateDate = reader.readLong(offsets[34]);
+  object.videoSources = reader.readObjectList<VideoSource>(
+    offsets[36],
+    VideoSourceSchema.deserialize,
+    allOffsets,
+    VideoSource(),
+  );
+  object.viewCountText = reader.readStringOrNull(offsets[37]);
+  object.width = reader.readLongOrNull(offsets[38]);
+  object.youtubeId = reader.readStringOrNull(offsets[39]);
   return object;
 }
 
@@ -393,73 +502,97 @@ P _mediaInfoDeserializeProp<P>(
     case 1:
       return (reader.readStringOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readObjectList<AudioSource>(
+        offset,
+        AudioSourceSchema.deserialize,
+        allOffsets,
+        AudioSource(),
+      )) as P;
     case 3:
-      return (reader.readStringOrNull(offset)) as P;
-    case 4:
-      return (reader.readLongOrNull(offset)) as P;
-    case 5:
-      return (reader.readLong(offset)) as P;
-    case 6:
       return (reader.readString(offset)) as P;
-    case 7:
+    case 4:
       return (reader.readStringOrNull(offset)) as P;
-    case 8:
+    case 5:
+      return (reader.readStringOrNull(offset)) as P;
+    case 6:
       return (reader.readLongOrNull(offset)) as P;
+    case 7:
+      return (reader.readLong(offset)) as P;
+    case 8:
+      return (reader.readString(offset)) as P;
     case 9:
       return (reader.readStringOrNull(offset)) as P;
     case 10:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 11:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 12:
+      return (reader.readLongOrNull(offset)) as P;
+    case 13:
+      return (reader.readStringOrNull(offset)) as P;
+    case 14:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 15:
       return (_MediaInfodownloadStatusValueEnumMap[
               reader.readByteOrNull(offset)] ??
           DownloadStatus.none) as P;
-    case 13:
-      return (reader.readLong(offset)) as P;
-    case 14:
-      return (reader.readLongOrNull(offset)) as P;
-    case 15:
-      return (reader.readLongOrNull(offset)) as P;
     case 16:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 17:
       return (reader.readString(offset)) as P;
     case 18:
-      return (reader.readBool(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 19:
-      return (reader.readBool(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 20:
-      return (reader.readByteList(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 21:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 22:
+      return (reader.readBool(offset)) as P;
+    case 23:
+      return (reader.readBool(offset)) as P;
+    case 24:
+      return (reader.readBool(offset)) as P;
+    case 25:
+      return (reader.readLongOrNull(offset)) as P;
+    case 26:
+      return (reader.readByteList(offset)) as P;
+    case 27:
+      return (reader.readStringOrNull(offset)) as P;
+    case 28:
       return (reader.readObjectOrNull<PlayHistory>(
         offset,
         PlayHistorySchema.deserialize,
         allOffsets,
       )) as P;
-    case 23:
+    case 29:
       return (reader.readStringOrNull(offset)) as P;
-    case 24:
+    case 30:
       return (_MediaInfosourceTypeValueEnumMap[reader.readByteOrNull(offset)] ??
           SourceType.local) as P;
-    case 25:
-      return (reader.readString(offset)) as P;
-    case 26:
-      return (reader.readStringOrNull(offset)) as P;
-    case 27:
-      return (reader.readString(offset)) as P;
-    case 28:
-      return (reader.readLong(offset)) as P;
-    case 29:
-      return (reader.readString(offset)) as P;
-    case 30:
-      return (reader.readStringOrNull(offset)) as P;
     case 31:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 32:
+      return (reader.readStringOrNull(offset)) as P;
+    case 33:
+      return (reader.readString(offset)) as P;
+    case 34:
+      return (reader.readLong(offset)) as P;
+    case 35:
+      return (reader.readString(offset)) as P;
+    case 36:
+      return (reader.readObjectList<VideoSource>(
+        offset,
+        VideoSourceSchema.deserialize,
+        allOffsets,
+        VideoSource(),
+      )) as P;
+    case 37:
+      return (reader.readStringOrNull(offset)) as P;
+    case 38:
+      return (reader.readLongOrNull(offset)) as P;
+    case 39:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -485,10 +618,12 @@ const _MediaInfodownloadStatusValueEnumMap = {
 const _MediaInfosourceTypeEnumValueMap = {
   'local': 0,
   'youtube': 1,
+  'bilibili': 2,
 };
 const _MediaInfosourceTypeValueEnumMap = {
   0: SourceType.local,
   1: SourceType.youtube,
+  2: SourceType.bilibili,
 };
 
 Id _mediaInfoGetId(MediaInfo object) {
@@ -786,6 +921,113 @@ extension MediaInfoQueryFilter
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      audioSourcesIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'audioSources',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      audioSourcesIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'audioSources',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      audioSourcesLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'audioSources',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      audioSourcesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'audioSources',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      audioSourcesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'audioSources',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      audioSourcesLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'audioSources',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      audioSourcesLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'audioSources',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      audioSourcesLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'audioSources',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -911,6 +1153,154 @@ extension MediaInfoQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'author',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'authorId',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      authorIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'authorId',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'authorId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'authorId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'authorId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'authorId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'authorId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'authorId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'authorId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'authorId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> authorIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'authorId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      authorIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'authorId',
         value: '',
       ));
     });
@@ -1709,6 +2099,79 @@ extension MediaInfoQueryFilter
   }
 
   QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      dislikeCountIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'dislikeCount',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      dislikeCountIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'dislikeCount',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> dislikeCountEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'dislikeCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      dislikeCountGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'dislikeCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      dislikeCountLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'dislikeCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> dislikeCountBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'dislikeCount',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
       downloadPathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2050,6 +2513,142 @@ extension MediaInfoQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'durationFormat',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'durationFormat',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'durationFormat',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'durationFormat',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'durationFormat',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'durationFormat',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'durationFormat',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'durationFormat',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'durationFormat',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      durationFormatIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'durationFormat',
+        value: '',
       ));
     });
   }
@@ -2475,12 +3074,93 @@ extension MediaInfoQueryFilter
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> isLikeEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isLike',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> isLocalVideoEqualTo(
       bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isLocalVideo',
         value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> likeCountIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'likeCount',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      likeCountIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'likeCount',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> likeCountEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'likeCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      likeCountGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'likeCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> likeCountLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'likeCount',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> likeCountBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'likeCount',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -3623,6 +4303,113 @@ extension MediaInfoQueryFilter
   }
 
   QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      videoSourcesIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'videoSources',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      videoSourcesIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'videoSources',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      videoSourcesLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'videoSources',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      videoSourcesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'videoSources',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      videoSourcesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'videoSources',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      videoSourcesLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'videoSources',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      videoSourcesLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'videoSources',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      videoSourcesLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'videoSources',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
       viewCountTextIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3997,10 +4784,24 @@ extension MediaInfoQueryFilter
 
 extension MediaInfoQueryObject
     on QueryBuilder<MediaInfo, MediaInfo, QFilterCondition> {
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> audioSourcesElement(
+      FilterQuery<AudioSource> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'audioSources');
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> playHistory(
       FilterQuery<PlayHistory> q) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'playHistory');
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> videoSourcesElement(
+      FilterQuery<VideoSource> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'videoSources');
     });
   }
 }
@@ -4043,6 +4844,18 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByAuthorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'author', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByAuthorId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'authorId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByAuthorIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'authorId', Sort.desc);
     });
   }
 
@@ -4131,6 +4944,18 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDislikeCount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dislikeCount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDislikeCountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dislikeCount', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDownloadPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'downloadPath', Sort.asc);
@@ -4177,6 +5002,18 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDurationDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'duration', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDurationFormat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'durationFormat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDurationFormatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'durationFormat', Sort.desc);
     });
   }
 
@@ -4240,6 +5077,18 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByIsLike() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isLike', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByIsLikeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isLike', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByIsLocalVideo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isLocalVideo', Sort.asc);
@@ -4249,6 +5098,18 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByIsLocalVideoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isLocalVideo', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByLikeCount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'likeCount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByLikeCountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'likeCount', Sort.desc);
     });
   }
 
@@ -4425,6 +5286,18 @@ extension MediaInfoQuerySortThenBy
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByAuthorId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'authorId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByAuthorIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'authorId', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByAuthorThumbnail() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'authorThumbnail', Sort.asc);
@@ -4510,6 +5383,18 @@ extension MediaInfoQuerySortThenBy
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDislikeCount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dislikeCount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDislikeCountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'dislikeCount', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDownloadPath() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'downloadPath', Sort.asc);
@@ -4556,6 +5441,18 @@ extension MediaInfoQuerySortThenBy
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDurationDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'duration', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDurationFormat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'durationFormat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDurationFormatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'durationFormat', Sort.desc);
     });
   }
 
@@ -4631,6 +5528,18 @@ extension MediaInfoQuerySortThenBy
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByIsLike() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isLike', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByIsLikeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isLike', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByIsLocalVideo() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isLocalVideo', Sort.asc);
@@ -4640,6 +5549,18 @@ extension MediaInfoQuerySortThenBy
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByIsLocalVideoDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isLocalVideo', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByLikeCount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'likeCount', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByLikeCountDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'likeCount', Sort.desc);
     });
   }
 
@@ -4799,6 +5720,13 @@ extension MediaInfoQueryWhereDistinct
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByAuthorId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'authorId', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByAuthorThumbnail(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -4848,6 +5776,12 @@ extension MediaInfoQueryWhereDistinct
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByDislikeCount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'dislikeCount');
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByDownloadPath(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -4870,6 +5804,14 @@ extension MediaInfoQueryWhereDistinct
   QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'duration');
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByDurationFormat(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'durationFormat',
+          caseSensitive: caseSensitive);
     });
   }
 
@@ -4904,9 +5846,21 @@ extension MediaInfoQueryWhereDistinct
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByIsLike() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isLike');
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByIsLocalVideo() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isLocalVideo');
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByLikeCount() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'likeCount');
     });
   }
 
@@ -5015,9 +5969,22 @@ extension MediaInfoQueryProperty
     });
   }
 
+  QueryBuilder<MediaInfo, List<AudioSource>?, QQueryOperations>
+      audioSourcesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'audioSources');
+    });
+  }
+
   QueryBuilder<MediaInfo, String, QQueryOperations> authorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'author');
+    });
+  }
+
+  QueryBuilder<MediaInfo, String?, QQueryOperations> authorIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'authorId');
     });
   }
 
@@ -5063,6 +6030,12 @@ extension MediaInfoQueryProperty
     });
   }
 
+  QueryBuilder<MediaInfo, int?, QQueryOperations> dislikeCountProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'dislikeCount');
+    });
+  }
+
   QueryBuilder<MediaInfo, String?, QQueryOperations> downloadPathProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'downloadPath');
@@ -5086,6 +6059,12 @@ extension MediaInfoQueryProperty
   QueryBuilder<MediaInfo, int, QQueryOperations> durationProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'duration');
+    });
+  }
+
+  QueryBuilder<MediaInfo, String, QQueryOperations> durationFormatProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'durationFormat');
     });
   }
 
@@ -5119,9 +6098,21 @@ extension MediaInfoQueryProperty
     });
   }
 
+  QueryBuilder<MediaInfo, bool, QQueryOperations> isLikeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isLike');
+    });
+  }
+
   QueryBuilder<MediaInfo, bool, QQueryOperations> isLocalVideoProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isLocalVideo');
+    });
+  }
+
+  QueryBuilder<MediaInfo, int?, QQueryOperations> likeCountProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'likeCount');
     });
   }
 
@@ -5184,6 +6175,13 @@ extension MediaInfoQueryProperty
   QueryBuilder<MediaInfo, String, QQueryOperations> updateDateFormatProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'updateDateFormat');
+    });
+  }
+
+  QueryBuilder<MediaInfo, List<VideoSource>?, QQueryOperations>
+      videoSourcesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'videoSources');
     });
   }
 
@@ -5518,3 +6516,1240 @@ extension PlayHistoryQueryFilter
 
 extension PlayHistoryQueryObject
     on QueryBuilder<PlayHistory, PlayHistory, QFilterCondition> {}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const VideoSourceSchema = Schema(
+  name: r'VideoSource',
+  id: 7682483451518015526,
+  properties: {
+    r'bitrate': PropertySchema(
+      id: 0,
+      name: r'bitrate',
+      type: IsarType.long,
+    ),
+    r'byteSize': PropertySchema(
+      id: 1,
+      name: r'byteSize',
+      type: IsarType.long,
+    ),
+    r'format': PropertySchema(
+      id: 2,
+      name: r'format',
+      type: IsarType.string,
+    ),
+    r'height': PropertySchema(
+      id: 3,
+      name: r'height',
+      type: IsarType.long,
+    ),
+    r'isOnlyVideo': PropertySchema(
+      id: 4,
+      name: r'isOnlyVideo',
+      type: IsarType.bool,
+    ),
+    r'label': PropertySchema(
+      id: 5,
+      name: r'label',
+      type: IsarType.string,
+    ),
+    r'url': PropertySchema(
+      id: 6,
+      name: r'url',
+      type: IsarType.string,
+    ),
+    r'width': PropertySchema(
+      id: 7,
+      name: r'width',
+      type: IsarType.long,
+    )
+  },
+  estimateSize: _videoSourceEstimateSize,
+  serialize: _videoSourceSerialize,
+  deserialize: _videoSourceDeserialize,
+  deserializeProp: _videoSourceDeserializeProp,
+);
+
+int _videoSourceEstimateSize(
+  VideoSource object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  {
+    final value = object.format;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.label;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.url.length * 3;
+  return bytesCount;
+}
+
+void _videoSourceSerialize(
+  VideoSource object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeLong(offsets[0], object.bitrate);
+  writer.writeLong(offsets[1], object.byteSize);
+  writer.writeString(offsets[2], object.format);
+  writer.writeLong(offsets[3], object.height);
+  writer.writeBool(offsets[4], object.isOnlyVideo);
+  writer.writeString(offsets[5], object.label);
+  writer.writeString(offsets[6], object.url);
+  writer.writeLong(offsets[7], object.width);
+}
+
+VideoSource _videoSourceDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = VideoSource(
+    bitrate: reader.readLongOrNull(offsets[0]),
+    byteSize: reader.readLongOrNull(offsets[1]),
+    format: reader.readStringOrNull(offsets[2]),
+    height: reader.readLongOrNull(offsets[3]),
+    isOnlyVideo: reader.readBoolOrNull(offsets[4]) ?? false,
+    label: reader.readStringOrNull(offsets[5]),
+    url: reader.readStringOrNull(offsets[6]) ?? '',
+    width: reader.readLongOrNull(offsets[7]),
+  );
+  return object;
+}
+
+P _videoSourceDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readLongOrNull(offset)) as P;
+    case 1:
+      return (reader.readLongOrNull(offset)) as P;
+    case 2:
+      return (reader.readStringOrNull(offset)) as P;
+    case 3:
+      return (reader.readLongOrNull(offset)) as P;
+    case 4:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    case 5:
+      return (reader.readStringOrNull(offset)) as P;
+    case 6:
+      return (reader.readStringOrNull(offset) ?? '') as P;
+    case 7:
+      return (reader.readLongOrNull(offset)) as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+extension VideoSourceQueryFilter
+    on QueryBuilder<VideoSource, VideoSource, QFilterCondition> {
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      bitrateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'bitrate',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      bitrateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'bitrate',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> bitrateEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'bitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      bitrateGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'bitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> bitrateLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'bitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> bitrateBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'bitrate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      byteSizeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'byteSize',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      byteSizeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'byteSize',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> byteSizeEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'byteSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      byteSizeGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'byteSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      byteSizeLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'byteSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> byteSizeBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'byteSize',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> formatIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'format',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      formatIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'format',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> formatEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'format',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      formatGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'format',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> formatLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'format',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> formatBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'format',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      formatStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'format',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> formatEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'format',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> formatContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'format',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> formatMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'format',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      formatIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'format',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      formatIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'format',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> heightIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'height',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      heightIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'height',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> heightEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'height',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      heightGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'height',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> heightLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'height',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> heightBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'height',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      isOnlyVideoEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isOnlyVideo',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'label',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      labelIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'label',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'label',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      labelGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'label',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'label',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'label',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'label',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'label',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'label',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'label',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> labelIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'label',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      labelIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'label',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'url',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'url',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'url',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      urlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'url',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> widthIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'width',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      widthIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'width',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> widthEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'width',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      widthGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'width',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> widthLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'width',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> widthBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'width',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+}
+
+extension VideoSourceQueryObject
+    on QueryBuilder<VideoSource, VideoSource, QFilterCondition> {}
+
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+
+const AudioSourceSchema = Schema(
+  name: r'AudioSource',
+  id: -6394188906617519483,
+  properties: {
+    r'bitrate': PropertySchema(
+      id: 0,
+      name: r'bitrate',
+      type: IsarType.long,
+    ),
+    r'byteSize': PropertySchema(
+      id: 1,
+      name: r'byteSize',
+      type: IsarType.long,
+    ),
+    r'url': PropertySchema(
+      id: 2,
+      name: r'url',
+      type: IsarType.string,
+    )
+  },
+  estimateSize: _audioSourceEstimateSize,
+  serialize: _audioSourceSerialize,
+  deserialize: _audioSourceDeserialize,
+  deserializeProp: _audioSourceDeserializeProp,
+);
+
+int _audioSourceEstimateSize(
+  AudioSource object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.url.length * 3;
+  return bytesCount;
+}
+
+void _audioSourceSerialize(
+  AudioSource object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeLong(offsets[0], object.bitrate);
+  writer.writeLong(offsets[1], object.byteSize);
+  writer.writeString(offsets[2], object.url);
+}
+
+AudioSource _audioSourceDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  final object = AudioSource(
+    bitrate: reader.readLongOrNull(offsets[0]),
+    byteSize: reader.readLongOrNull(offsets[1]),
+    url: reader.readStringOrNull(offsets[2]) ?? '',
+  );
+  return object;
+}
+
+P _audioSourceDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
+    case 0:
+      return (reader.readLongOrNull(offset)) as P;
+    case 1:
+      return (reader.readLongOrNull(offset)) as P;
+    case 2:
+      return (reader.readStringOrNull(offset) ?? '') as P;
+    default:
+      throw IsarError('Unknown property with id $propertyId');
+  }
+}
+
+extension AudioSourceQueryFilter
+    on QueryBuilder<AudioSource, AudioSource, QFilterCondition> {
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      bitrateIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'bitrate',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      bitrateIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'bitrate',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> bitrateEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'bitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      bitrateGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'bitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> bitrateLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'bitrate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> bitrateBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'bitrate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      byteSizeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'byteSize',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      byteSizeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'byteSize',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> byteSizeEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'byteSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      byteSizeGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'byteSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      byteSizeLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'byteSize',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> byteSizeBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'byteSize',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'url',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'url',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'url',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'url',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      urlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'url',
+        value: '',
+      ));
+    });
+  }
+}
+
+extension AudioSourceQueryObject
+    on QueryBuilder<AudioSource, AudioSource, QFilterCondition> {}

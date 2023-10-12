@@ -5,6 +5,7 @@
 import 'dart:async';
 
 import 'package:chewie/chewie.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
@@ -18,9 +19,14 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'player_controller.dart';
 
-Future<void> startUserPlayPage({required MediaInfo mediaInfo}) async {
+Future<void> startUserPlayPage({required MediaInfo mediaInfo, bool isCloseCurrent = false, BuildContext? context})
+async {
   userPlayerController.playNewSource(mediaInfo);
-  PageNavigation.startNewPage(const UserPlayerPage());
+  if (isCloseCurrent) {
+    PageNavigation.startNewPageAndClose(const UserPlayerPage(),preventDuplicates: false);
+  } else {
+    PageNavigation.startNewPage(const UserPlayerPage());
+  }
 }
 
 class UserPlayerController {
@@ -261,7 +267,7 @@ class UserPlayerController {
     }
   }
 
-  void refreshMediaInfo(){
+  void refreshMediaInfo() {
     _nowPlayingMedia.refresh();
   }
 

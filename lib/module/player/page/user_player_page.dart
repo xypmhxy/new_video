@@ -249,9 +249,4 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
   Widget _height(double height) {
     return SliverToBoxAdapter(child: Height(height));
   }
-
-  Widget _divider() {
-    return SliverToBoxAdapter(
-        child: Divider(height: 36, thickness: .3, color: AppThemeController.textAccentColor(context)));
-  }
 }

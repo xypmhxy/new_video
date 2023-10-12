@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PageNavigation {
-  static Future<T?>? startNewPage<T>(Widget newPage) {
-    return Get.to(newPage);
+  static Future<T?>? startNewPage<T>(Widget newPage, {bool preventDuplicates = true}) {
+    return Get.to(newPage, preventDuplicates: preventDuplicates);
   }
 
   static void back<T>({T? result}) {
     Get.back(result: result);
   }
 
-  static Future<T?>? startNewPageAndClose<T>(Widget newPage) {
-    return Get.off(newPage);
+  static Future<T?>? startNewPageAndClose<T>(Widget newPage, {bool preventDuplicates = true}) {
+    return Get.off(newPage, preventDuplicates: preventDuplicates);
   }
 
   static Future<T?>? startNewPageAndCloseAll<T>(Widget newPage) {
@@ -35,5 +35,11 @@ class PageNavigation {
         },
       ),
     );
+  }
+
+  static Future<T?>? startNewPageAndCloseWithOrigin<T>(BuildContext context, Widget newPage) {
+    return Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
+      return newPage;
+    }));
   }
 }

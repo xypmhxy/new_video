@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/recommend_controller.dart';
+import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_page_controller.dart';
+import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
 import 'package:free_tube_player/widget/no_data_view.dart';
@@ -14,7 +16,6 @@ import 'package:free_tube_player/widget/video_item_view.dart';
 import 'package:get/get.dart';
 
 class RecommendTabPage extends StatefulWidget {
-
   const RecommendTabPage({super.key});
 
   @override
@@ -22,7 +23,6 @@ class RecommendTabPage extends StatefulWidget {
 }
 
 class _RecommendTabPageState extends State<RecommendTabPage> with AutomaticKeepAliveClientMixin {
-
   final _recommendController = RecommendController();
 
   @override
@@ -58,7 +58,11 @@ class _RecommendTabPageState extends State<RecommendTabPage> with AutomaticKeepA
         itemCount: _recommendController.recommendVideos.length,
         itemBuilder: (_, index) {
           final mediaInfo = _recommendController.recommendVideos[index];
-          return VideoItemView(mediaInfo: mediaInfo);
+          return GestureDetector(
+              onTap: () {
+                startUserPlayPage(mediaInfo: mediaInfo, isCloseCurrent: true,context: context);
+              },
+              child: VideoItemView(mediaInfo: mediaInfo));
         },
         separatorBuilder: (_, index) {
           return const Height(20);
