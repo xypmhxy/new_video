@@ -37,10 +37,10 @@ class VideoItemView extends StatelessWidget {
                 bottom: 10,
                 right: 10,
                 child: Container(
-                  decoration: allRadiusDecoration(8,
-                      color: mediaInfo.duration == 0 ? ColorRes.themeColor : ColorRes.backgroundColor),
+                  decoration:
+                      allRadiusDecoration(8, color: mediaInfo.isLive ? ColorRes.themeColor : ColorRes.backgroundColor),
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: TextView.primary(mediaInfo.duration == 0 ? S.current.live : mediaInfo.durationFormat,
+                  child: TextView.primary(mediaInfo.isLive ? S.current.live : mediaInfo.durationFormat,
                       color: Colors.white, fontSize: 12, fontWeight: FontWeight.normal),
                 )),
             Positioned(

@@ -88,6 +88,7 @@ class UserPlayerController {
   }
 
   Future<void> seekTo(Duration position, {bool isByUser = false}) async {
+    if (isLive) return;
     await _chewiePlayerImpl.seekTo(position);
   }
 
@@ -105,6 +106,8 @@ class UserPlayerController {
     _positionSubs?.cancel();
     _durationSubs?.cancel();
     _bufferSubs?.cancel();
+    position.value = Duration.zero;
+    duration.value = Duration.zero;
     playStatus.value = PlayStatus.none;
   }
 
@@ -160,6 +163,7 @@ class UserPlayerController {
   }
 
   Future<void> onHorizontalDragUpdate(double dx) async {
+    if (isLive) return;
     final isForward = dx >= 0;
     dragPosition.value ??= position.value;
     if (dragPosition.value == null) return;
@@ -169,6 +173,7 @@ class UserPlayerController {
   }
 
   Future<void> onHorizontalDragEnd() async {
+    if (isLive) return;
     if (dragPosition.value == null) return;
     final position = dragPosition.value;
     dragPosition.value = null;
@@ -210,12 +215,14 @@ class UserPlayerController {
   }
 
   Future<void> back10seconds() async {
+    if (isLive) return;
     var newPosition = positionMill - 10000;
     newPosition = newPosition <= 0 ? 0 : newPosition;
     await seekTo(Duration(milliseconds: newPosition));
   }
 
   Future<void> forward10Seconds() async {
+    if (isLive) return;
     var newPosition = positionMill + 10000;
     newPosition = newPosition >= durationMill ? durationMill : newPosition;
     await seekTo(Duration(milliseconds: newPosition));
@@ -237,10 +244,16 @@ class UserPlayerController {
     });
 
     _positionSubs = _chewiePlayerImpl.watchPosition.listen((pos) {
+      if (isLive) {
+        return;
+      }
       position.value = pos;
     });
 
     _durationSubs = _chewiePlayerImpl.watchDuration.listen((dur) {
+      if (isLive) {
+        return;
+      }
       duration.value = dur;
     });
 
@@ -252,24 +265,29 @@ class UserPlayerController {
   Future<void> requestPlaySource(MediaInfo mediaInfo) async {
     try {
       if (mediaInfo.youtubeId == null) return;
-      final manifest = await _youtubeExplode.videos.streams.getManifest(mediaInfo.youtubeId!);
       List<VideoSource> videoSources = [];
       List<AudioSource> audioSource = [];
-      for (final mux in manifest.video) {
-        videoSources.add(VideoUtils.parseMuxedVideo(mux));
-      }
-      videoSources.sort((a, b) {
-        if (a.width == null || b.width == null) return 0;
-        return a.width! > b.width! ? 1 : 0;
-      });
+      if (isLive) {
+        final liveUrl = await _youtubeExplode.videos.streams.getHttpLiveStreamUrl(VideoId(mediaInfo.youtubeId!));
+        videoSources.add(VideoSource(url: liveUrl));
+      } else {
+        final manifest = await _youtubeExplode.videos.streams.getManifest(mediaInfo.youtubeId!);
+        for (final mux in manifest.video) {
+          videoSources.add(VideoUtils.parseMuxedVideo(mux));
+        }
+        videoSources.sort((a, b) {
+          if (a.width == null || b.width == null) return 0;
+          return a.width! > b.width! ? 1 : 0;
+        });
 
-      for (final audioInfo in manifest.audio) {
-        audioSource.add(VideoUtils.parseAudio(audioInfo));
+        for (final audioInfo in manifest.audio) {
+          audioSource.add(VideoUtils.parseAudio(audioInfo));
+        }
+        audioSource.sort((a, b) {
+          if (a.bitrate == null || b.bitrate == null) return 0;
+          return a.bitrate! > b.bitrate! ? 1 : 0;
+        });
       }
-      audioSource.sort((a, b) {
-        if (a.bitrate == null || b.bitrate == null) return 0;
-        return a.bitrate! > b.bitrate! ? 1 : 0;
-      });
       mediaInfo.videoSources = videoSources;
       mediaInfo.audioSources = audioSource;
     } catch (e) {
@@ -292,4 +310,6 @@ class UserPlayerController {
   int get positionMill => position.value.inMilliseconds;
 
   bool get isPlaying => playStatus.value == PlayStatus.playing;
+
+  bool get isLive => nowPlayingMedia?.isLive ?? false;
 }

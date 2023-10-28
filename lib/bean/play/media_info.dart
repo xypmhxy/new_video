@@ -231,6 +231,9 @@ class MediaInfo {
     return '$dislikeCount';
   }
 
+  @ignore
+  bool get isLive => youtubeId != null && duration == 0;
+
   @override
   String toString() {
     return 'title= $title author= $author id= $id youtubeId= $youtubeId createDate= $createDate '
