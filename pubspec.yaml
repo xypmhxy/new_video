@@ -70,7 +70,10 @@ dependencies:
   google_mobile_ads: ^3.0.0
   uuid: ^4.0.0
   crypto: ^3.0.2
-  youtube_explode_dart: ^2.0.2
+  youtube_explode_dart:
+    path: plugins/youtube_explode_dart
+  native_device_orientation: ^1.1.4
+  sliding_up_panel: ^2.0.0+1
 
 dependency_overrides:
   video_player:

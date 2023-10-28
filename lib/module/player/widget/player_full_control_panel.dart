@@ -6,9 +6,11 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
+import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/player_seek_bar.dart';
+import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
 
@@ -34,7 +36,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
         visible: playerController.isShowControlPanel.value,
         child: Stack(
           alignment: Alignment.center,
-          children: [_backButton(), _playSpeed(), _movePositionWidget(), _playWidget(), _progressBar()],
+          children: [_background(), _backButton(), _playSpeed(), _movePositionWidget(), _playWidget(), _progressBar()],
         )));
   }
 
@@ -109,10 +111,20 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
     return Center(
       child: Obx(() {
         final isPlaying = PlayerController.get.isPlaying;
-        return _button(isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-            size: isPlaying ? 60 : 72, onPressed: playerController.clickPlay);
+        return _buttonSvg(isPlaying ? Assets.svgPause : Assets.svgPlay,
+            size: isPlaying ? 44 : 44, onPressed: playerController.clickPlay);
       }),
     );
+  }
+
+  Widget _buttonSvg(String svg, {VoidCallback? onPressed, double size = 44}) {
+    return GestureDetector(
+        onTap: onPressed,
+        child: SVGView(
+          assetName: svg,
+          color: AppThemeController.counterTextPrimaryColor(context),
+          size: size,
+        ));
   }
 
   Widget _button(IconData iconData, {VoidCallback? onPressed, double size = 44}) {

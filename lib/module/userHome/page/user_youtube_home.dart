@@ -9,8 +9,10 @@ import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/search/page/search_page.dart';
 import 'package:free_tube_player/module/userHome/controller/user_youtube_home_controller.dart';
 import 'package:free_tube_player/module/userHome/page/user_youtube_child_page.dart';
+import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/image_view.dart';
@@ -68,7 +70,9 @@ class _UserYoutubeHomeState extends State<UserYoutubeHome> with AutomaticKeepAli
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ImageButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      PageNavigation.startNewPage(const SearchPage());
+                    },
                     splashRadius: 24,
                     size: 26,
                     child:

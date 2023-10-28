@@ -33,11 +33,11 @@ class _UserModePageState extends State<UserHomeTabPage> {
           physics: const NeverScrollableScrollPhysics(),
           controller: pageController.pageController,
           children: const [
-            UserYoutubeHome(),
+            SizedBox(),
             TMDBPage(),
             UserYoutubeHome(),
             VideoHomePage(),
-            UserYoutubeHome(),
+            SizedBox(),
           ]),
     );
   }

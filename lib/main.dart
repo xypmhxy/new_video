@@ -18,6 +18,7 @@ void main() async {
   XScreen.portrait();
   await SPUtils.init();
   XScreen.statusBarContentColor(isWhite: AppThemeController.getThemeMode() == ThemeMode.light);
+  XScreen.portrait();
   try {
     await FirebaseHelper.get.initFirebase();
   } catch (_) {}

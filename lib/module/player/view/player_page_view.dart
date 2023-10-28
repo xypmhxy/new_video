@@ -28,12 +28,17 @@ class PlayerPageView extends BasePageView<PlayerPageCallback> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorRes.backgroundColor,
-      body: Column(
-        children: [_playerWidget()],
-      ),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          backgroundColor: ColorRes.backgroundColor,
+          body: Column(
+            children: [_playerWidget()],
+          ),
+        ),
+        onWillPop: () async {
+          playerController.onBackPressed();
+          return false;
+        });
   }
 
   Widget _playerWidget() {

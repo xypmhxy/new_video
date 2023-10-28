@@ -6,13 +6,14 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
-import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
+import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/player_seek_bar.dart';
+import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
 
@@ -37,29 +38,15 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
         visible: playerController.isShowControlPanel.value,
         child: Stack(
           alignment: Alignment.center,
-          children: [
-            _background(),
-            _titleBar(),
-            // _title(),
-            _playSpeed(),
-            // _dragPositionWidget(),
-            _playWidget(),
-            _progressBar()
-          ],
+          children: [_background(), _backButton(), _playSpeed(), _playWidget(), _progressBar()],
         )));
   }
 
   Widget _background() {
     return IgnorePointer(
         child: Container(
-      color: Colors.black12,
+      color: Colors.black26,
     ));
-  }
-
-  Widget _titleBar() {
-    return Row(
-      children: [_backButton(), const Width(12), _title()],
-    );
   }
 
   Widget _backButton() {
@@ -76,60 +63,37 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
             )));
   }
 
-  Widget _title() {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Container(
-        margin: EdgeInsets.only(top: XScreen.getStatusBarH(context) + 15),
-        child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: screenWidth / 2.5),
-            child: TextView.primary(playerController.nowPlayingMedia?.title ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                height: 1.1,
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w500)),
-      ),
-    );
-  }
-
   Widget _playSpeed() {
     const textColor = Colors.white;
     return Positioned(
         top: XScreen.getStatusBarH(context) + 12,
         right: 20,
-        child: Obx(() => DropdownButton(
-            value: userPlayerController.playSpeed.value,
-            elevation: 0,
-            isDense: true,
-            itemHeight: null,
-            underline: const SizedBox(),
-            icon: const SizedBox(),
-            dropdownColor: ColorRes.backgroundColor,
-            items: const [
-              DropdownMenuItem(value: 0.5, child: TextView.primary('0.5x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 0.75, child: TextView.primary('0.75x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 1.0, child: TextView.primary('1.0x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 1.25, child: TextView.primary('1.25x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 1.5, child: TextView.primary('1.5x', color: textColor, fontSize: 17)),
-              DropdownMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 17))
-            ],
-            onChanged: (value) {
-              userPlayerController.setPlaybackSpeed(value ?? 1.0);
-            })));
-  }
-
-  Widget _dragPositionWidget() {
-    return Positioned(
-        top: (screenHeight / 4) - 48,
-        child: Obx(() => Visibility(
-            visible: playerController.dragPosition.value != null,
-            child: TextView.primary(
-              playerController.dragPosition.value?.toSimpleString() ?? '',
-              fontSize: 28,
-              color: AppThemeController.counterTextPrimaryColor(context),
-            ))));
+        child: Obx(() => PopupMenuButton<double>(
+              itemBuilder: (context) {
+                return <PopupMenuItem<double>>[
+                  const PopupMenuItem(value: 0.5, child: TextView.primary('0.5x', color: textColor, fontSize: 17)),
+                  const PopupMenuItem(value: 0.75, child: TextView.primary('0.75x', color: textColor, fontSize: 17)),
+                  const PopupMenuItem(value: 1.0, child: TextView.primary('1.0x', color: textColor, fontSize: 17)),
+                  const PopupMenuItem(value: 1.25, child: TextView.primary('1.25x', color: textColor, fontSize: 17)),
+                  const PopupMenuItem(value: 1.5, child: TextView.primary('1.5x', color: textColor, fontSize: 17)),
+                  const PopupMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 17))
+                ];
+              },
+              iconSize: 1,
+              onCanceled: () {
+                playerController.startDelayCloseControlPanel();
+              },
+              onOpened: () {
+                playerController.showControlPanelLongTime();
+              },
+              onSelected: (value) {
+                playerController.setPlaybackSpeed(value);
+              },
+              child: TextView.primary(
+                '${playerController.playSpeed.value}x',
+                fontSize: 17,
+              ),
+            )));
   }
 
   Widget _playWidget() {
@@ -139,17 +103,27 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _button(Icons.replay_10_rounded, size: 43, onPressed: playerController.back10seconds),
+              _button(Icons.replay_10_rounded, size: 32, onPressed: playerController.back10seconds),
               const Width(28),
               Obx(
-                () => _button(playerController.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                    onPressed: playerController.togglePlay, size: playerController.isPlaying ? 48 : 54),
+                () => _buttonSvg(playerController.isPlaying ? Assets.svgPause : Assets.svgPlay,
+                    onPressed: playerController.togglePlay, size: playerController.isPlaying ? 35 : 38),
               ),
               const Width(28),
-              _button(Icons.forward_10_rounded, size: 43, onPressed: playerController.forward10Seconds)
+              _button(Icons.forward_10_rounded, size: 32, onPressed: playerController.forward10Seconds)
             ],
           )),
     );
+  }
+
+  Widget _buttonSvg(String svg, {VoidCallback? onPressed, double size = 44}) {
+    return GestureDetector(
+        onTap: onPressed,
+        child: SVGView(
+          assetName: svg,
+          color: AppThemeController.counterTextPrimaryColor(context),
+          size: size,
+        ));
   }
 
   Widget _button(IconData iconData, {VoidCallback? onPressed, double size = 44}) {

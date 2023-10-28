@@ -75,7 +75,7 @@ class DialogMoreAction extends StatelessWidget {
               Container(
                 width: 48,
                 height: 48,
-                decoration: allRadiusDecoration(12, color: AppThemeController.colorF5F5F5(context)),
+                decoration: allRadiusDecoration(12, color: AppThemeController.onPrimaryColor(context)),
                 child: UnconstrainedBox(
                   child: SVGView(
                     assetName: svg,

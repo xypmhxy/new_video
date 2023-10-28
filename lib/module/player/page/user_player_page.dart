@@ -6,17 +6,20 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/extension/comment_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/player/controller/comment_controller.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_page_controller.dart';
-import 'package:free_tube_player/module/player/page/comment_tab_page.dart';
+import 'package:free_tube_player/module/player/page/dialog_comment.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'recommend_tab_page.dart';
 
@@ -29,17 +32,19 @@ class UserPlayerPage extends StatefulWidget {
 
 class _UserPlayerPageState extends State<UserPlayerPage> {
   final _userPlayerPageController = UserPlayerPageController();
+  final _commentController = CommentController();
 
   @override
   void initState() {
-    _userPlayerPageController.requestWatchPageInfo(userPlayerController.nowPlayingMedia!);
+    _userPlayerPageController
+        .requestWatchPageInfo(userPlayerController.nowPlayingMedia!)
+        .then((value) => _commentController.requestComment(_userPlayerPageController.video.value));
     _userPlayerPageController.requestAuthorInfo(userPlayerController.nowPlayingMedia?.authorId ?? '');
     super.initState();
   }
 
   @override
   void dispose() {
-    userPlayerController.stop();
     _userPlayerPageController.dispose();
     super.dispose();
   }
@@ -47,11 +52,28 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-            child: Column(children: [
-      _playerWidget(),
-      _videoInfoRecommend(),
-    ])));
+        body: SlidingUpPanel(
+      minHeight: 0,
+      maxHeight: screenHeight * .71,
+      color: Colors.transparent,
+      controller: _userPlayerPageController.panelController,
+      panelBuilder: (scrollController) {
+        return DialogComment(
+          commentController: _commentController,
+          video: _userPlayerPageController.video.value,
+          scrollController: scrollController,
+          onClickClose: () {
+            _userPlayerPageController.panelController.close();
+          },
+        );
+      },
+      body: SafeArea(
+        child: Column(children: [
+          _playerWidget(),
+          _videoInfoRecommend(),
+        ]),
+      ),
+    ));
   }
 
   Widget _videoInfoRecommend() {
@@ -73,13 +95,12 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
                       SliverAppBar(
                           leading: const SizedBox(),
                           backgroundColor: AppThemeController.backgroundColor(context),
-                          toolbarHeight: 52,
+                          toolbarHeight: 48,
                           pinned: true,
-                          flexibleSpace: _tabBar()),
-                      _height(8),
+                          flexibleSpace: _commentsView()),
                     ];
                   },
-                  body: _tabBarView(),
+                  body: const RecommendTabPage(),
                 ))));
   }
 
@@ -221,29 +242,36 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
     );
   }
 
-  TabBar _tabBar() {
-    return TabBar(
-        indicatorPadding: const EdgeInsets.only(bottom: 8),
-        indicatorSize: TabBarIndicatorSize.label,
-        labelPadding: const EdgeInsets.only(right: 20),
-        splashFactory: NoSplash.splashFactory,
-        isScrollable: true,
-        indicatorColor: AppThemeController.primaryThemeColor(context),
-        tabs: [
-          Tab(
-            text: S.current.recommended,
-          ),
-          Tab(
-            text: S.current.comment,
-          )
-        ]);
-  }
-
-  Widget _tabBarView() {
-    return TabBarView(children: [
-      const RecommendTabPage(),
-      Obx(() => CommentTabPage(video: _userPlayerPageController.video.value)),
-    ]);
+  Widget _commentsView() {
+    return GestureDetector(
+        onTap: () {
+          _userPlayerPageController.showCommentDialog(context, _commentController);
+        },
+        child: Container(
+            height: 48,
+            color: Colors.transparent,
+            alignment: Alignment.centerLeft,
+            child: Obx(() => Row(
+                  children: [
+                    TextView.primary(S.current.comments, fontSize: 15, fontWeight: FontWeight.normal),
+                    const Width(8),
+                    TextView.primary(
+                      _commentController.commentsList.value?.formatTotalCount() ?? '',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    Expanded(
+                        child: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 8),
+                      child: SVGView(
+                        assetName: Assets.svgExpandComment,
+                        color: AppThemeController.textPrimaryColor(context),
+                        size: 18,
+                      ),
+                    ))
+                  ],
+                ))));
   }
 
   Widget _height(double height) {

@@ -66,7 +66,7 @@ class DialogRename extends StatelessWidget {
     return Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: allRadiusDecoration(16, color: AppThemeController.colorF5F5F5(context)),
+        decoration: allRadiusDecoration(16, color: AppThemeController.onPrimaryColor(context)),
         child: TextField(
           focusNode: FocusNode()..requestFocus(),
           cursorHeight: 18,

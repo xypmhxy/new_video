@@ -44,7 +44,14 @@
   "download": "Download",
   "share": "Share",
   "save": "Save",
-  "comment": "Comment",
+  "comments": "Comments",
+  "replies": "Replies",
   "playlist": "Playlist",
-  "loop": "Loop"
+  "loop": "Loop",
+  "top": "Top",
+  "newest": "Newest",
+  "mostLike": "Most like",
+  "mostReplies": "Most Replies",
+  "search": "Search",
+  "viewCountParams": "{params} views"
 }

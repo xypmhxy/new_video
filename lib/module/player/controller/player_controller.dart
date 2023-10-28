@@ -101,6 +101,7 @@ class PlayerController extends GetxController {
         showControlsOnInitialize: true,
         showControls: true,
         useRootNavigator: false,
+        deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
         deviceOrientationsOnEnterFullScreen: [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
         customControls: PlayerControlPanel(playerController: this, onBackPressed: onBackPressed),
         errorBuilder: (_, e) {

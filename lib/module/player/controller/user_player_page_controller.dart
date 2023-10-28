@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/play/author_info.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/module/channel/api/channel_api.dart';
+import 'package:free_tube_player/module/player/controller/comment_controller.dart';
 import 'package:get/get.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class UserPlayerPageController extends BaseController {
@@ -11,6 +14,7 @@ class UserPlayerPageController extends BaseController {
   final _youtubeExplode = YoutubeExplode();
   final authorInfo = Rxn<AuthorInfo>();
   final video = Rxn<Video>();
+  PanelController panelController = PanelController();
 
   @override
   dispose() {
@@ -33,5 +37,9 @@ class UserPlayerPageController extends BaseController {
     final authorInfo = await _channelApi.requestAuthorInfo(channelId);
     if (authorInfo == null) return;
     this.authorInfo.value = authorInfo;
+  }
+
+  Future<void> showCommentDialog(BuildContext context, CommentController commentController) async {
+    panelController.open();
   }
 }

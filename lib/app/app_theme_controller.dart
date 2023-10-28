@@ -21,9 +21,11 @@ class AppThemeController extends GetxController {
     final isLight = brightness == Brightness.light;
     const primaryColor = ColorRes.themeColor;
     final backgroundColor = isLight ? Colors.white : ColorRes.backgroundColor;
+    final bottomSheetBackground = isLight ? Colors.white : ColorRes.bottomSheetBackground;
     final textColor = isLight ? ColorRes.backgroundColor : ColorRes.textPrimaryColor;
     const accentTextColor = ColorRes.accentTextColor;
     final surfaceColor = isLight ? ColorRes.colorF5F5F5 : Colors.black12;
+    final onPrimaryColor = isLight ? ColorRes.colorF5F5F5 : const Color(0XFF181A1F);
     final disabledColor = isLight ? ColorRes.negativeColor : ColorRes.negativeDarkColor;
     final iconThemeData = IconThemeData(color: textColor, size: 24);
     final fontFamily = tubeFontFamily;
@@ -34,10 +36,12 @@ class AppThemeController extends GetxController {
         brightness: brightness,
         disabledColor: disabledColor,
         splashColor: primaryColor.withOpacity(.1),
+        bottomSheetTheme: BottomSheetThemeData(backgroundColor: bottomSheetBackground),
+        dividerColor: isLight ? Colors.black45 : Colors.white38,
         colorScheme: ColorScheme(
             brightness: brightness,
             primary: primaryColor,
-            onPrimary: textColor,
+            onPrimary: onPrimaryColor,
             secondary: textColor,
             onSecondary: Colors.black,
             error: primaryColor,
@@ -114,7 +118,12 @@ class AppThemeController extends GetxController {
 
   static Color backgroundColor(BuildContext context) => themeData(context).colorScheme.background;
 
+  static Color bottomSheetColor(BuildContext context) =>
+      themeData(context).bottomSheetTheme.backgroundColor ?? ColorRes.bottomSheetBackground;
+
   static Color disableColor(BuildContext context) => themeData(context).disabledColor;
+
+  static Color dividerColor(BuildContext context) => themeData(context).dividerColor;
 
   static Color textPrimaryColor(BuildContext context) =>
       themeData(context).textTheme.titleLarge?.color ?? ColorRes.textPrimaryColor;
@@ -130,5 +139,7 @@ class AppThemeController extends GetxController {
   static Color counterTextPrimaryColor(BuildContext context) =>
       isLight(context) ? backgroundColor(context) : textPrimaryColor(context);
 
-  static Color colorF5F5F5(BuildContext context) => themeData(context).colorScheme.onSurface;
+  static Color onPrimaryColor(BuildContext context) => themeData(context).colorScheme.onPrimary;
+
+  static Color splashColor(BuildContext context) => themeData(context).splashColor;
 }

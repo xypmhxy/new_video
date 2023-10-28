@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UserHomeTabPageController {
-  final pageController = PageController();
+  final pageController = PageController(initialPage: 2);
   final index = 2.obs;
 
   void onTapBottomNavigationBar(int index) {

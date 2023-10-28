@@ -65,7 +65,7 @@ class ChewiePlayerImpl implements PlayerInterface {
       // if (_adShowCompleter?.isCompleted == false) {
       //   await _adShowCompleter?.future;
       // }
-      chewieController?.play();
+      // chewieController?.play();
     }).onError((error, stackTrace) {
       LogUtils.e('视频播放失败 ${error.toString()}');
     });

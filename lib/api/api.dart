@@ -21,7 +21,7 @@ class API {
   static String visitorData = 'CgtxX01fTDF5US1WZyiVtfunBjIICgJISxICGgA%3D';
 
   static Map<String, dynamic> getWebCommonParams({Map? hlgl, String? visitorData}) {
-    hlgl ??= {'hl': AppUtils.language, 'gl': AppUtils.localCountryCode};
+    hlgl ??= {'hl': AppUtils.language};
     return {
       'context': {
         'client': {

@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
+import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/player_seek_bar.dart';
+import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
 
@@ -105,7 +107,10 @@ class _PlayerNormalControlPanelState extends State<PlayerNormalControlPanel> {
           onSelected: (value) {
             PlayerController.get.setPlaySpeed(value);
           },
-          child: TextView.primary('${PlayerController.get.playSpeed.value}',fontSize: 17,),
+          child: TextView.primary(
+            '${PlayerController.get.playSpeed.value}',
+            fontSize: 17,
+          ),
         ));
   }
 
@@ -128,17 +133,27 @@ class _PlayerNormalControlPanelState extends State<PlayerNormalControlPanel> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _button(Icons.replay_10_rounded, size: 43, onPressed: playerController.back10seconds),
+              _button(Icons.replay_10_rounded, size: 32, onPressed: playerController.back10seconds),
               const Width(28),
               Obx(
-                () => _button(PlayerController.get.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                    onPressed: playerController.clickPlay, size: PlayerController.get.isPlaying ? 48 : 54),
+                () => _buttonSvg(playerController.isPlaying ? Assets.svgPause : Assets.svgPlay,
+                    onPressed: playerController.clickPlay, size: playerController.isPlaying ? 35 : 38),
               ),
               const Width(28),
-              _button(Icons.forward_10_rounded, size: 43, onPressed: playerController.forward10Seconds)
+              _button(Icons.forward_10_rounded, size: 32, onPressed: playerController.forward10Seconds)
             ],
           )),
     );
+  }
+
+  Widget _buttonSvg(String svg, {VoidCallback? onPressed, double size = 44}) {
+    return GestureDetector(
+        onTap: onPressed,
+        child: SVGView(
+          assetName: svg,
+          color: AppThemeController.counterTextPrimaryColor(context),
+          size: size,
+        ));
   }
 
   Widget _button(IconData iconData, {VoidCallback? onPressed, double size = 44}) {

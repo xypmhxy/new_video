@@ -12,6 +12,7 @@ class ColorRes {
   static const negativeColor = Color(0XFFFFE7EC);
   static const negativeDarkColor = Color(0XFF282A30);
   static const backgroundColor = Color(0XFF131418);
+  static const bottomSheetBackground = Color(0XFF1D1F25);
   static const textPrimaryColor = Colors.white;
   static const accentTextColor = Color(0XFF8B8F8D);
   static const colorF5F5F5 = Color(0XFFF5F5F5);

@@ -500,11 +500,21 @@ class S {
     );
   }
 
-  /// `Comment`
-  String get comment {
+  /// `Comments`
+  String get comments {
     return Intl.message(
-      'Comment',
-      name: 'comment',
+      'Comments',
+      name: 'comments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Replies`
+  String get replies {
+    return Intl.message(
+      'Replies',
+      name: 'replies',
       desc: '',
       args: [],
     );
@@ -527,6 +537,66 @@ class S {
       name: 'loop',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Top`
+  String get top {
+    return Intl.message(
+      'Top',
+      name: 'top',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Newest`
+  String get newest {
+    return Intl.message(
+      'Newest',
+      name: 'newest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Most like`
+  String get mostLike {
+    return Intl.message(
+      'Most like',
+      name: 'mostLike',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Most Replies`
+  String get mostReplies {
+    return Intl.message(
+      'Most Replies',
+      name: 'mostReplies',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get search {
+    return Intl.message(
+      'Search',
+      name: 'search',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{params} views`
+  String viewCountParams(Object params) {
+    return Intl.message(
+      '$params views',
+      name: 'viewCountParams',
+      desc: '',
+      args: [params],
     );
   }
 }

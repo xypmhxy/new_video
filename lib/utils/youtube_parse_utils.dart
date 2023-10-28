@@ -5,6 +5,7 @@
 
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
+import 'package:free_tube_player/utils/duration_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 
 class YoutubeParseUtils {
@@ -49,20 +50,7 @@ class YoutubeParseUtils {
     final mediaDao = MediaInfoDao();
     int duration = 0;
     String durationString = videoRenderer['lengthText']?['simpleText'] ?? '';
-    if (durationString.contains(':')) {
-      final durationList = durationString.split(':');
-      int hour = 0;
-      if (durationList.length >= 3) {
-        hour = int.tryParse(durationList[0]) ?? 0;
-        int min = int.tryParse(durationList[1]) ?? 0;
-        int second = int.tryParse(durationList[2]) ?? 0;
-        duration = Duration(hours: hour, minutes: min, seconds: second).inMilliseconds;
-      } else {
-        int min = int.tryParse(durationList[0]) ?? 0;
-        int second = int.tryParse(durationList[1]) ?? 0;
-        duration = Duration(hours: hour, minutes: min, seconds: second).inMilliseconds;
-      }
-    }
+    duration = DurationUtils.parseDurationText(durationString);
 
     final viewCountText = videoRenderer['shortViewCountText']?['simpleText'] ?? '';
 

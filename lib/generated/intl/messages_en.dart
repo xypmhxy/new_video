@@ -22,12 +22,14 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(params) => "${params} videos";
 
+  static String m1(params) => "${params} views";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "clearHistory": MessageLookupByLibrary.simpleMessage("Clear history"),
-        "comment": MessageLookupByLibrary.simpleMessage("Comment"),
+        "comments": MessageLookupByLibrary.simpleMessage("Comments"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "confirmDelete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this video?"),
@@ -49,7 +51,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "like": MessageLookupByLibrary.simpleMessage("Like"),
         "live": MessageLookupByLibrary.simpleMessage("Live"),
         "loop": MessageLookupByLibrary.simpleMessage("Loop"),
+        "mostLike": MessageLookupByLibrary.simpleMessage("Most like"),
+        "mostReplies": MessageLookupByLibrary.simpleMessage("Most Replies"),
         "movie": MessageLookupByLibrary.simpleMessage("Movie"),
+        "newest": MessageLookupByLibrary.simpleMessage("Newest"),
         "noData": MessageLookupByLibrary.simpleMessage("No video found"),
         "noDataAndroid": MessageLookupByLibrary.simpleMessage("No video found"),
         "noDataClickRetry": MessageLookupByLibrary.simpleMessage(
@@ -66,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
         "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
+        "replies": MessageLookupByLibrary.simpleMessage("Replies"),
         "rewardNotLoad": MessageLookupByLibrary.simpleMessage(
             "The video ad has not been loaded yet. Please try again later"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
@@ -73,12 +79,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Save to gallery failed"),
         "saveToGallerySuccess": MessageLookupByLibrary.simpleMessage(
             "Save to gallery successfully"),
+        "search": MessageLookupByLibrary.simpleMessage("Search"),
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "shorts": MessageLookupByLibrary.simpleMessage("Shorts"),
         "toAuthorize": MessageLookupByLibrary.simpleMessage("To authorize"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
+        "top": MessageLookupByLibrary.simpleMessage("Top"),
         "trim": MessageLookupByLibrary.simpleMessage("Trim"),
-        "userAgreement": MessageLookupByLibrary.simpleMessage("User Agreement")
+        "userAgreement": MessageLookupByLibrary.simpleMessage("User Agreement"),
+        "viewCountParams": m1
       };
 }

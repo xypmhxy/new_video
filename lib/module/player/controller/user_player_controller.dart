@@ -19,11 +19,11 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'player_controller.dart';
 
-Future<void> startUserPlayPage({required MediaInfo mediaInfo, bool isCloseCurrent = false, BuildContext? context})
-async {
+Future<void> startUserPlayPage(
+    {required MediaInfo mediaInfo, bool isCloseCurrent = false, BuildContext? context}) async {
   userPlayerController.playNewSource(mediaInfo);
   if (isCloseCurrent) {
-    PageNavigation.startNewPageAndClose(const UserPlayerPage(),preventDuplicates: false);
+    PageNavigation.startNewPageAndClose(const UserPlayerPage(), preventDuplicates: false);
   } else {
     PageNavigation.startNewPage(const UserPlayerPage());
   }
@@ -83,6 +83,7 @@ class UserPlayerController {
   Future<void> next({bool isByUser = false}) async {}
 
   Future<void> setPlaybackSpeed(double speed, {bool isByUser = false}) async {
+    playSpeed.value = speed;
     await _chewiePlayerImpl.setPlaybackSpeed(speed, isByUser: isByUser);
   }
 
@@ -112,7 +113,7 @@ class UserPlayerController {
     checkControlPanelStatus();
   }
 
-  void checkControlPanelStatus() {
+  void checkControlPanelStatus({int seconds = 3}) {
     if (isShowControlPanel.value) {
       startDelayCloseControlPanel();
     } else {
@@ -120,12 +121,20 @@ class UserPlayerController {
     }
   }
 
-  void startDelayCloseControlPanel() {
+  void startDelayCloseControlPanel({int seconds = 3}) {
     cancelDelayCloseControlPanel();
-    _controlPanelTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _controlPanelTimer = Timer.periodic(Duration(seconds: seconds), (timer) {
       isShowControlPanel.value = false;
       cancelDelayCloseControlPanel();
     });
+  }
+
+  void showControlPanelLongTime() {
+    if (isShowControlPanel.value) {
+      startDelayCloseControlPanel(seconds: 30);
+    } else {
+      cancelDelayCloseControlPanel();
+    }
   }
 
   void cancelDelayCloseControlPanel() {
@@ -134,6 +143,7 @@ class UserPlayerController {
   }
 
   Future<void> togglePlay() async {
+    startDelayCloseControlPanel();
     chewieController.togglePause();
     saveHistoryPosition();
   }
