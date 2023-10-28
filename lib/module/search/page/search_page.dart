@@ -34,6 +34,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     _searchPageController.focusNode.requestFocus();
+    _searchPageController.getSearchHistoryList();
     super.initState();
   }
 
@@ -151,15 +152,18 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _content() {
     return Obx(() {
-      Widget replacement = _searchHistory();
-      if (_searchPageController.searchLoadState.value == ViewStatus.empty ||
+      Widget replacement = const SizedBox();
+      if (_searchPageController.inputText.isEmpty) {
+        replacement = _searchHistory();
+      } else if (_searchPageController.searchLoadState.value == ViewStatus.empty ||
           _searchPageController.searchLoadState.value == ViewStatus.failed) {
         return _searchFailed();
       } else if (_searchPageController.searchSuggestions.isNotEmpty) {
         replacement = _searchSuggestions();
       }
       return Visibility(
-        visible: _searchPageController.searchLoadState.value != ViewStatus.none,
+        visible: _searchPageController.searchLoadState.value != ViewStatus.none &&
+            _searchPageController.inputText.isNotEmpty,
         replacement: replacement,
         child: _searchResult(),
       );
@@ -167,9 +171,46 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _searchHistory() {
-    return Container(
-      child: TextView.primary('搜索历史'),
-    );
+    return Expanded(
+        child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemBuilder: (_, index) {
+              final searchHistoryInfo = _searchPageController.searchHistoryList[index];
+              return GestureDetector(
+                  onTap: () {
+                    _searchPageController.search(searchHistoryInfo.content);
+                  },
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    height: 38,
+                    color: Colors.transparent,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                            child: TextView.primary(searchHistoryInfo.content,
+                                fontSize: 14, maxLines: 1, overflow: TextOverflow.ellipsis)),
+                        const Width(16),
+                        GestureDetector(
+                            onTap: () {
+                              _searchPageController.deleteSearchHistory(searchHistoryInfo);
+                            },
+                            child: Container(
+                              color: Colors.transparent,
+                              padding: const EdgeInsets.all(4),
+                              child: const Icon(
+                                Icons.close_rounded,
+                                size: 20,
+                              ),
+                            ))
+                      ],
+                    ),
+                  ));
+            },
+            separatorBuilder: (_, index) {
+              return const Height(4);
+            },
+            itemCount: _searchPageController.searchHistoryList.length));
   }
 
   Widget _searchSuggestions() {

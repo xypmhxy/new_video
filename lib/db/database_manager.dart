@@ -6,6 +6,7 @@
 import 'dart:io';
 
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/bean/search/search_history_info.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -29,7 +30,7 @@ class DatabaseManager {
       dirDir.createSync();
     }
     _isar = await Isar.open(
-      [MediaInfoSchema],
+      [MediaInfoSchema,SearchHistoryInfoSchema],
       directory: '${dir.path}/db',
     );
   }
