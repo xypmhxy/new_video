@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
-import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
@@ -14,6 +13,7 @@ import 'package:free_tube_player/module/search/controller/search_page_controller
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
+import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/refresh_header.dart';
 import 'package:free_tube_player/widget/search_item.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
@@ -52,7 +52,7 @@ class _SearchPageState extends State<SearchPage> {
           const Height(16),
           _searchBar(),
           const Height(16),
-          _searchResult(),
+          _content(),
         ],
       )),
     );
@@ -151,15 +151,48 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _content() {
     return Obx(() {
-      if (_searchPageController.inputText.isEmpty) {
-        return _searchHistory();
+      Widget replacement = _searchHistory();
+      if (_searchPageController.searchLoadState.value == ViewStatus.empty ||
+          _searchPageController.searchLoadState.value == ViewStatus.failed) {
+        return _searchFailed();
+      } else if (_searchPageController.searchSuggestions.isNotEmpty) {
+        replacement = _searchSuggestions();
       }
-      return _searchResult();
+      return Visibility(
+        visible: _searchPageController.searchLoadState.value != ViewStatus.none,
+        replacement: replacement,
+        child: _searchResult(),
+      );
     });
   }
 
   Widget _searchHistory() {
-    return Container();
+    return Container(
+      child: TextView.primary('搜索历史'),
+    );
+  }
+
+  Widget _searchSuggestions() {
+    return Expanded(
+        child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemBuilder: (_, index) {
+              final suggestion = _searchPageController.searchSuggestions[index];
+              return GestureDetector(
+                  onTap: () {
+                    _searchPageController.search(suggestion);
+                  },
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    height: 38,
+                    color: Colors.transparent,
+                    child: TextView.primary(suggestion, fontSize: 14, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ));
+            },
+            separatorBuilder: (_, index) {
+              return const Height(4);
+            },
+            itemCount: _searchPageController.searchSuggestions.length));
   }
 
   Widget _searchResult() {
@@ -190,5 +223,12 @@ class _SearchPageState extends State<SearchPage> {
                   return const Height(12);
                 },
                 itemCount: _searchPageController.searchResultList.length))));
+  }
+
+  Widget _searchFailed() {
+    return Container(
+      margin: const EdgeInsets.only(top: 68),
+      child: NoDataView(text: S.current.noData),
+    );
   }
 }

@@ -4,6 +4,7 @@
 */
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/api/search_api.dart';
+import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,9 @@ class SearchPageController extends BaseController {
   final _searchApi = SearchApi();
   final refreshController = RefreshController();
   final searchResultList = <MediaInfo>[].obs;
+  final searchSuggestions = <String>[].obs;
   final inputText = ''.obs;
+  final searchLoadState = ViewStatus.none.obs;
   String? _continuation;
 
   SearchPageController() {
@@ -36,12 +39,19 @@ class SearchPageController extends BaseController {
   }
 
   Future<void> getSearchSuggestion(String keyword) async {
-    inputText.value = textInputController.text.trim();
-    // final aaa = await _youtubeExplode.search.getQuerySuggestions(keyword);
-    // print('object');
+    inputText.value = keyword.trim();
+    final suggestions = await _youtubeExplode.search.getQuerySuggestions(keyword);
+    searchSuggestions.clear();
+    searchSuggestions.addAll(suggestions);
+    if (suggestions.isNotEmpty && searchLoadState.value != ViewStatus.loading){
+      searchLoadState.value = ViewStatus.none;
+    }
   }
 
   Future<void> search(String keyword) async {
+    focusNode.unfocus();
+    searchLoadState.value = ViewStatus.loading;
+    await Future.delayed(const Duration(milliseconds: 500));
     _continuation = null;
     refreshController.requestRefresh(needCallback: false);
     final resultMediaInfo = await _searchApi.search(
@@ -52,6 +62,11 @@ class SearchPageController extends BaseController {
     searchResultList.clear();
     searchResultList.addAll(resultMediaInfo);
     refreshController.refreshCompleted(resetFooterState: true);
+    if (resultMediaInfo.isEmpty){
+      searchLoadState.value = ViewStatus.empty;
+    }else{
+      searchLoadState.value = ViewStatus.success;
+    }
   }
 
   Future<void> searchMore() async {
