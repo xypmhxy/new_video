@@ -13,6 +13,7 @@ import 'package:free_tube_player/module/player/interface/chewie_player_impl.dart
 import 'package:free_tube_player/module/player/page/user_player_page.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
+import 'package:free_tube_player/utils/sp_utils.dart';
 import 'package:free_tube_player/utils/video_utils.dart';
 import 'package:get/get.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -43,6 +44,8 @@ class UserPlayerController {
   final isShowControlPanel = false.obs;
   final playSpeed = 1.0.obs;
   final isFullScreen = false.obs;
+  final isLoop = false.obs;
+  final isBackgroundPlayback = false.obs;
   double? dragStartX;
   double? dragStartY;
 
@@ -108,6 +111,8 @@ class UserPlayerController {
     _bufferSubs?.cancel();
     position.value = Duration.zero;
     duration.value = Duration.zero;
+    isLoop.value = false;
+    isBackgroundPlayback.value = false;
     playStatus.value = PlayStatus.none;
   }
 
@@ -149,6 +154,20 @@ class UserPlayerController {
     startDelayCloseControlPanel();
     chewieController.togglePause();
     saveHistoryPosition();
+  }
+
+  void toggleLoop() {
+    setLoop(isLoop.toggle().value);
+  }
+
+  void setLoop(bool isLoop) {
+    _chewiePlayerImpl.setLoop(isLoop);
+    this.isLoop.value = isLoop;
+    SPUtils.setBool('play_loop', isLoop);
+  }
+
+  void toggleBackgroundPlayback() {
+    isBackgroundPlayback.toggle();
   }
 
   Future<void> saveHistoryPosition() async {
@@ -241,19 +260,18 @@ class UserPlayerController {
   void setupStreams() {
     _playStatusSubs = _chewiePlayerImpl.watchPlayState.listen((status) {
       playStatus.value = status;
+      if (playStatus.value == PlayStatus.initialized) {
+        if (isRelease) play();
+      }
     });
 
     _positionSubs = _chewiePlayerImpl.watchPosition.listen((pos) {
-      if (isLive) {
-        return;
-      }
+      if (isLive) return;
       position.value = pos;
     });
 
     _durationSubs = _chewiePlayerImpl.watchDuration.listen((dur) {
-      if (isLive) {
-        return;
-      }
+      if (isLive) return;
       duration.value = dur;
     });
 
@@ -312,4 +330,8 @@ class UserPlayerController {
   bool get isPlaying => playStatus.value == PlayStatus.playing;
 
   bool get isLive => nowPlayingMedia?.isLive ?? false;
+
+  static bool getLoop() {
+    return SPUtils.getBool('play_loop');
+  }
 }

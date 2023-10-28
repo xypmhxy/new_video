@@ -170,15 +170,35 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
       child: Obx(() {
         final mediaInfo = userPlayerController.nowPlayingMedia;
         final isLike = mediaInfo?.isLike ?? false;
+        final isLoop = userPlayerController.isLoop.value;
+        final isBackgroundPlayback = userPlayerController.isBackgroundPlayback.value;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _controlItem(isLike ? Assets.svgLikeSelect : Assets.svgLikeNormal, mediaInfo?.formatLikeCount() ?? '-',
-                color: isLike ? AppThemeController.primaryThemeColor(context) : null),
-            _controlItem(isLike ? Assets.svgLoopSelect : Assets.svgLoopNormal, S.current.loop,
-                color: isLike ? AppThemeController.primaryThemeColor(context) : null),
+            _controlItem(
+              isLike ? Assets.svgLikeSelect : Assets.svgLikeNormal,
+              mediaInfo?.formatLikeCount() ?? '-',
+              color: isLike ? AppThemeController.primaryThemeColor(context) : null,
+            ),
+            GestureDetector(
+                onTap: () {
+                  userPlayerController.toggleLoop();
+                },
+                child: _controlItem(
+                  isLoop ? Assets.svgLoopSelect : Assets.svgLoopNormal,
+                  S.current.loop,
+                  color: isLoop ? AppThemeController.primaryThemeColor(context) : null,
+                )),
+            GestureDetector(
+                onTap: () {
+                  userPlayerController.toggleBackgroundPlayback();
+                },
+                child: _controlItem(
+                  Assets.svgHeadset,
+                  S.current.backgroundPlayback,
+                  color: isBackgroundPlayback ? AppThemeController.primaryThemeColor(context) : null,
+                )),
             _controlItem(Assets.svgDownload, S.current.download),
-            _controlItem(Assets.svgShare, S.current.share),
           ],
         );
       }),

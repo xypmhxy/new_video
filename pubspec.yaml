@@ -74,6 +74,7 @@ dependencies:
     path: plugins/youtube_explode_dart
   native_device_orientation: ^1.1.4
   sliding_up_panel: ^2.0.0+1
+  flutter_lifecycle_detector: ^0.0.6
 
 dependency_overrides:
   video_player:

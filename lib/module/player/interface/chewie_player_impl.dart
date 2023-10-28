@@ -3,6 +3,7 @@
 * 时间  2023/9/13 08:06
 */
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +42,8 @@ class ChewiePlayerImpl implements PlayerInterface {
     if (chewieController?.hasListeners ?? false) {
       chewieController?.removeListener(_videoPlayerListener);
     }
-    VideoPlayerController videoPlayerController =
-        VideoPlayerController.networkUrl(Uri.parse(url), audioSource: audioUrl);
+    VideoPlayerController videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url),
+        audioSource: audioUrl, videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true));
     _chewieController = ChewieController(
         videoPlayerController: videoPlayerController,
         autoInitialize: false,
@@ -59,13 +60,7 @@ class ChewiePlayerImpl implements PlayerInterface {
         });
     chewieController?.videoPlayerController.addListener(_videoPlayerListener);
     chewieController?.videoPlayerController.initialize().then((value) async {
-      // if (nowPlayMedia?.historyPosition != null) {
-      //   await seekTo(Duration(milliseconds: nowPlayMedia!.historyPosition!));
-      // }
-      // if (_adShowCompleter?.isCompleted == false) {
-      //   await _adShowCompleter?.future;
-      // }
-      // chewieController?.play();
+      _playStateController.add(PlayStatus.initialized);
     }).onError((error, stackTrace) {
       LogUtils.e('视频播放失败 ${error.toString()}');
     });
@@ -95,6 +90,11 @@ class ChewiePlayerImpl implements PlayerInterface {
   @override
   Future<void> seekTo(Duration position, {bool isByUser = false}) async {
     await chewieController?.seekTo(position);
+  }
+
+  @override
+  void setLoop(bool isLoop, {bool isByUser = false}) {
+    chewieController?.setLooping(isLoop);
   }
 
   @override

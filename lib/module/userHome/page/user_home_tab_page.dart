@@ -3,7 +3,10 @@
 * 时间  2023/9/10 08:06
 */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/generated/assets.dart';
@@ -24,6 +27,21 @@ class UserHomeTabPage extends StatefulWidget {
 
 class _UserModePageState extends State<UserHomeTabPage> {
   final pageController = Get.put(UserHomeTabPageController());
+  StreamSubscription? backgroundSubscription;
+
+  @override
+  void initState() {
+    backgroundSubscription = FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) async {
+      pageController.onAppLifecycleChange(isBackground);
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    backgroundSubscription?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +62,7 @@ class _UserModePageState extends State<UserHomeTabPage> {
 
   Widget _bottomNavigationBar() {
     return Obx(() => Container(
-      padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 8),
           child: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               currentIndex: pageController.index.value,

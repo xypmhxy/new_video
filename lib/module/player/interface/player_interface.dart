@@ -4,9 +4,11 @@
 */
 
 class PlayerInterface {
-  Future<void> playNewSource(String url,{String? audioUrl}) async {}
+  Future<void> playNewSource(String url, {String? audioUrl}) async {}
 
   Future<void> play({bool isByUser = false}) async {}
+
+  void setLoop(bool isLoop, {bool isByUser = false}) {}
 
   Future<void> pause({bool isByUser = false}) async {}
 

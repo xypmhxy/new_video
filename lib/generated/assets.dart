@@ -20,6 +20,7 @@ class Assets {
   static const String svgDownload = 'assets/svg/download.svg';
   static const String svgEditor = 'assets/svg/editor.svg';
   static const String svgExpandComment = 'assets/svg/expand_comment.svg';
+  static const String svgHeadset = 'assets/svg/headset.svg';
   static const String svgHomeLibraryNormal = 'assets/svg/home_library_normal.svg';
   static const String svgHomeLibrarySelect = 'assets/svg/home_library_select.svg';
   static const String svgHomeLocalFileNormal = 'assets/svg/home_local_file_normal.svg';

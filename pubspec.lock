@@ -542,6 +542,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_lifecycle_detector:
+    dependency: "direct main"
+    description:
+      name: flutter_lifecycle_detector
+      sha256: "30ba24feb361e906ecc521a1a477b637f389ce0878391c798770c2ccbb231255"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
   flutter_lints:
     dependency: "direct dev"
     description:

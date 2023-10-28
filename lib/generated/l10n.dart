@@ -480,6 +480,16 @@ class S {
     );
   }
 
+  /// `Background`
+  String get backgroundPlayback {
+    return Intl.message(
+      'Background',
+      name: 'backgroundPlayback',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Share`
   String get share {
     return Intl.message(

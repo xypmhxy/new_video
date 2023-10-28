@@ -23,7 +23,7 @@ import 'package:screen_brightness/screen_brightness.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-enum PlayStatus { none, loading, playing, pause }
+enum PlayStatus { none, initialized,loading, playing, pause }
 
 void playMediaInfo({required MediaInfo mediaInfo}) {
   PlayerController.get.playNew(mediaInfo);
