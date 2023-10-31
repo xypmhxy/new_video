@@ -58,7 +58,9 @@ class MediaInfo {
   String? publishedTime;
   String? viewCountText;
   String? downloadPath;
-  double? downloadProgress;
+  int? downloadLength;
+  int? downloadStartDate;
+  int? downloadFinishDate;
   bool isLike = false;
   int? likeCount;
   int? dislikeCount;
@@ -115,7 +117,9 @@ class MediaInfo {
     publishedTime = map['publishedTime'];
     viewCountText = map['viewCountText'];
     downloadPath = map['downloadPath'];
-    downloadProgress = map['downloadProgress'];
+    downloadLength = map['downloadLength'];
+    downloadStartDate = map['downloadStartDate'];
+    downloadFinishDate = map['downloadFinishDate'];
     isLike = map['isLike'] ?? false;
     likeCount = map['likeCount'];
     dislikeCount = map['dislikeCount'];
@@ -150,7 +154,9 @@ class MediaInfo {
       'publishedTime': publishedTime,
       'viewCountText': viewCountText,
       'downloadPath': downloadPath,
-      'downloadProgress': downloadProgress,
+      'downloadLength': downloadLength,
+      'downloadStartDate': downloadStartDate,
+      'downloadFinishDate': downloadFinishDate,
       'isLike': isLike,
       'likeCount': likeCount,
       'dislikeCount': dislikeCount,
