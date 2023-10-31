@@ -28,48 +28,50 @@ class _PlayerControlPanelState extends State<PlayerControlPanel> {
     return Stack(
       children: [
         Positioned.fill(
-            child: GestureDetector(
-                onTap: () {
-                  playerController.togglePanel();
-                },
-                onDoubleTap: () {
-                  playerController.clickPlay();
-                },
-                onLongPress: () {
-                  vibrate();
-                  playerController.setPlaySpeed(2.0);
-                },
-                onLongPressUp: () {
-                  playerController.setPlaySpeed(1.0);
-                },
-                onHorizontalDragStart: (detail) {
-                  playerController.onMoveStart(detail.localPosition.dx);
-                },
-                onHorizontalDragUpdate: (detail) {
-                  playerController.onMove(detail.localPosition.dx);
-                },
-                onHorizontalDragEnd: (detail) {
-                  playerController.onMoveEnd();
-                },
-                onVerticalDragStart: (detail) {
-                  playerController.onMoveVerticalStart(detail.globalPosition.dx, detail.localPosition.dy);
-                },
-                onVerticalDragUpdate: (detail) {
-                  playerController.onMoveVerticalUpdate(detail.localPosition.dy);
-                },
-                onVerticalDragEnd: (_) {
-                  playerController.onMoveVerticalEnd();
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Obx(() => playerController.isFullScreen.value
-                      ? PlayerFullControlPanel(
-                          playerController: playerController,
-                          onBackPressed: playerController.onBackPressed,
-                        )
-                      : PlayerNormalControlPanel(
-                          playerController: playerController, onClickBack: playerController.onBackPressed)),
-                )))
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 20),
+                child: GestureDetector(
+                    onTap: () {
+                      playerController.togglePanel();
+                    },
+                    onDoubleTap: () {
+                      playerController.clickPlay();
+                    },
+                    onLongPress: () {
+                      vibrate();
+                      playerController.setPlaySpeed(2.0);
+                    },
+                    onLongPressUp: () {
+                      playerController.setPlaySpeed(1.0);
+                    },
+                    onHorizontalDragStart: (detail) {
+                      playerController.onMoveStart(detail.localPosition.dx);
+                    },
+                    onHorizontalDragUpdate: (detail) {
+                      playerController.onMove(detail.localPosition.dx);
+                    },
+                    onHorizontalDragEnd: (detail) {
+                      playerController.onMoveEnd();
+                    },
+                    onVerticalDragStart: (detail) {
+                      playerController.onMoveVerticalStart(detail.globalPosition.dx, detail.localPosition.dy);
+                    },
+                    onVerticalDragUpdate: (detail) {
+                      playerController.onMoveVerticalUpdate(detail.localPosition.dy);
+                    },
+                    onVerticalDragEnd: (_) {
+                      playerController.onMoveVerticalEnd();
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Obx(() => playerController.isFullScreen.value
+                          ? PlayerFullControlPanel(
+                              playerController: playerController,
+                              onBackPressed: playerController.onBackPressed,
+                            )
+                          : PlayerNormalControlPanel(
+                              playerController: playerController, onClickBack: playerController.onBackPressed)),
+                    ))))
       ],
     );
   }

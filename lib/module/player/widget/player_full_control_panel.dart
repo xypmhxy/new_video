@@ -36,7 +36,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
         visible: playerController.isShowControlPanel.value,
         child: Stack(
           alignment: Alignment.center,
-          children: [_background(), _backButton(), _playSpeed(), _movePositionWidget(), _playWidget(), _progressBar()],
+          children: [_backButton(), _playSpeed(), _movePositionWidget(), _playWidget(), _progressBar()],
         )));
   }
 
@@ -50,7 +50,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
   Widget _backButton() {
     return Positioned(
         left: 20,
-        top: 24,
+        top: 0,
         child: Row(
           children: [
             _button(Icons.arrow_back_rounded, onPressed: widget.onBackPressed, size: 28),
@@ -62,7 +62,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
   }
 
   Widget _playSpeed() {
-    return Positioned(top: 24, right: 48, child: _speedDropDown());
+    return Positioned(top: 0, right: 24, child: _speedDropDown());
   }
 
   Widget _speedDropDown() {
@@ -97,7 +97,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
 
   Widget _movePositionWidget() {
     return Positioned(
-        top: 20,
+        top: 36,
         child: Obx(() => Visibility(
             visible: playerController.movePosition.value != null,
             child: TextView.primary(
@@ -139,8 +139,8 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
 
   Widget _progressBar() {
     return Positioned(
-      bottom: 16,
       left: 20,
+      bottom: 0,
       right: 20,
       child: Row(
         children: [

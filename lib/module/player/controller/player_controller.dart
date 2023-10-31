@@ -16,6 +16,7 @@ import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
 import 'package:free_tube_player/module/player/page/player_page.dart';
 import 'package:free_tube_player/module/player/widget/player_control_panel.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:get/get.dart';
@@ -47,6 +48,7 @@ class PlayerController extends GetxController {
   final isShowControlPanel = false.obs;
   final playSpeed = 1.0.obs;
   final isFullScreen = false.obs;
+  final brightness = 0.0.obs;
 
   final _mediaInfoHelper = MediaInfoHelper.get;
 
@@ -209,6 +211,7 @@ class PlayerController extends GetxController {
   }
 
   Future<void> onMoveVerticalStart(double dx, double dy) async {
+    // LogUtils.i('bottomBarHeight ${bottomSafeBarHeight}');
     if (isFullScreen.value == false) return;
     moveStartX = dx;
     moveStartY = dy;
@@ -231,6 +234,7 @@ class PlayerController extends GetxController {
       double newValue = currentBrightness! + rate;
       newValue = newValue >= 1.0 ? 1.0 : newValue;
       newValue = newValue < 0.0 ? 0 : newValue;
+      brightness.value = newValue;
       ScreenBrightness().setScreenBrightness(newValue);
     }
   }

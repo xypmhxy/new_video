@@ -23,8 +23,10 @@ class _PlayerPageState extends State<PlayerPage> implements PlayerPageCallback {
 
   @override
   void initState() {
+    _playerPageController.initScreenBrightness();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
