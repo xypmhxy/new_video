@@ -37,7 +37,7 @@ class _PlayerNormalControlPanelState extends State<PlayerNormalControlPanel> {
         visible: playerController.isShowControlPanel.value,
         child: Stack(
           alignment: Alignment.center,
-          children: [_backButton(), _title(), _playSpeed(), _movePositionWidget(), _playWidget(), _progressBar()],
+          children: [_backButton(), _title(), _playSpeed(), _playWidget(), _progressBar()],
         )));
   }
 
@@ -50,7 +50,7 @@ class _PlayerNormalControlPanelState extends State<PlayerNormalControlPanel> {
 
   Widget _backButton() {
     return Positioned(
-        left: 20,
+        left: 0,
         top: XScreen.getStatusBarH(context) + 12,
         child: ImageButton(
             onPressed: () {
@@ -81,7 +81,7 @@ class _PlayerNormalControlPanelState extends State<PlayerNormalControlPanel> {
   }
 
   Widget _playSpeed() {
-    return Positioned(top: XScreen.getStatusBarH(context) + 12, right: 20, child: _speedDropDown());
+    return Positioned(top: XScreen.getStatusBarH(context) + 12, right: 0, child: _speedDropDown());
   }
 
   Widget _speedDropDown() {
@@ -168,7 +168,7 @@ class _PlayerNormalControlPanelState extends State<PlayerNormalControlPanel> {
 
   Widget _progressBar() {
     return Positioned(
-      bottom: XScreen.getBottomSafe(context) + 16,
+      bottom: 0,
       left: 0,
       right: 0,
       child: Row(

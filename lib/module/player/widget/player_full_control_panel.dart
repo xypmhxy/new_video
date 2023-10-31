@@ -36,7 +36,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
         visible: playerController.isShowControlPanel.value,
         child: Stack(
           alignment: Alignment.center,
-          children: [_backButton(), _playSpeed(), _movePositionWidget(), _playWidget(), _progressBar()],
+          children: [_backButton(), _playSpeed(),  _playWidget(), _progressBar()],
         )));
   }
 
@@ -49,7 +49,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
 
   Widget _backButton() {
     return Positioned(
-        left: 20,
+        left: 0,
         top: 0,
         child: Row(
           children: [
@@ -62,7 +62,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
   }
 
   Widget _playSpeed() {
-    return Positioned(top: 0, right: 24, child: _speedDropDown());
+    return Positioned(top: 0, right: 0, child: _speedDropDown());
   }
 
   Widget _speedDropDown() {
@@ -97,14 +97,18 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
 
   Widget _movePositionWidget() {
     return Positioned(
-        top: 36,
-        child: Obx(() => Visibility(
-            visible: playerController.movePosition.value != null,
-            child: TextView.primary(
-              playerController.movePosition.value?.toSimpleString() ?? '',
-              fontSize: 30,
-              color: AppThemeController.counterTextPrimaryColor(context),
-            ))));
+      top: 36,
+      child: Obx(
+        () => Visibility(
+          visible: playerController.movePosition.value != null,
+          child: TextView.primary(
+            playerController.movePosition.value?.toSimpleString() ?? '',
+            fontSize: 30,
+            color: AppThemeController.counterTextPrimaryColor(context),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _playWidget() {
@@ -139,9 +143,9 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
 
   Widget _progressBar() {
     return Positioned(
-      left: 20,
+      left: 0,
       bottom: 0,
-      right: 20,
+      right: 0,
       child: Row(
         children: [
           _button(Icons.replay_10_rounded, size: 32, onPressed: playerController.back10seconds),

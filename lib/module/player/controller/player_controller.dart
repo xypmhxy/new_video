@@ -24,7 +24,7 @@ import 'package:screen_brightness/screen_brightness.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-enum PlayStatus { none, initialized,loading, playing, pause }
+enum PlayStatus { none, initialized, loading, playing, pause }
 
 void playMediaInfo({required MediaInfo mediaInfo}) {
   PlayerController.get.playNew(mediaInfo);
@@ -48,7 +48,7 @@ class PlayerController extends GetxController {
   final isShowControlPanel = false.obs;
   final playSpeed = 1.0.obs;
   final isFullScreen = false.obs;
-  final brightness = 0.0.obs;
+  final brightness = Rxn<double>();
 
   final _mediaInfoHelper = MediaInfoHelper.get;
 
@@ -167,7 +167,7 @@ class PlayerController extends GetxController {
 
   Future<void> onMoveStart(double dx) async {
     moveStartX = dx;
-    isShowControlPanel.value = true;
+    // isShowControlPanel.value = true;
   }
 
   Future<void> onMove(double dx) async {
@@ -217,6 +217,7 @@ class PlayerController extends GetxController {
     moveStartY = dy;
     currentVolume = await FlutterVolumeController.getVolume();
     currentBrightness = await ScreenBrightness().current;
+    brightness.value = currentBrightness;
     // LogUtils.i('onMoveVerticalStart $moveStartX $screenWidth $screenHeight');
   }
 
@@ -244,6 +245,7 @@ class PlayerController extends GetxController {
     moveStartY = null;
     FlutterVolumeController.getVolume().then((value) => currentVolume = value);
     ScreenBrightness().current.then((value) => currentBrightness = value);
+    brightness.value = null;
   }
 
   void startPositionRecordTimer() {
@@ -265,7 +267,7 @@ class PlayerController extends GetxController {
 
   void startDelayCloseControlPanel({int seconds = 3}) {
     cancelDelayCloseControlPanel();
-    _controlPanelTimer = Timer.periodic( Duration(seconds: seconds), (timer) {
+    _controlPanelTimer = Timer.periodic(Duration(seconds: seconds), (timer) {
       isShowControlPanel.value = false;
       cancelDelayCloseControlPanel();
     });
