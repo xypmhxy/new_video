@@ -11,6 +11,7 @@ import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
 import 'package:free_tube_player/module/player/interface/chewie_player_impl.dart';
 import 'package:free_tube_player/module/player/page/user_player_page.dart';
+import 'package:free_tube_player/utils/file_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
@@ -61,15 +62,24 @@ class UserPlayerController {
     _nowPlayingMedia.value = mediaInfo;
     await stop();
     await requestPlaySource(mediaInfo);
-    if (mediaInfo.videoSources == null) return;
-    const targetResolution = 720;
-    final playVideoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
-    if (playVideoSource == null) return;
-    String? audioUrl;
-    if (mediaInfo.isNeedAudioTrack(targetResolution: targetResolution)) {
-      audioUrl = mediaInfo.audioSources?.first.url;
+    if (mediaInfo.videoSources == null && mediaInfo.downloadPath == null) return;
+    if (mediaInfo.downloadStatus == DownloadStatus.success) {
+      final videoPath = await FileUtils.getDownloadFilePath(mediaInfo.downloadPath!);
+      String? audioPath;
+      if (mediaInfo.downloadAudioPath != null) {
+        audioPath = await FileUtils.getDownloadFilePath(mediaInfo.downloadAudioPath!);
+      }
+      await _chewiePlayerImpl.playNewSource(videoPath, audioUrl: audioPath);
+    } else {
+      const targetResolution = 1080;
+      final playVideoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
+      if (playVideoSource == null) return;
+      String? audioUrl;
+      if (mediaInfo.isNeedAudioTrack(targetResolution: targetResolution)) {
+        audioUrl = mediaInfo.audioSources?.first.url;
+      }
+      await _chewiePlayerImpl.playNewSource(playVideoSource.url, audioUrl: audioUrl);
     }
-    await _chewiePlayerImpl.playNewSource(playVideoSource.url, audioUrl: audioUrl);
     setupStreams();
   }
 

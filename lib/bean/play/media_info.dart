@@ -58,6 +58,8 @@ class MediaInfo {
   String? publishedTime;
   String? viewCountText;
   String? downloadPath;
+  String? downloadAudioPath;
+  int? downloadAudioLength;
   int? downloadLength;
   int? downloadStartDate;
   int? downloadFinishDate;
@@ -117,6 +119,8 @@ class MediaInfo {
     publishedTime = map['publishedTime'];
     viewCountText = map['viewCountText'];
     downloadPath = map['downloadPath'];
+    downloadAudioPath = map['downloadAudioPath'];
+    downloadAudioLength = map['downloadAudioLength'];
     downloadLength = map['downloadLength'];
     downloadStartDate = map['downloadStartDate'];
     downloadFinishDate = map['downloadFinishDate'];
@@ -154,6 +158,8 @@ class MediaInfo {
       'publishedTime': publishedTime,
       'viewCountText': viewCountText,
       'downloadPath': downloadPath,
+      'downloadAudioPath': downloadAudioPath,
+      'downloadAudioLength': downloadAudioLength,
       'downloadLength': downloadLength,
       'downloadStartDate': downloadStartDate,
       'downloadFinishDate': downloadFinishDate,

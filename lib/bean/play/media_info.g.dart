@@ -83,152 +83,162 @@ const MediaInfoSchema = CollectionSchema(
       name: r'dislikeCount',
       type: IsarType.long,
     ),
-    r'downloadFinishDate': PropertySchema(
+    r'downloadAudioLength': PropertySchema(
       id: 13,
+      name: r'downloadAudioLength',
+      type: IsarType.long,
+    ),
+    r'downloadAudioPath': PropertySchema(
+      id: 14,
+      name: r'downloadAudioPath',
+      type: IsarType.string,
+    ),
+    r'downloadFinishDate': PropertySchema(
+      id: 15,
       name: r'downloadFinishDate',
       type: IsarType.long,
     ),
     r'downloadLength': PropertySchema(
-      id: 14,
+      id: 16,
       name: r'downloadLength',
       type: IsarType.long,
     ),
     r'downloadPath': PropertySchema(
-      id: 15,
+      id: 17,
       name: r'downloadPath',
       type: IsarType.string,
     ),
     r'downloadStartDate': PropertySchema(
-      id: 16,
+      id: 18,
       name: r'downloadStartDate',
       type: IsarType.long,
     ),
     r'downloadStatus': PropertySchema(
-      id: 17,
+      id: 19,
       name: r'downloadStatus',
       type: IsarType.byte,
       enumMap: _MediaInfodownloadStatusEnumValueMap,
     ),
     r'duration': PropertySchema(
-      id: 18,
+      id: 20,
       name: r'duration',
       type: IsarType.long,
     ),
     r'durationFormat': PropertySchema(
-      id: 19,
+      id: 21,
       name: r'durationFormat',
       type: IsarType.string,
     ),
     r'height': PropertySchema(
-      id: 20,
+      id: 22,
       name: r'height',
       type: IsarType.long,
     ),
     r'historyPosition': PropertySchema(
-      id: 21,
+      id: 23,
       name: r'historyPosition',
       type: IsarType.long,
     ),
     r'historyProgress': PropertySchema(
-      id: 22,
+      id: 24,
       name: r'historyProgress',
       type: IsarType.double,
     ),
     r'identify': PropertySchema(
-      id: 23,
+      id: 25,
       name: r'identify',
       type: IsarType.string,
     ),
     r'isDelete': PropertySchema(
-      id: 24,
+      id: 26,
       name: r'isDelete',
       type: IsarType.bool,
     ),
     r'isLike': PropertySchema(
-      id: 25,
+      id: 27,
       name: r'isLike',
       type: IsarType.bool,
     ),
     r'isLocalVideo': PropertySchema(
-      id: 26,
+      id: 28,
       name: r'isLocalVideo',
       type: IsarType.bool,
     ),
     r'likeCount': PropertySchema(
-      id: 27,
+      id: 29,
       name: r'likeCount',
       type: IsarType.long,
     ),
     r'localBytesThumbnail': PropertySchema(
-      id: 28,
+      id: 30,
       name: r'localBytesThumbnail',
       type: IsarType.byteList,
     ),
     r'localPath': PropertySchema(
-      id: 29,
+      id: 31,
       name: r'localPath',
       type: IsarType.string,
     ),
     r'playHistory': PropertySchema(
-      id: 30,
+      id: 32,
       name: r'playHistory',
       type: IsarType.object,
       target: r'PlayHistory',
     ),
     r'publishedTime': PropertySchema(
-      id: 31,
+      id: 33,
       name: r'publishedTime',
       type: IsarType.string,
     ),
     r'sourceType': PropertySchema(
-      id: 32,
+      id: 34,
       name: r'sourceType',
       type: IsarType.byte,
       enumMap: _MediaInfosourceTypeEnumValueMap,
     ),
     r'suffix': PropertySchema(
-      id: 33,
+      id: 35,
       name: r'suffix',
       type: IsarType.string,
     ),
     r'thumbnail': PropertySchema(
-      id: 34,
+      id: 36,
       name: r'thumbnail',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 35,
+      id: 37,
       name: r'title',
       type: IsarType.string,
     ),
     r'updateDate': PropertySchema(
-      id: 36,
+      id: 38,
       name: r'updateDate',
       type: IsarType.long,
     ),
     r'updateDateFormat': PropertySchema(
-      id: 37,
+      id: 39,
       name: r'updateDateFormat',
       type: IsarType.string,
     ),
     r'videoSources': PropertySchema(
-      id: 38,
+      id: 40,
       name: r'videoSources',
       type: IsarType.objectList,
       target: r'VideoSource',
     ),
     r'viewCountText': PropertySchema(
-      id: 39,
+      id: 41,
       name: r'viewCountText',
       type: IsarType.string,
     ),
     r'width': PropertySchema(
-      id: 40,
+      id: 42,
       name: r'width',
       type: IsarType.long,
     ),
     r'youtubeId': PropertySchema(
-      id: 41,
+      id: 43,
       name: r'youtubeId',
       type: IsarType.string,
     )
@@ -299,6 +309,12 @@ int _mediaInfoEstimateSize(
   }
   {
     final value = object.directoryName;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.downloadAudioPath;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -399,45 +415,47 @@ void _mediaInfoSerialize(
   writer.writeLong(offsets[10], object.directoryId);
   writer.writeString(offsets[11], object.directoryName);
   writer.writeLong(offsets[12], object.dislikeCount);
-  writer.writeLong(offsets[13], object.downloadFinishDate);
-  writer.writeLong(offsets[14], object.downloadLength);
-  writer.writeString(offsets[15], object.downloadPath);
-  writer.writeLong(offsets[16], object.downloadStartDate);
-  writer.writeByte(offsets[17], object.downloadStatus.index);
-  writer.writeLong(offsets[18], object.duration);
-  writer.writeString(offsets[19], object.durationFormat);
-  writer.writeLong(offsets[20], object.height);
-  writer.writeLong(offsets[21], object.historyPosition);
-  writer.writeDouble(offsets[22], object.historyProgress);
-  writer.writeString(offsets[23], object.identify);
-  writer.writeBool(offsets[24], object.isDelete);
-  writer.writeBool(offsets[25], object.isLike);
-  writer.writeBool(offsets[26], object.isLocalVideo);
-  writer.writeLong(offsets[27], object.likeCount);
-  writer.writeByteList(offsets[28], object.localBytesThumbnail);
-  writer.writeString(offsets[29], object.localPath);
+  writer.writeLong(offsets[13], object.downloadAudioLength);
+  writer.writeString(offsets[14], object.downloadAudioPath);
+  writer.writeLong(offsets[15], object.downloadFinishDate);
+  writer.writeLong(offsets[16], object.downloadLength);
+  writer.writeString(offsets[17], object.downloadPath);
+  writer.writeLong(offsets[18], object.downloadStartDate);
+  writer.writeByte(offsets[19], object.downloadStatus.index);
+  writer.writeLong(offsets[20], object.duration);
+  writer.writeString(offsets[21], object.durationFormat);
+  writer.writeLong(offsets[22], object.height);
+  writer.writeLong(offsets[23], object.historyPosition);
+  writer.writeDouble(offsets[24], object.historyProgress);
+  writer.writeString(offsets[25], object.identify);
+  writer.writeBool(offsets[26], object.isDelete);
+  writer.writeBool(offsets[27], object.isLike);
+  writer.writeBool(offsets[28], object.isLocalVideo);
+  writer.writeLong(offsets[29], object.likeCount);
+  writer.writeByteList(offsets[30], object.localBytesThumbnail);
+  writer.writeString(offsets[31], object.localPath);
   writer.writeObject<PlayHistory>(
-    offsets[30],
+    offsets[32],
     allOffsets,
     PlayHistorySchema.serialize,
     object.playHistory,
   );
-  writer.writeString(offsets[31], object.publishedTime);
-  writer.writeByte(offsets[32], object.sourceType.index);
-  writer.writeString(offsets[33], object.suffix);
-  writer.writeString(offsets[34], object.thumbnail);
-  writer.writeString(offsets[35], object.title);
-  writer.writeLong(offsets[36], object.updateDate);
-  writer.writeString(offsets[37], object.updateDateFormat);
+  writer.writeString(offsets[33], object.publishedTime);
+  writer.writeByte(offsets[34], object.sourceType.index);
+  writer.writeString(offsets[35], object.suffix);
+  writer.writeString(offsets[36], object.thumbnail);
+  writer.writeString(offsets[37], object.title);
+  writer.writeLong(offsets[38], object.updateDate);
+  writer.writeString(offsets[39], object.updateDateFormat);
   writer.writeObjectList<VideoSource>(
-    offsets[38],
+    offsets[40],
     allOffsets,
     VideoSourceSchema.serialize,
     object.videoSources,
   );
-  writer.writeString(offsets[39], object.viewCountText);
-  writer.writeLong(offsets[40], object.width);
-  writer.writeString(offsets[41], object.youtubeId);
+  writer.writeString(offsets[41], object.viewCountText);
+  writer.writeLong(offsets[42], object.width);
+  writer.writeString(offsets[43], object.youtubeId);
 }
 
 MediaInfo _mediaInfoDeserialize(
@@ -464,43 +482,45 @@ MediaInfo _mediaInfoDeserialize(
   object.directoryId = reader.readLongOrNull(offsets[10]);
   object.directoryName = reader.readStringOrNull(offsets[11]);
   object.dislikeCount = reader.readLongOrNull(offsets[12]);
-  object.downloadFinishDate = reader.readLongOrNull(offsets[13]);
-  object.downloadLength = reader.readLongOrNull(offsets[14]);
-  object.downloadPath = reader.readStringOrNull(offsets[15]);
-  object.downloadStartDate = reader.readLongOrNull(offsets[16]);
+  object.downloadAudioLength = reader.readLongOrNull(offsets[13]);
+  object.downloadAudioPath = reader.readStringOrNull(offsets[14]);
+  object.downloadFinishDate = reader.readLongOrNull(offsets[15]);
+  object.downloadLength = reader.readLongOrNull(offsets[16]);
+  object.downloadPath = reader.readStringOrNull(offsets[17]);
+  object.downloadStartDate = reader.readLongOrNull(offsets[18]);
   object.downloadStatus = _MediaInfodownloadStatusValueEnumMap[
-          reader.readByteOrNull(offsets[17])] ??
+          reader.readByteOrNull(offsets[19])] ??
       DownloadStatus.none;
-  object.duration = reader.readLong(offsets[18]);
-  object.height = reader.readLongOrNull(offsets[20]);
+  object.duration = reader.readLong(offsets[20]);
+  object.height = reader.readLongOrNull(offsets[22]);
   object.id = id;
-  object.isDelete = reader.readBool(offsets[24]);
-  object.isLike = reader.readBool(offsets[25]);
-  object.likeCount = reader.readLongOrNull(offsets[27]);
-  object.localBytesThumbnail = reader.readByteList(offsets[28]);
-  object.localPath = reader.readStringOrNull(offsets[29]);
+  object.isDelete = reader.readBool(offsets[26]);
+  object.isLike = reader.readBool(offsets[27]);
+  object.likeCount = reader.readLongOrNull(offsets[29]);
+  object.localBytesThumbnail = reader.readByteList(offsets[30]);
+  object.localPath = reader.readStringOrNull(offsets[31]);
   object.playHistory = reader.readObjectOrNull<PlayHistory>(
-    offsets[30],
+    offsets[32],
     PlayHistorySchema.deserialize,
     allOffsets,
   );
-  object.publishedTime = reader.readStringOrNull(offsets[31]);
+  object.publishedTime = reader.readStringOrNull(offsets[33]);
   object.sourceType =
-      _MediaInfosourceTypeValueEnumMap[reader.readByteOrNull(offsets[32])] ??
+      _MediaInfosourceTypeValueEnumMap[reader.readByteOrNull(offsets[34])] ??
           SourceType.local;
-  object.suffix = reader.readString(offsets[33]);
-  object.thumbnail = reader.readStringOrNull(offsets[34]);
-  object.title = reader.readString(offsets[35]);
-  object.updateDate = reader.readLong(offsets[36]);
+  object.suffix = reader.readString(offsets[35]);
+  object.thumbnail = reader.readStringOrNull(offsets[36]);
+  object.title = reader.readString(offsets[37]);
+  object.updateDate = reader.readLong(offsets[38]);
   object.videoSources = reader.readObjectList<VideoSource>(
-    offsets[38],
+    offsets[40],
     VideoSourceSchema.deserialize,
     allOffsets,
     VideoSource(),
   );
-  object.viewCountText = reader.readStringOrNull(offsets[39]);
-  object.width = reader.readLongOrNull(offsets[40]);
-  object.youtubeId = reader.readStringOrNull(offsets[41]);
+  object.viewCountText = reader.readStringOrNull(offsets[41]);
+  object.width = reader.readLongOrNull(offsets[42]);
+  object.youtubeId = reader.readStringOrNull(offsets[43]);
   return object;
 }
 
@@ -545,72 +565,76 @@ P _mediaInfoDeserializeProp<P>(
     case 13:
       return (reader.readLongOrNull(offset)) as P;
     case 14:
-      return (reader.readLongOrNull(offset)) as P;
-    case 15:
       return (reader.readStringOrNull(offset)) as P;
+    case 15:
+      return (reader.readLongOrNull(offset)) as P;
     case 16:
       return (reader.readLongOrNull(offset)) as P;
     case 17:
+      return (reader.readStringOrNull(offset)) as P;
+    case 18:
+      return (reader.readLongOrNull(offset)) as P;
+    case 19:
       return (_MediaInfodownloadStatusValueEnumMap[
               reader.readByteOrNull(offset)] ??
           DownloadStatus.none) as P;
-    case 18:
-      return (reader.readLong(offset)) as P;
-    case 19:
-      return (reader.readString(offset)) as P;
     case 20:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 21:
-      return (reader.readLongOrNull(offset)) as P;
-    case 22:
-      return (reader.readDoubleOrNull(offset)) as P;
-    case 23:
       return (reader.readString(offset)) as P;
+    case 22:
+      return (reader.readLongOrNull(offset)) as P;
+    case 23:
+      return (reader.readLongOrNull(offset)) as P;
     case 24:
-      return (reader.readBool(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 25:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 26:
       return (reader.readBool(offset)) as P;
     case 27:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 28:
-      return (reader.readByteList(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 29:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 30:
+      return (reader.readByteList(offset)) as P;
+    case 31:
+      return (reader.readStringOrNull(offset)) as P;
+    case 32:
       return (reader.readObjectOrNull<PlayHistory>(
         offset,
         PlayHistorySchema.deserialize,
         allOffsets,
       )) as P;
-    case 31:
+    case 33:
       return (reader.readStringOrNull(offset)) as P;
-    case 32:
+    case 34:
       return (_MediaInfosourceTypeValueEnumMap[reader.readByteOrNull(offset)] ??
           SourceType.local) as P;
-    case 33:
-      return (reader.readString(offset)) as P;
-    case 34:
-      return (reader.readStringOrNull(offset)) as P;
     case 35:
       return (reader.readString(offset)) as P;
     case 36:
-      return (reader.readLong(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 37:
       return (reader.readString(offset)) as P;
     case 38:
+      return (reader.readLong(offset)) as P;
+    case 39:
+      return (reader.readString(offset)) as P;
+    case 40:
       return (reader.readObjectList<VideoSource>(
         offset,
         VideoSourceSchema.deserialize,
         allOffsets,
         VideoSource(),
       )) as P;
-    case 39:
-      return (reader.readStringOrNull(offset)) as P;
-    case 40:
-      return (reader.readLongOrNull(offset)) as P;
     case 41:
+      return (reader.readStringOrNull(offset)) as P;
+    case 42:
+      return (reader.readLongOrNull(offset)) as P;
+    case 43:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2185,6 +2209,234 @@ extension MediaInfoQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioLengthIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'downloadAudioLength',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioLengthIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'downloadAudioLength',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioLengthEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'downloadAudioLength',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioLengthGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'downloadAudioLength',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioLengthLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'downloadAudioLength',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioLengthBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'downloadAudioLength',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'downloadAudioPath',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'downloadAudioPath',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'downloadAudioPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'downloadAudioPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'downloadAudioPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'downloadAudioPath',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'downloadAudioPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'downloadAudioPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'downloadAudioPath',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'downloadAudioPath',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'downloadAudioPath',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      downloadAudioPathIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'downloadAudioPath',
+        value: '',
       ));
     });
   }
@@ -5112,6 +5364,32 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDownloadAudioLength() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadAudioLength', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      sortByDownloadAudioLengthDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadAudioLength', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDownloadAudioPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadAudioPath', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      sortByDownloadAudioPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadAudioPath', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByDownloadFinishDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'downloadFinishDate', Sort.asc);
@@ -5576,6 +5854,32 @@ extension MediaInfoQuerySortThenBy
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDownloadAudioLength() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadAudioLength', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      thenByDownloadAudioLengthDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadAudioLength', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDownloadAudioPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadAudioPath', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      thenByDownloadAudioPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadAudioPath', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByDownloadFinishDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'downloadFinishDate', Sort.asc);
@@ -5988,6 +6292,21 @@ extension MediaInfoQueryWhereDistinct
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct>
+      distinctByDownloadAudioLength() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'downloadAudioLength');
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByDownloadAudioPath(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'downloadAudioPath',
+          caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByDownloadFinishDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'downloadFinishDate');
@@ -6251,6 +6570,20 @@ extension MediaInfoQueryProperty
   QueryBuilder<MediaInfo, int?, QQueryOperations> dislikeCountProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dislikeCount');
+    });
+  }
+
+  QueryBuilder<MediaInfo, int?, QQueryOperations>
+      downloadAudioLengthProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'downloadAudioLength');
+    });
+  }
+
+  QueryBuilder<MediaInfo, String?, QQueryOperations>
+      downloadAudioPathProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'downloadAudioPath');
     });
   }
 

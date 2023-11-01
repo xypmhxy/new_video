@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 
 extension StringExtension on String {
-  String md5() {
+  String toMd5() {
     Uint8List content = const Utf8Encoder().convert(this);
     Digest digest = md5.convert(content);
     return digest.toString();
@@ -22,5 +22,9 @@ extension StringExtension on String {
       breakWord.write('\u200B');
     }
     return breakWord.toString();
+  }
+
+  bool isHttp(){
+    return startsWith('http');
   }
 }

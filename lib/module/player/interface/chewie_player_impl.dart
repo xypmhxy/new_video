@@ -4,11 +4,13 @@
 */
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/extension/string_extension.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/interface/player_interface.dart';
 import 'package:free_tube_player/module/player/widget/user_player_control_panel.dart';
@@ -42,8 +44,14 @@ class ChewiePlayerImpl implements PlayerInterface {
     if (chewieController?.hasListeners ?? false) {
       chewieController?.removeListener(_videoPlayerListener);
     }
-    VideoPlayerController videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url),
-        audioSource: audioUrl, videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true));
+    late VideoPlayerController videoPlayerController;
+    if (url.isHttp()) {
+      videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(url),
+          audioSource: audioUrl, videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true));
+    } else {
+      videoPlayerController = VideoPlayerController.file(File(url),
+          audioSource: audioUrl, videoPlayerOptions: VideoPlayerOptions(allowBackgroundPlayback: true));
+    }
     _chewieController = ChewieController(
         videoPlayerController: videoPlayerController,
         autoInitialize: false,

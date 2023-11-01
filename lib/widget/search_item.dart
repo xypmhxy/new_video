@@ -10,8 +10,11 @@ import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/download/bean/download_info.dart';
+import 'package:free_tube_player/module/download/controller/global_download_controller.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'text_view.dart';
 
@@ -98,11 +101,25 @@ class SearchItem extends StatelessWidget {
                   ],
                 )),
                 const Width(2),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  color: Colors.transparent,
-                  child: Icon(Icons.more_vert_rounded,size: 20,color: AppThemeController.textAccentColor(context),),
-                )
+                GestureDetector(
+                    onTap: () async {
+                      final youtubeExp = YoutubeExplode();
+                      final maniFest = await youtubeExp.videos.streams.getManifest(mediaInfo.youtubeId!);
+                      final videoUrl = maniFest.videoOnly.last.url.toString();
+                      final audioUrl = maniFest.audioOnly.last.url.toString();
+                      GlobalDownloadController().addToDownloadList(DownloadInfo(mediaInfo)
+                        ..videoUrl = videoUrl
+                        ..audioUrl = audioUrl);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      color: Colors.transparent,
+                      child: Icon(
+                        Icons.more_vert_rounded,
+                        size: 20,
+                        color: AppThemeController.textAccentColor(context),
+                      ),
+                    ))
               ],
             ),
           ))
