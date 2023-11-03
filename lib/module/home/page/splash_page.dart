@@ -78,7 +78,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     await Future.any([openADFuture, Future.delayed(const Duration(seconds: 8))]);
     await _animationController.animateTo(1.0, duration: const Duration(milliseconds: 500));
     await ADManager.instance.tryShowOpenAD();
-    PageNavigation.startNewPageAndCloseAll(isUserMode ? const EmptyPage() : const HomePage());
+    PageNavigation.startNewPageAndCloseAll(isUserMode ? const UserHomeTabPage() : const HomePage());
   }
 
   @override

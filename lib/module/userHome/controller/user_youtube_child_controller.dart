@@ -6,6 +6,8 @@ import 'package:free_tube_player/api/youtube_home_api.dart';
 import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/home/youtube_home_tab.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/helper/video_action_helper.dart';
+import 'package:free_tube_player/utils/dialog_utils.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -14,6 +16,7 @@ class UserYoutubeChildController extends BaseController {
   final YoutubeHomeTab youtubeHomeTab;
   final mediaInfos = <MediaInfo>[].obs;
   final refreshController = RefreshController();
+  final _videoActionHelper = VideoActionHelper();
   String continuation = '';
 
   UserYoutubeChildController(this.youtubeHomeTab) {
@@ -63,5 +66,9 @@ class UserYoutubeChildController extends BaseController {
     if (youtubeHomeTab.continuation.isEmpty) {
       refreshController.loadNoData();
     }
+  }
+
+  Future<void> showMoreActionDialog(MediaInfo mediaInfo) async {
+    _videoActionHelper.showActionDialog(mediaInfo: mediaInfo);
   }
 }

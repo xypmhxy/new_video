@@ -61,7 +61,6 @@ class UserPlayerController {
   Future<void> playNewSource(MediaInfo mediaInfo) async {
     _nowPlayingMedia.value = mediaInfo;
     await stop();
-    if (mediaInfo.videoSources == null && mediaInfo.downloadPath == null) return;
     if (mediaInfo.downloadStatus == DownloadStatus.success) {
       final videoPath = await FileUtils.getDownloadFilePath(mediaInfo.downloadPath!);
       String? audioPath;
@@ -70,7 +69,8 @@ class UserPlayerController {
       }
       await _chewiePlayerImpl.playNewSource(videoPath, audioUrl: audioPath);
     } else {
-      await requestPlaySource(mediaInfo);
+      final media = await VideoUtils.requestVideoSource(mediaInfo);
+      if (media != null) mediaInfo = media;
       const targetResolution = 1080;
       final playVideoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
       if (playVideoSource == null) return;

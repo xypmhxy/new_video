@@ -3,6 +3,7 @@
 * 时间  2023/8/5 15:50
 */
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
@@ -13,6 +14,44 @@ class VideoUtils {
       newest: false,
       hideIfEmpty: true,
     );
+  }
+
+  static Future<MediaInfo?> requestVideoSource(MediaInfo mediaInfo) async {
+    final youtubeExplode = YoutubeExplode();
+    if (mediaInfo.videoSources?.isEmpty ?? true) {
+      try {
+        if (mediaInfo.youtubeId == null) return null;
+        List<VideoSource> videoSources = [];
+        List<AudioSource> audioSource = [];
+        if (mediaInfo.isLive) {
+          final liveUrl = await youtubeExplode.videos.streams.getHttpLiveStreamUrl(VideoId(mediaInfo.youtubeId!));
+          videoSources.add(VideoSource(url: liveUrl));
+        } else {
+          final manifest = await youtubeExplode.videos.streams.getManifest(mediaInfo.youtubeId!);
+          for (final mux in manifest.video) {
+            videoSources.add(parseMuxedVideo(mux));
+          }
+          videoSources.sort((a, b) {
+            if (a.width == null || b.width == null) return 0;
+            return a.width! > b.width! ? 1 : 0;
+          });
+
+          for (final audioInfo in manifest.audio) {
+            audioSource.add(parseAudio(audioInfo));
+          }
+          audioSource.sort((a, b) {
+            if (a.bitrate == null || b.bitrate == null) return 0;
+            return a.bitrate! > b.bitrate! ? 1 : 0;
+          });
+        }
+        mediaInfo.videoSources = videoSources;
+        mediaInfo.audioSources = audioSource;
+      } catch (e) {
+        LogUtils.e('获取播放链接错误 ${e.toString()}');
+      }
+    }
+    youtubeExplode.close();
+    return mediaInfo;
   }
 
   static VideoSource parseMuxedVideo(VideoStreamInfo info) {

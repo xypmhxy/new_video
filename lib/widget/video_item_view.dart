@@ -19,8 +19,9 @@ import 'text_view.dart';
 
 class VideoItemView extends StatelessWidget {
   final MediaInfo mediaInfo;
+  final VoidCallback? onClickMore;
 
-  const VideoItemView({super.key, required this.mediaInfo});
+  const VideoItemView({super.key, required this.mediaInfo, this.onClickMore});
 
   @override
   Widget build(BuildContext context) {
@@ -86,15 +87,7 @@ class VideoItemView extends StatelessWidget {
             )),
             const Width(8),
             ImageButton(
-                onPressed: () async {
-                  final youtubeExp = YoutubeExplode();
-                  final maniFest = await youtubeExp.videos.streams.getManifest(mediaInfo.youtubeId!);
-                  final videoUrl = maniFest.videoOnly.first.url.toString();
-                  final audioUrl = maniFest.audioOnly.first.url.toString();
-                  GlobalDownloadController().addToDownloadList(DownloadInfo(mediaInfo)
-                    ..videoUrl = videoUrl
-                    ..audioUrl = audioUrl);
-                },
+                onPressed: onClickMore,
                 splashRadius: 20,
                 child: const Icon(
                   Icons.more_vert_rounded,

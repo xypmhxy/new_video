@@ -55,7 +55,12 @@ class _UserYoutubeChildPageState extends State<UserYoutubeChildPage> with Automa
                   onTap: () {
                     startUserPlayPage(mediaInfo: mediaInfo);
                   },
-                  child: VideoItemView(mediaInfo: mediaInfo));
+                  child: VideoItemView(
+                    mediaInfo: mediaInfo,
+                    onClickMore: () {
+                      youtubeController.showMoreActionDialog(mediaInfo);
+                    },
+                  ));
             },
             separatorBuilder: (_, index) {
               return const Height(20);
