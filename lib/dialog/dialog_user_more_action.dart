@@ -47,23 +47,21 @@ class DialogUserMoreAction extends StatelessWidget {
 
   Widget _content(BuildContext context) {
     return Expanded(
-        child: Container(
-      child: GridView(
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.all(12),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-        ),
-        children: [
-          _item(context, svg: Assets.svgLikeNormal, title: S.current.rename, size: 29, onPressed: onClickLike),
-          _item(context, svg: Assets.svgDownload, title: S.current.delete, onPressed: onClickDownload),
-          _item(context, svg: Assets.svgAddToList, title: S.current.edit, onPressed: onClickAddList),
-          _item(context, svg: Assets.svgAddToList, title: S.current.edit, onPressed: onClickAddList),
-        ],
-      ),
-    ));
+        child: GridView(
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(12),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+          ),
+          children: [
+            _item(context, svg: Assets.svgLikeNormal, title: S.current.like, size: 29, onPressed: onClickLike),
+            _item(context, svg: Assets.svgDownload, title: S.current.download, onPressed: onClickDownload),
+            _item(context, svg: Assets.svgAddToList, title: S.current.playlist, onPressed: onClickAddList),
+            _item(context, svg: Assets.svgShare, title: S.current.share, onPressed: onClickAddList,size: 29),
+          ],
+        ));
   }
 
   Widget _item(BuildContext context,
