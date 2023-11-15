@@ -37,6 +37,7 @@ class VideoUtils {
           });
 
           for (final audioInfo in manifest.audio) {
+            if (audioInfo.codec.mimeType.startsWith('audio') == false) continue;
             audioSource.add(parseAudio(audioInfo));
           }
           audioSource.sort((a, b) {
@@ -63,6 +64,7 @@ class VideoUtils {
     final bitrate = info.bitrate.bitsPerSecond;
     final width = info.videoResolution.width;
     final height = info.videoResolution.height;
+    final fps = info.framerate.framesPerSecond.toInt();
     return VideoSource(
         url: url,
         label: label,
@@ -71,14 +73,16 @@ class VideoUtils {
         bitrate: bitrate,
         width: width,
         height: height,
+        fps: fps,
         isOnlyVideo: runTimeType == 'VideoOnlyStreamInfo');
   }
 
   static AudioSource parseAudio(AudioStreamInfo info) {
     final url = info.url.toString();
+    final format = info.codec.subtype;
     final byteSize = info.size.totalBytes;
     final bitrate = info.bitrate.bitsPerSecond;
-    return AudioSource(url: url, byteSize: byteSize, bitrate: bitrate);
+    return AudioSource(url: url, format: format, byteSize: byteSize, bitrate: bitrate);
   }
 
   static VideoSource? getTargetVideoUrl(int target, MediaInfo mediaInfo) {

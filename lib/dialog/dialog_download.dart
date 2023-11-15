@@ -4,13 +4,18 @@ import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
+import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/download/view/audio_child_tab.dart';
+import 'package:free_tube_player/module/download/view/video_child_tab.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
 import 'package:free_tube_player/utils/video_utils.dart';
+import 'package:free_tube_player/widget/border_radius_indicator.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';
+import 'package:free_tube_player/widget/loading_view.dart';
+import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class DialogDownload extends StatefulWidget {
   final MediaInfo mediaInfo;
@@ -33,11 +38,11 @@ class _DialogDownloadState extends State<DialogDownload> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(minHeight: 120, maxHeight: 160),
+      constraints: BoxConstraints(minHeight: 120, maxHeight: screenHeight * .65),
       decoration: allRadiusDecoration(16, color: AppThemeController.backgroundColor(context)),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        children: [const Height(4), _closeButton(), const Height(16), _title()],
+        children: [const Height(4), _closeButton(), const Height(12), _title(), _content()],
       ),
     );
   }
@@ -67,12 +72,75 @@ class _DialogDownloadState extends State<DialogDownload> {
             borderRadius: getBorderRadius(4),
             child: ImageView.network(
               imageUrl: mediaInfo.thumbnail ?? '',
-              size: 36,
+              size: 40,
             )),
-        const Width(12),
-        TextView.primary(mediaInfo.title, fontSize: 14)
+        const Width(16),
+        Expanded(
+            child: TextView.primary(
+          mediaInfo.title,
+          fontSize: 14,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        )),
+        const Width(8),
       ],
     );
+  }
+
+  Widget _content() {
+    return Obx(() {
+      if (_controller.viewStatus.value == ViewStatus.success) {
+        return DefaultTabController(
+            length: 2,
+            child: Expanded(
+                child: Column(
+              children: [_tabBar(), const Height(12), _tabBarView()],
+            )));
+      } else if (_controller.viewStatus.value == ViewStatus.failed) {
+        return Container(
+          margin: const EdgeInsets.only(top: 56),
+          child: NoDataView(
+            text: S.current.getPlaySourceFailed,
+            iconSize: 164,
+            onClick: () {
+              _controller.requestVideoSource(mediaInfo);
+            },
+          ),
+        );
+      }
+      return const Expanded(
+          child: Center(
+        child: LoadingView(
+          size: 40,
+        ),
+      ));
+    });
+  }
+
+  Widget _tabBar() {
+    return TabBar(
+        isScrollable: false,
+        labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: tubeFontFamily),
+        unselectedLabelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: tubeFontFamily),
+        indicatorColor: AppThemeController.primaryThemeColor(context),
+        indicatorWeight: 3,
+        indicator: BorderRadiusIndicator(color: AppThemeController.primaryThemeColor(context)),
+        tabs: [
+          Tab(
+            text: S.current.video,
+          ),
+          Tab(
+            text: S.current.audio,
+          )
+        ]);
+  }
+
+  Widget _tabBarView() {
+    return Expanded(
+        child: TabBarView(children: [
+      VideoChildTab(mediaInfo: mediaInfo),
+      AudioChildTab(mediaInfo: mediaInfo),
+    ]));
   }
 
   MediaInfo get mediaInfo => widget.mediaInfo;

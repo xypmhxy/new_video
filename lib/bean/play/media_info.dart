@@ -38,8 +38,6 @@ class MediaInfo {
   String suffix = '';
   @enumerated
   SourceType sourceType = SourceType.local;
-  @enumerated
-  DownloadStatus downloadStatus = DownloadStatus.none;
 
   //local
   int assetsCreateDate = 0;
@@ -57,12 +55,13 @@ class MediaInfo {
   String? description;
   String? publishedTime;
   String? viewCountText;
-  String? downloadPath;
-  String? downloadAudioPath;
-  int? downloadAudioLength;
-  int? downloadLength;
-  int? downloadStartDate;
-  int? downloadFinishDate;
+
+  // String? downloadPath;
+  // String? downloadAudioPath;
+  // int? downloadAudioLength;
+  // int? downloadLength;
+  // int? downloadStartDate;
+  // int? downloadFinishDate;
   bool isLike = false;
   int? likeCount;
   int? dislikeCount;
@@ -82,7 +81,7 @@ class MediaInfo {
     this.playHistory,
     this.suffix = '',
     this.sourceType = SourceType.local,
-    this.downloadStatus = DownloadStatus.none,
+    // this.downloadStatus = DownloadStatus.none,
     this.assetsCreateDate = 0,
     this.assetsId,
     this.directoryId,
@@ -104,7 +103,7 @@ class MediaInfo {
     playHistory = map['playHistory'];
     suffix = map['suffix'] ?? '';
     sourceType = map['sourceType'] ?? map['youtubeId'] != null ? SourceType.youtube : SourceType.local;
-    downloadStatus = map['downloadStatus'] ?? DownloadStatus.none;
+    // downloadStatus = map['downloadStatus'] ?? DownloadStatus.none;
     assetsCreateDate = map['assetsCreateDate'] ?? 0;
     assetsId = map['assetsId'];
     directoryId = map['directoryId'];
@@ -118,12 +117,12 @@ class MediaInfo {
     description = map['description'];
     publishedTime = map['publishedTime'];
     viewCountText = map['viewCountText'];
-    downloadPath = map['downloadPath'];
-    downloadAudioPath = map['downloadAudioPath'];
-    downloadAudioLength = map['downloadAudioLength'];
-    downloadLength = map['downloadLength'];
-    downloadStartDate = map['downloadStartDate'];
-    downloadFinishDate = map['downloadFinishDate'];
+    // downloadPath = map['downloadPath'];
+    // downloadAudioPath = map['downloadAudioPath'];
+    // downloadAudioLength = map['downloadAudioLength'];
+    // downloadLength = map['downloadLength'];
+    // downloadStartDate = map['downloadStartDate'];
+    // downloadFinishDate = map['downloadFinishDate'];
     isLike = map['isLike'] ?? false;
     likeCount = map['likeCount'];
     dislikeCount = map['dislikeCount'];
@@ -143,7 +142,7 @@ class MediaInfo {
       'playHistory': playHistory,
       'suffix': suffix,
       'sourceType': sourceType,
-      'downloadStatus': downloadStatus,
+      // 'downloadStatus': downloadStatus,
       'assetsCreateDate': assetsCreateDate,
       'assetsId': assetsId,
       'directoryId': directoryId,
@@ -157,12 +156,12 @@ class MediaInfo {
       'description': description,
       'publishedTime': publishedTime,
       'viewCountText': viewCountText,
-      'downloadPath': downloadPath,
-      'downloadAudioPath': downloadAudioPath,
-      'downloadAudioLength': downloadAudioLength,
-      'downloadLength': downloadLength,
-      'downloadStartDate': downloadStartDate,
-      'downloadFinishDate': downloadFinishDate,
+      // 'downloadPath': downloadPath,
+      // 'downloadAudioPath': downloadAudioPath,
+      // 'downloadAudioLength': downloadAudioLength,
+      // 'downloadLength': downloadLength,
+      // 'downloadStartDate': downloadStartDate,
+      // 'downloadFinishDate': downloadFinishDate,
       'isLike': isLike,
       'likeCount': likeCount,
       'dislikeCount': dislikeCount,
@@ -246,10 +245,22 @@ class MediaInfo {
   @ignore
   bool get isLive => youtubeId != null && duration == 0;
 
+  // bool isDownloading(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.downloading;
+  //
+  // bool isWaiting(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.waiting;
+  //
+  // bool isPause(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.pause;
+  //
+  // bool isSuccess(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.success;
+  //
+  // bool isFailed(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.failed;
+  //
+  // bool isInQueue(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.failed;
+
   @override
   String toString() {
     return 'title= $title author= $author id= $id youtubeId= $youtubeId createDate= $createDate '
-        'updateDate= $updateDate duration= $duration downloadStatus= $downloadStatus';
+        'updateDate= $updateDate duration= $duration';
   }
 }
 
@@ -262,23 +273,64 @@ class PlayHistory {
   PlayHistory({this.firstPlayDate, this.recentPlayDate, this.playPosition});
 }
 
-@embedded
-class VideoSource {
-  String url;
+class BaseMediaSource {
+  String url = '';
   String? label;
   String? format;
   int? byteSize;
   int? bitrate;
+
+  @enumerated
+  DownloadStatus downloadStatus = DownloadStatus.none;
+  int? fileLength;
+  int? downloadLength;
+  int? downloadStartDate;
+  int? downloadFinishDate;
+  String? downloadPath;
+
+  BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize});
+
+  @ignore
+  bool get isDownloading => downloadStatus == DownloadStatus.downloading;
+
+  bool get isWaiting => downloadStatus == DownloadStatus.waiting;
+
+  @ignore
+  bool get isInQueue => isWaiting || isDownloading;
+
+  @ignore
+  bool get isPause => downloadStatus == DownloadStatus.pause;
+
+  @ignore
+  bool get isSuccess => downloadStatus == DownloadStatus.success;
+
+  @ignore
+  bool get isFailed => downloadStatus == DownloadStatus.failed;
+
+  double get downloadProgress => downloadLength == null || fileLength == null ? 0 : downloadLength! / fileLength!;
+}
+
+@embedded
+class VideoSource extends BaseMediaSource {
   int? width;
   int? height;
+  int? fps;
   bool isOnlyVideo;
 
+  // @enumerated
+  // DownloadStatus downloadStatus = DownloadStatus.none;
+  // int? downloadLength;
+  // int? downloadStartDate;
+  // int? downloadFinishDate;
+  // String? downloadPath;
+
   VideoSource(
-      {this.url = '',
-      this.label,
-      this.format,
-      this.bitrate,
-      this.byteSize,
+      {super.url = '',
+      super.label,
+      super.format,
+      super.bitrate,
+      super.byteSize,
+      this.fps,
       this.width,
       this.height,
       this.isOnlyVideo = false});
@@ -291,13 +343,41 @@ class VideoSource {
       return width!;
     }
   }
+
+  String formatSize() {
+    if (byteSize == null || byteSize == 0) return '0MB';
+    final sizeMB = byteSize! / 1024 / 1024;
+    if (sizeMB >= 1024) {
+      final sizeGB = sizeMB / 1024;
+      return '${sizeGB.toStringAsFixed(2)}G';
+    }
+    return '${sizeMB.toStringAsFixed(1)}MB';
+  }
+
+  String get resolution => '${width}x$height';
 }
 
 @embedded
-class AudioSource {
-  String url;
-  int? byteSize;
-  int? bitrate;
+class AudioSource extends BaseMediaSource {
+  AudioSource({super.url = '', super.label, super.format, super.bitrate, super.byteSize});
 
-  AudioSource({this.url = '', this.bitrate, this.byteSize});
+  String formatSize() {
+    if (byteSize == null || byteSize == 0) return '0MB';
+    final sizeMB = byteSize! / 1024 / 1024;
+    if (sizeMB >= 1024) {
+      final sizeGB = sizeMB / 1024;
+      return '${sizeGB.toStringAsFixed(2)}G';
+    }
+    return '${sizeMB.toStringAsFixed(1)}MB';
+  }
+
+  String formatBitrate() {
+    if (bitrate == null || bitrate == 0) return '0 Kbit/s';
+    final sizeKB = bitrate! / 1024;
+    if (sizeKB >= 1024) {
+      final sizeMB = sizeKB / 1024;
+      return '${sizeMB.toStringAsFixed(1)} Mbit/s';
+    }
+    return '${sizeKB.toStringAsFixed(1)} Kbit/s';
+  }
 }

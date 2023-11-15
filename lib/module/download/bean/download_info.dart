@@ -8,22 +8,24 @@ base class DownloadInfo extends LinkedListEntry<DownloadInfo> {
   MediaInfo mediaInfo;
   CancelToken cancelToken = CancelToken();
   Downloader downloader = Downloader();
-  String? videoUrl;
-  String? audioUrl;
+  BaseMediaSource? mediaSource;
+  AudioSource? audioSource;
   int thisSecondLength = 0;
   int lastSecondLength = 0;
 
-  DownloadInfo(this.mediaInfo, {this.videoUrl, this.audioUrl});
+  DownloadInfo(this.mediaInfo, {this.mediaSource,this.audioSource});
 
-  bool get isDownloading => mediaInfo.downloadStatus == DownloadStatus.downloading;
+  bool get isDownloading => mediaSource?.isDownloading ?? false;
 
-  bool get isEnqueued => mediaInfo.downloadStatus == DownloadStatus.waiting;
+  bool get isWaiting => mediaSource?.isWaiting ?? false;
 
-  bool get isPause => mediaInfo.downloadStatus == DownloadStatus.pause;
+  bool get isInQueue => mediaSource?.isInQueue ?? false;
 
-  bool get isFailed => mediaInfo.downloadStatus == DownloadStatus.failed;
+  bool get isPause => mediaSource?.isPause ?? false;
 
-  bool get isSuccess => mediaInfo.downloadStatus == DownloadStatus.success;
+  bool get isFailed => mediaSource?.isFailed ?? false;
+
+  bool get isSuccess => mediaSource?.isSuccess ?? false;
 
   String get identify => mediaInfo.identify;
 }

@@ -25,7 +25,7 @@ class AppThemeController extends GetxController {
     final textColor = isLight ? ColorRes.backgroundColor : ColorRes.textPrimaryColor;
     const accentTextColor = ColorRes.accentTextColor;
     final surfaceColor = isLight ? ColorRes.colorF5F5F5 : Colors.black12;
-    final onPrimaryColor = isLight ? ColorRes.colorF5F5F5 : const Color(0XFF181A1F);
+    final onPrimaryColor = isLight ? ColorRes.colorF5F5F5 : const Color(0XFF0f0f0f);
     final disabledColor = isLight ? ColorRes.negativeColor : ColorRes.negativeDarkColor;
     final iconThemeData = IconThemeData(color: textColor, size: 24);
     final fontFamily = tubeFontFamily;

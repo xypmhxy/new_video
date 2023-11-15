@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:free_tube_player/blindness/blindness_helper.dart';
 import 'package:free_tube_player/firebase/server_config.dart';
+import 'package:free_tube_player/module/download/controller/global_download_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:get/get.dart';
@@ -34,6 +35,7 @@ double get statusBarHeight => XScreen.getInstance().statusBarHeight;
 String tubeFontFamily = 'MeTubeFont';
 
 ServerConfig serverConfig = ServerConfig();
+GlobalDownloadController globalDownloadController = GlobalDownloadController();
 
 Future<void> vibrate() async {
   await HapticFeedback.vibrate();

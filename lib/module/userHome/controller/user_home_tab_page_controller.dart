@@ -5,11 +5,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/utils/date_utils.dart';
+import 'package:free_tube_player/utils/dialog_utils.dart';
+import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:get/get.dart';
 
 class UserHomeTabPageController {
   final pageController = PageController(initialPage: 2);
   final index = 2.obs;
+  int lastBackPressedTime = 0;
 
   void onTapBottomNavigationBar(int index) {
     this.index.value = index;
@@ -34,5 +39,18 @@ class UserHomeTabPageController {
     } else {
       ///
     }
+  }
+
+  bool backPressed() {
+    // final isShowing = DialogUtils.isShowing();
+    // if (isShowing){
+    //   DialogUtils.dismiss();
+    // }
+    final nowTime = DateUtil.getNowDateMs();
+    final intervalTime = nowTime - lastBackPressedTime;
+    if (intervalTime <= 1500) return true;
+    lastBackPressedTime = nowTime;
+    ToastUtils.show(S.current.backPressedConfirm);
+    return false;
   }
 }

@@ -58,7 +58,7 @@ class DialogUserMoreAction extends StatelessWidget {
           children: [
             _item(context, svg: Assets.svgLikeNormal, title: S.current.like, size: 29, onPressed: onClickLike),
             _item(context, svg: Assets.svgDownload, title: S.current.download, onPressed: onClickDownload),
-            _item(context, svg: Assets.svgAddToList, title: S.current.playlist, onPressed: onClickAddList),
+            // _item(context, svg: Assets.svgAddToList, title: S.current.playlist, onPressed: onClickAddList),
             _item(context, svg: Assets.svgShare, title: S.current.share, onPressed: onClickAddList,size: 29),
           ],
         ));

@@ -54,5 +54,8 @@
   "mostLike": "Most like",
   "mostReplies": "Most Replies",
   "search": "Search",
-  "viewCountParams": "{params} views"
+  "video": "Video",
+  "audio": "Audio",
+  "backPressedConfirm": "Please click again to exit to desktop",
+  "getPlaySourceFailed": "Failed to obtain playback information"
 }

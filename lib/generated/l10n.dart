@@ -600,13 +600,43 @@ class S {
     );
   }
 
-  /// `{params} views`
-  String viewCountParams(Object params) {
+  /// `Video`
+  String get video {
     return Intl.message(
-      '$params views',
-      name: 'viewCountParams',
+      'Video',
+      name: 'video',
       desc: '',
-      args: [params],
+      args: [],
+    );
+  }
+
+  /// `Audio`
+  String get audio {
+    return Intl.message(
+      'Audio',
+      name: 'audio',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please click again to exit to desktop`
+  String get backPressedConfirm {
+    return Intl.message(
+      'Please click again to exit to desktop',
+      name: 'backPressedConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to obtain playback information`
+  String get getPlaySourceFailed {
+    return Intl.message(
+      'Failed to obtain playback information',
+      name: 'getPlaySourceFailed',
+      desc: '',
+      args: [],
     );
   }
 }

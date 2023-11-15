@@ -22,11 +22,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(params) => "${params} videos";
 
-  static String m1(params) => "${params} views";
-
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "all": MessageLookupByLibrary.simpleMessage("All"),
+        "audio": MessageLookupByLibrary.simpleMessage("Audio"),
+        "backPressedConfirm": MessageLookupByLibrary.simpleMessage(
+            "Please click again to exit to desktop"),
         "backgroundPlayback":
             MessageLookupByLibrary.simpleMessage("Background"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
@@ -47,6 +48,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "file": MessageLookupByLibrary.simpleMessage("File"),
         "folder": MessageLookupByLibrary.simpleMessage("Folder"),
         "free": MessageLookupByLibrary.simpleMessage("Free"),
+        "getPlaySourceFailed": MessageLookupByLibrary.simpleMessage(
+            "Failed to obtain playback information"),
         "history": MessageLookupByLibrary.simpleMessage("History"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "library": MessageLookupByLibrary.simpleMessage("Library"),
@@ -90,6 +93,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "top": MessageLookupByLibrary.simpleMessage("Top"),
         "trim": MessageLookupByLibrary.simpleMessage("Trim"),
         "userAgreement": MessageLookupByLibrary.simpleMessage("User Agreement"),
-        "viewCountParams": m1
+        "video": MessageLookupByLibrary.simpleMessage("Video")
       };
 }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/video_group.dart';
 import 'package:free_tube_player/dialog/dialog_confirm.dart';
+import 'package:free_tube_player/dialog/dialog_download.dart';
 import 'package:free_tube_player/dialog/dialog_more_action.dart';
 import 'package:free_tube_player/dialog/dialog_rename.dart';
 import 'package:free_tube_player/dialog/dialog_user_more_action.dart';
@@ -25,22 +26,15 @@ class VideoActionHelper {
       ValueChanged<String>? onRename,
       VoidCallback? onClickVideoEditor,
       bool isShowHistory = false}) {
-    DialogUtils.showBottomSheet(DialogUserMoreAction());
-  }
-
-  void _showConfirmDialog(VideoGroup videoGroup, MediaInfo mediaInfo, {VoidCallback? onDelete}) {
-    DialogUtils.showCenterDialog(DialogConfirm(
-      title: S.current.confirmDelete,
-      onCancel: () {
-        DialogUtils.dismiss();
-      },
-      onConfirm: () async {
-        await MediaInfoHelper.get.delete(mediaInfo);
-        DialogUtils.dismiss();
-        DialogUtils.dismiss(tag: 'dialogMoreAction');
-        onDelete?.call();
+    DialogUtils.showBottomSheet(DialogUserMoreAction(
+      onClickDownload: () {
+        _showDownloadDialog(mediaInfo);
       },
     ));
+  }
+
+  void _showDownloadDialog(MediaInfo mediaInfo, {VoidCallback? onDelete}) {
+    DialogUtils.showBottomSheet(DialogDownload(mediaInfo: mediaInfo));
   }
 
   void _showRenameDialog(MediaInfo mediaInfo, {ValueChanged<String>? onRename}) {

@@ -71,7 +71,7 @@ class UserPlayerController {
     } else {
       final media = await VideoUtils.requestVideoSource(mediaInfo);
       if (media != null) mediaInfo = media;
-      const targetResolution = 1080;
+      const targetResolution = 720;
       final playVideoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
       if (playVideoSource == null) return;
       String? audioUrl;

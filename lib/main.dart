@@ -50,9 +50,7 @@ class MyApp extends StatelessWidget {
       localeResolutionCallback: (locale, list) {
         return locale;
       },
-      builder: (context, child) {
-        return FlutterSmartDialog(child: child);
-      },
+      builder:FlutterSmartDialog.init(),
       home: const SplashPage(),
     );
   }

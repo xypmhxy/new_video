@@ -103,13 +103,13 @@ class SearchItem extends StatelessWidget {
                 const Width(2),
                 GestureDetector(
                     onTap: () async {
-                      final youtubeExp = YoutubeExplode();
-                      final maniFest = await youtubeExp.videos.streams.getManifest(mediaInfo.youtubeId!);
-                      final videoUrl = maniFest.videoOnly.last.url.toString();
-                      final audioUrl = maniFest.audioOnly.last.url.toString();
-                      GlobalDownloadController().addToDownloadList(DownloadInfo(mediaInfo)
-                        ..videoUrl = videoUrl
-                        ..audioUrl = audioUrl);
+                      // final youtubeExp = YoutubeExplode();
+                      // final maniFest = await youtubeExp.videos.streams.getManifest(mediaInfo.youtubeId!);
+                      // final videoUrl = maniFest.videoOnly.last.url.toString();
+                      // final audioUrl = maniFest.audioOnly.last.url.toString();
+                      // GlobalDownloadController().addToDownloadList(DownloadInfo(mediaInfo)
+                      //   ..videoUrl = videoUrl
+                      //   ..audioUrl = audioUrl);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(4),

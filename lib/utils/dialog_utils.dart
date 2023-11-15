@@ -16,6 +16,7 @@ class DialogUtils {
     await SmartDialog.show(
         alignment: Alignment.topCenter,
         clickMaskDismiss: clickBgDismissTemp,
+        backDismiss: clickBgDismissTemp,
         tag: tag,
         builder: (BuildContext context) {
           return widget;
@@ -26,6 +27,7 @@ class DialogUtils {
     return SmartDialog.show(
         alignment: Alignment.bottomCenter,
         clickMaskDismiss: clickBgDismissTemp,
+        backDismiss: clickBgDismissTemp,
         tag: tag,
         builder: (BuildContext context) {
           return widget;
@@ -38,6 +40,7 @@ class DialogUtils {
         animationType: SmartAnimationType.centerFade_otherSlide,
         animationTime: const Duration(milliseconds: 100),
         clickMaskDismiss: clickBgDismissTemp,
+        backDismiss: clickBgDismissTemp,
         tag: tag,
         builder: (BuildContext context) {
           return widget;
@@ -45,7 +48,7 @@ class DialogUtils {
   }
 
   static bool isShowing() {
-    return SmartDialog.config.isExist;
+    return SmartDialog.config.checkExist();
   }
 
   static dismiss<T>({T? result, String? tag}) {

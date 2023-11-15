@@ -26,7 +26,7 @@ class ToastView extends StatelessWidget {
         constraints: BoxConstraints(maxWidth: screenWidth - 60),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-            color: AppThemeController.primaryThemeColor(context), borderRadius: BorderRadius.circular(20)),
+            color: AppThemeController.primaryThemeColor(context), borderRadius: BorderRadius.circular(12)),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
