@@ -25,7 +25,10 @@ class DownloadView extends StatelessWidget {
         builder: (_) {
           return GestureDetector(
             onTap: () {
-              globalDownloadController.downloadMedia(mediaInfo, videoSource, audioSource);
+              BaseMediaSource? mediaSource = videoSource;
+              mediaSource ??= audioSource;
+              if (mediaSource == null) return;
+              globalDownloadController.downloadMedia(mediaInfo: mediaInfo, mediaSource: mediaSource);
             },
             child: Container(
               color: Colors.transparent,

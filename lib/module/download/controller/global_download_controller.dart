@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:html';
 import 'dart:io';
 
 import 'package:free_tube_player/bean/play/media_info.dart';
@@ -15,12 +14,8 @@ class GlobalDownloadController extends GetxController {
   final _mediaDao = MediaInfoDao();
   LinkedList<DownloadInfo> downloadList = LinkedList();
 
-  void downloadMedia({required MediaInfo mediaInfo, required MediaSource mediaSource, AudioSource? audioSource}) {
-    VideoSource? videoSource = mediaSource as VideoSource?;
-    if (videoSource?.isOnlyVideo == false && audioSource == null) {
-      audioSource = mediaInfo.audioSources?.first;
-    }
-    final DownloadInfo downloadInfo = DownloadInfo(mediaInfo, mediaSource: videoSource, audioSource: audioSource);
+  void downloadMedia({required MediaInfo mediaInfo, required BaseMediaSource mediaSource}) {
+    final DownloadInfo downloadInfo = DownloadInfo(mediaInfo, videoSource: mediaSource);
     addToDownloadList(downloadInfo);
   }
 
@@ -44,61 +39,62 @@ class GlobalDownloadController extends GetxController {
     final downloader = downloadInfo.downloader;
     final mediaInfo = downloadInfo.mediaInfo;
     final videoSource = downloadInfo.videoSource;
-
     final videoUrl = downloadInfo.videoSource?.url;
-    final audioUrl = downloadInfo.audioSource?.url;
 
-    if (videoUrl != null) {
-      final fileName = mediaInfo.youtubeId ?? mediaInfo.title;
-      final relativePath = '${fileName.toMd5()}.mp4';
-      final videoSavePath = await FileUtils.getDownloadFilePath(relativePath);
-      videoSource?.downloadPath = relativePath;
-      _mediaDao.insert(mediaInfo);
+    if (videoUrl == null) return;
+    final fileName = mediaInfo.youtubeId ?? mediaInfo.title;
+    final relativePath = '${fileName.toMd5()}.mp4';
+    final videoSavePath = await FileUtils.getDownloadFilePath(relativePath);
+    videoSource?.downloadPath = relativePath;
+    _mediaDao.insert(mediaInfo);
 
-      downloader.download(
-          url: videoUrl,
-          savePath: videoSavePath,
-          cancelToken: downloadInfo.cancelToken,
-          downloadFailed: ({errorCode}) {
-            videoSource?.downloadStatus = DownloadStatus.failed;
-            _mediaDao.insert(mediaInfo);
-            _updateUI(mediaInfo.identify);
-            if (errorCode == 416) {
-              final downloadPath = videoSource?.downloadPath;
-              _deleteFile(downloadPath);
+    downloader.download(
+        url: videoUrl,
+        savePath: videoSavePath,
+        cancelToken: downloadInfo.cancelToken,
+        downloadFailed: ({errorCode}) {
+          videoSource?.downloadStatus = DownloadStatus.failed;
+          _mediaDao.insert(mediaInfo);
+          _updateUI(mediaInfo.identify);
+          if (errorCode == 416) {
+            final downloadPath = videoSource?.downloadPath;
+            _deleteFile(downloadPath);
+          }
+          LogUtils.e('视频下载失败 $errorCode');
+        },
+        onReceiveProgress: (count, total) {
+          videoSource?.downloadLength = count;
+          LogUtils.print('当前视频文件下载进度 ${mediaInfo.title}  $count  $total');
+          if (count >= total) {
+            final audioUrl = videoSource?.childSource?.url;
+            if (audioUrl != null) {
+              _doDownloadAudio(downloadInfo, videoSource!.childSource! as AudioSource);
+            } else {
+              videoSource?.downloadStatus = DownloadStatus.success;
+              videoSource?.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
+              // removeDownloadFromList(downloadInfo);
             }
-            LogUtils.e('视频下载失败 $errorCode');
-          },
-          onReceiveProgress: (count, total) {
-            videoSource?.downloadLength = count;
-            print('当前视频文件下载进度 ${mediaInfo.title}  $count  $total');
-            if (count >= total) {
-              if (audioUrl != null) {
-                _doDownloadAudio(downloadInfo);
-              } else {
-                videoSource?.downloadStatus = DownloadStatus.success;
-                videoSource?.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
-                // removeDownloadFromList(downloadInfo);
-              }
-              LogUtils.i('视频下载完成 ${mediaInfo.title}');
-            }
-            _mediaDao.insert(mediaInfo);
-            _updateUI(mediaInfo.identify);
-            // _downloadStreamController.add(downloadInfo);
-          });
-    }
+            LogUtils.i('视频下载完成 ${mediaInfo.title}');
+          }
+          _mediaDao.insert(mediaInfo);
+          _updateUI(mediaInfo.identify);
+          // _downloadStreamController.add(downloadInfo);
+        });
   }
 
-  Future<void> _doDownloadAudio(DownloadInfo downloadInfo) async {
+  Future<void> _doDownloadAudio(DownloadInfo downloadInfo, AudioSource audioSource) async {
     final downloader = downloadInfo.downloader;
     final mediaInfo = downloadInfo.mediaInfo;
-    final audioSource = downloadInfo.audioSource;
-    final audioUrl = audioSource?.url;
-    if (audioUrl == null) return;
+    final audioUrl = audioSource.url;
     final fileName = mediaInfo.youtubeId ?? mediaInfo.title;
     final relativePath = '${fileName.toMd5()}.mp3';
     final audioSavePath = await FileUtils.getDownloadFilePath(relativePath);
-    audioSource?.downloadPath = relativePath;
+    if (File(audioSavePath).existsSync()) {
+      _mediaDao.insert(mediaInfo);
+      _updateUI(mediaInfo.identify);
+      return;
+    }
+    audioSource.downloadPath = relativePath;
     _mediaDao.insert(mediaInfo);
 
     downloader.download(
@@ -106,17 +102,17 @@ class GlobalDownloadController extends GetxController {
         savePath: audioSavePath,
         downloadFailed: ({errorCode}) {
           if (errorCode == 416) {
-            final downloadPath = audioSource?.downloadPath;
+            final downloadPath = audioSource.downloadPath;
             _deleteFile(downloadPath);
           }
           LogUtils.e('音频下载失败 $errorCode');
         },
         onReceiveProgress: (count, total) {
-          audioSource?.downloadLength = count;
-          print('当前音频文件下载进度 ${mediaInfo.title}  $count  $total');
+          audioSource.downloadLength = count;
+          LogUtils.print('当前音频文件下载进度 ${mediaInfo.title}  $count  $total');
           if (count >= total) {
-            audioSource?.downloadStatus = DownloadStatus.success;
-            audioSource?.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
+            audioSource.downloadStatus = DownloadStatus.success;
+            audioSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
             // removeDownloadFromList(downloadInfo);
             LogUtils.i('音频下载完成 ${mediaInfo.title}');
           }

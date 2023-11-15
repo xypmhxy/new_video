@@ -210,8 +210,8 @@ class MediaInfo {
     return width! / height!;
   }
 
-  bool isNeedAudioTrack({int targetResolution = 720}) {
-    return targetResolution >= 1080 || sourceType == SourceType.bilibili;
+  bool isNeedAudioTrack({VideoSource? videoSource}) {
+    return videoSource?.isNeedAudioTrack() == true || sourceType == SourceType.bilibili;
   }
 
   VideoSource? getVideoSource(int width) {
@@ -279,6 +279,7 @@ class BaseMediaSource {
   String? format;
   int? byteSize;
   int? bitrate;
+  BaseMediaSource? childSource;
 
   @enumerated
   DownloadStatus downloadStatus = DownloadStatus.none;
@@ -288,7 +289,7 @@ class BaseMediaSource {
   int? downloadFinishDate;
   String? downloadPath;
 
-  BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize});
+  BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.childSource});
 
   @ignore
   bool get isDownloading => downloadStatus == DownloadStatus.downloading;
@@ -316,13 +317,6 @@ class VideoSource extends BaseMediaSource {
   int? height;
   int? fps;
   bool isOnlyVideo;
-
-  // @enumerated
-  // DownloadStatus downloadStatus = DownloadStatus.none;
-  // int? downloadLength;
-  // int? downloadStartDate;
-  // int? downloadFinishDate;
-  // String? downloadPath;
 
   VideoSource(
       {super.url = '',
@@ -352,6 +346,10 @@ class VideoSource extends BaseMediaSource {
       return '${sizeGB.toStringAsFixed(2)}G';
     }
     return '${sizeMB.toStringAsFixed(1)}MB';
+  }
+
+  bool isNeedAudioTrack() {
+    return getResolution() > 1080;
   }
 
   String get resolution => '${width}x$height';

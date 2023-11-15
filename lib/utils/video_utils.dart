@@ -28,14 +28,8 @@ class VideoUtils {
           videoSources.add(VideoSource(url: liveUrl));
         } else {
           final manifest = await youtubeExplode.videos.streams.getManifest(mediaInfo.youtubeId!);
-          for (final mux in manifest.video) {
-            videoSources.add(parseMuxedVideo(mux));
-          }
-          videoSources.sort((a, b) {
-            if (a.width == null || b.width == null) return 0;
-            return a.width! > b.width! ? 1 : 0;
-          });
 
+          //解析音频
           for (final audioInfo in manifest.audio) {
             if (audioInfo.codec.mimeType.startsWith('audio') == false) continue;
             audioSource.add(parseAudio(audioInfo));
@@ -44,6 +38,20 @@ class VideoUtils {
             if (a.bitrate == null || b.bitrate == null) return 0;
             return a.bitrate! > b.bitrate! ? 1 : 0;
           });
+
+          //解析视频
+          for (final mux in manifest.video) {
+            final videoSource = parseMuxedVideo(mux);
+            if (mediaInfo.isNeedAudioTrack(videoSource: videoSource) ){
+              videoSource.childSource = audioSource.last;
+            }
+            videoSources.add(videoSource);
+          }
+          videoSources.sort((a, b) {
+            if (a.width == null || b.width == null) return 0;
+            return a.width! > b.width! ? 1 : 0;
+          });
+
         }
         mediaInfo.videoSources = videoSources;
         mediaInfo.audioSources = audioSource;

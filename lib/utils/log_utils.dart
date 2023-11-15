@@ -7,6 +7,10 @@ class LogUtils {
   static final filterTag = {};
   static final LoggerChannel _loggerChannel = LoggerChannel();
 
+  static print(String msg) {
+    print(msg);
+  }
+
   static d(String? msg, {String? tag, bool useLogcat = false}) {
     // useLogcat ??= isAndroid ? true : false;
     if (useLogcat && isAndroid) {
@@ -18,7 +22,7 @@ class LogUtils {
     _logger.d('${tag ?? ''}$msg');
   }
 
-  static i(String? msg, {String? tag,  bool useLogcat = false}) {
+  static i(String? msg, {String? tag, bool useLogcat = false}) {
     // useLogcat ??= isAndroid ? true : false;
     if (useLogcat && isAndroid) {
       _loggerChannel.i(msg, tag: tag);
@@ -29,7 +33,7 @@ class LogUtils {
     _logger.i(msg);
   }
 
-  static e(String? msg, {String? tag,  bool useLogcat = false}) {
+  static e(String? msg, {String? tag, bool useLogcat = false}) {
     // useLogcat ??= isAndroid ? true : false;
     if (useLogcat && isAndroid) {
       _loggerChannel.e(msg, tag: tag);
