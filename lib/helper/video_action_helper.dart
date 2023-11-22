@@ -38,9 +38,15 @@ class VideoActionHelper {
     DialogUtils.showBottomSheet(DialogDownload(
       mediaInfo: mediaInfo,
       onClickDownload: (mediaSource) {
-        if (mediaSource.isDownloading) {
-          globalDownloadController.pause(mediaInfo);
-        }else {
+        if (mediaSource.isInQueue || mediaSource.isSuccess) {
+          DialogUtils.showCenterDialog(DialogConfirm(
+            title: S.current.removeDownloadConfirmText,
+            onConfirm: () {
+              globalDownloadController.remove(mediaInfo, mediaSource: mediaSource);
+              DialogUtils.dismiss();
+            },
+          ));
+        } else {
           globalDownloadController.downloadMedia(mediaInfo: mediaInfo, mediaSource: mediaSource);
         }
       },

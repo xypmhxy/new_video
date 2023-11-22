@@ -87,7 +87,9 @@ class DialogConfirm extends StatelessWidget {
       NegativeTextButton(
         size: Size((screenWidth - 48) / 3, 36),
         text: S.current.cancel,
-        onPressed: onCancel,
+        onPressed: onCancel??(){
+          DialogUtils.dismiss();
+        },
       ),
       ColorTextButton(
         size: Size((screenWidth - 48) / 3, 36),

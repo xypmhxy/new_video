@@ -28,7 +28,7 @@ class GlobalDownloadController extends GetxController {
     final mediaInfo = downloadInfo.mediaInfo;
     final videoSource = downloadInfo.videoSource;
     videoSource?.downloadStatus = DownloadStatus.downloading;
-    if (downloadList.length > maxDownloadCount){
+    if (downloadList.length > maxDownloadCount) {
       videoSource?.downloadStatus = DownloadStatus.waiting;
       _mediaDao.insert(mediaInfo);
       _updateUI(mediaInfo.identify);
@@ -140,6 +140,19 @@ class GlobalDownloadController extends GetxController {
     final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
     downloadInfo?.cancelToken.cancel();
     downloadInfo?.videoSource?.downloadStatus = DownloadStatus.pause;
+    _mediaDao.insert(mediaInfo);
+    _updateUI(mediaInfo.identify);
+  }
+
+  Future<void> remove(MediaInfo mediaInfo, {BaseMediaSource? mediaSource}) async {
+    final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
+    if (downloadInfo != null) {
+      downloadInfo.cancelToken.cancel();
+      removeDownloadInfo(downloadInfo);
+    }
+    mediaSource ??= downloadInfo?.videoSource;
+    await _deleteFile(mediaSource?.downloadPath);
+    mediaSource?.clearDownload();
     _mediaDao.insert(mediaInfo);
     _updateUI(mediaInfo.identify);
   }

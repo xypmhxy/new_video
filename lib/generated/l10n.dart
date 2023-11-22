@@ -639,6 +639,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Are you sure to remove the current download`
+  String get removeDownloadConfirmText {
+    return Intl.message(
+      'Are you sure to remove the current download',
+      name: 'removeDownloadConfirmText',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

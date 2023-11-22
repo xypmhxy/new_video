@@ -67,7 +67,7 @@ class UserPlayerController {
     }
     String? videoUrl;
     String? audioUrl;
-    if (videoSource == null) {
+    if (videoSource == null || videoSource.isDownloadAvailable == false) {
       final media = await VideoUtils.requestVideoSource(mediaInfo);
       if (media != null) mediaInfo = media;
       const targetResolution = defaultResolution;

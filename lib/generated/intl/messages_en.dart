@@ -75,6 +75,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "playlist": MessageLookupByLibrary.simpleMessage("Playlist"),
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
         "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
+        "removeDownloadConfirmText": MessageLookupByLibrary.simpleMessage(
+            "Are you sure to remove the current download"),
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "replies": MessageLookupByLibrary.simpleMessage("Replies"),
         "rewardNotLoad": MessageLookupByLibrary.simpleMessage(

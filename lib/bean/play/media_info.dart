@@ -299,7 +299,7 @@ class BaseMediaSource {
   bool get isWaiting => downloadStatus == DownloadStatus.waiting;
 
   @ignore
-  bool get isInQueue => isWaiting || isDownloading;
+  bool get isInQueue => isWaiting || isDownloading || isPause;
 
   @ignore
   bool get isPause => downloadStatus == DownloadStatus.pause;
@@ -318,6 +318,14 @@ class BaseMediaSource {
 
   @ignore
   bool get isDownloadAvailable => isSuccess && downloadPath != null;
+
+  void clearDownload() {
+    downloadStartDate = null;
+    downloadFinishDate = null;
+    downloadPath = null;
+    downloadLength = null;
+    downloadStatus = DownloadStatus.none;
+  }
 }
 
 @embedded

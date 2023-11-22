@@ -57,5 +57,6 @@
   "video": "Video",
   "audio": "Audio",
   "backPressedConfirm": "Please click again to exit to desktop",
-  "getPlaySourceFailed": "Failed to obtain playback information"
+  "getPlaySourceFailed": "Failed to obtain playback information",
+  "removeDownloadConfirmText": "Are you sure to remove the current download"
 }
