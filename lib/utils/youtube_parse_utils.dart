@@ -9,6 +9,8 @@ import 'package:free_tube_player/utils/duration_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 
 class YoutubeParseUtils {
+  static final mediaDao = MediaInfoDao();
+
   static Future<List<MediaInfo>> parseVideoRender(List contents) async {
     List<MediaInfo> mediaList = [];
     for (final content in contents) {
@@ -24,6 +26,8 @@ class YoutubeParseUtils {
   static Future<MediaInfo?> parseVideo(dynamic videoRenderer) async {
     final youtubeId = videoRenderer['videoId'];
     if (youtubeId == null) return null;
+    MediaInfo? dbMediaInfo = await mediaDao.queryYoutubeId(youtubeId).catchError((_) {});
+    if (dbMediaInfo != null) return dbMediaInfo;
     final thumbnails = videoRenderer['thumbnail']?['thumbnails'] as List?;
     final thumbnail = thumbnails?.last?['url'] ?? '';
 
@@ -47,7 +51,6 @@ class YoutubeParseUtils {
 
     final publishedTimeText = videoRenderer['publishedTimeText']?['simpleText'];
 
-    final mediaDao = MediaInfoDao();
     int duration = 0;
     String durationString = videoRenderer['lengthText']?['simpleText'] ?? '';
     duration = DurationUtils.parseDurationText(durationString);
@@ -79,13 +82,6 @@ class YoutubeParseUtils {
       'authorThumbnail': authorThumbnail,
     };
     final mediaInfo = MediaInfo.fromMap(map);
-    if (mediaInfo.youtubeId != null) {
-      MediaInfo? localMediaInfo = await mediaDao.queryYoutubeId(mediaInfo.youtubeId!);
-      if (localMediaInfo != null) {
-        mediaInfo.createDate = DateTime.now().millisecondsSinceEpoch;
-      }
-      return mediaInfo;
-    }
     return mediaInfo;
   }
 }

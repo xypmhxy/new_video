@@ -42,7 +42,7 @@ class VideoUtils {
           //解析视频
           for (final mux in manifest.video) {
             final videoSource = parseMuxedVideo(mux);
-            if (mediaInfo.isNeedAudioTrack(videoSource: videoSource) ){
+            if (mediaInfo.isNeedAudioTrack(videoSource: videoSource)) {
               videoSource.childSource = audioSource.last;
             }
             videoSources.add(videoSource);
@@ -51,8 +51,8 @@ class VideoUtils {
             if (a.width == null || b.width == null) return 0;
             return a.width! > b.width! ? 1 : 0;
           });
-
         }
+        videoSources.removeWhere((element) => element.format != 'mp4');
         mediaInfo.videoSources = videoSources;
         mediaInfo.audioSources = audioSource;
       } catch (e) {
@@ -94,13 +94,7 @@ class VideoUtils {
   }
 
   static VideoSource? getTargetVideoUrl(int target, MediaInfo mediaInfo) {
-    bool isOnlyVideo = false;
-    if (target >= 1080) {
-      isOnlyVideo = true;
-    }
-    final videoSources = mediaInfo.videoSources
-        ?.where((videoSource) => videoSource.getResolution() <= target && videoSource.isOnlyVideo == isOnlyVideo)
-        .toList();
+    final videoSources = mediaInfo.videoSources?.where((videoSource) => videoSource.getResolution() <= target).toList();
     if (videoSources?.isEmpty ?? true) return null;
     return videoSources!.last;
   }

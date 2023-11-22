@@ -20,18 +20,8 @@ class DatabaseManager {
   Isar get isar => _isar!;
 
   Future<void> setup() async {
-    if (_isar != null && _isar!.isOpen) {
-      return;
-    }
+    if (Isar.instanceNames.isNotEmpty) return;
     final dir = await getApplicationDocumentsDirectory();
-    final dbDirPath = '${dir.path}/db';
-    final dirDir = Directory(dbDirPath);
-    if (!dirDir.existsSync()) {
-      dirDir.createSync();
-    }
-    _isar = await Isar.open(
-      [MediaInfoSchema,SearchHistoryInfoSchema],
-      directory: '${dir.path}/db',
-    );
+    _isar = await Isar.open([MediaInfoSchema, SearchHistoryInfoSchema], directory: dir.path, maxSizeMiB: 512);
   }
 }

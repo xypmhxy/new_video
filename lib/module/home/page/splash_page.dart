@@ -12,7 +12,6 @@ import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/blindness/blindness_helper.dart';
 import 'package:free_tube_player/db/database_manager.dart';
-import 'package:free_tube_player/empty_page.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/helper/network_change_helper.dart';
 import 'package:free_tube_player/module/home/page/home_page.dart';

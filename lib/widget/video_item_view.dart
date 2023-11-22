@@ -86,13 +86,17 @@ class VideoItemView extends StatelessWidget {
               ],
             )),
             const Width(8),
-            ImageButton(
+            Visibility(
+              visible: mediaInfo.isLive == false,
+              child: ImageButton(
                 onPressed: onClickMore,
                 splashRadius: 20,
                 child: const Icon(
                   Icons.more_vert_rounded,
                   size: 22,
-                ))
+                ),
+              ),
+            )
           ],
         ),
       ],

@@ -4,6 +4,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/video_group.dart';
 import 'package:free_tube_player/dialog/dialog_confirm.dart';
@@ -34,31 +35,14 @@ class VideoActionHelper {
   }
 
   void _showDownloadDialog(MediaInfo mediaInfo, {VoidCallback? onDelete}) {
-    DialogUtils.showBottomSheet(DialogDownload(mediaInfo: mediaInfo));
-  }
-
-  void _showRenameDialog(MediaInfo mediaInfo, {ValueChanged<String>? onRename}) {
-    DialogUtils.showCenterDialog(DialogRename(
-        nowName: mediaInfo.title,
-        onConfirm: (newName) async {
-          await MediaInfoHelper.get.rename(mediaInfo, newName);
-          DialogUtils.dismiss();
-          DialogUtils.dismiss(tag: 'dialogMoreAction');
-          onRename?.call(newName);
-        }));
-  }
-
-  void _showDeleteHistoryConfirmDialog(VideoGroup videoGroup, MediaInfo mediaInfo, {VoidCallback? onDelete}) {
-    DialogUtils.showCenterDialog(DialogConfirm(
-      title: S.current.confirmDelete,
-      onCancel: () {
-        DialogUtils.dismiss();
-      },
-      onConfirm: () async {
-        await MediaInfoHelper.get.clearPlayPosition(mediaInfo);
-        DialogUtils.dismiss();
-        DialogUtils.dismiss(tag: 'dialogMoreAction');
-        onDelete?.call();
+    DialogUtils.showBottomSheet(DialogDownload(
+      mediaInfo: mediaInfo,
+      onClickDownload: (mediaSource) {
+        if (mediaSource.isDownloading) {
+          globalDownloadController.pause(mediaInfo);
+        }else {
+          globalDownloadController.downloadMedia(mediaInfo: mediaInfo, mediaSource: mediaSource);
+        }
       },
     ));
   }

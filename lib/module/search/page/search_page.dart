@@ -258,7 +258,12 @@ class _SearchPageState extends State<SearchPage> {
                       onTap: () {
                         startUserPlayPage(mediaInfo: mediaInfo);
                       },
-                      child: SearchItem(mediaInfo: mediaInfo));
+                      child: SearchItem(
+                        mediaInfo: mediaInfo,
+                        onClickMore: () {
+                          _searchPageController.showMoreActionDialog(mediaInfo);
+                        },
+                      ));
                 },
                 separatorBuilder: (_, index) {
                   return const Height(12);

@@ -19,6 +19,7 @@ final isPad = Get.context?.isTablet ?? false;
 const isDebug = kDebugMode;
 const isProfile = kProfileMode;
 const isRelease = kReleaseMode;
+const defaultResolution = isRelease ? 720 : 144;
 
 bool get isUserMode => BlindnessHelper.instance.isUserMode;
 

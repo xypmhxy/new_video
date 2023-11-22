@@ -6089,69 +6089,59 @@ const VideoSourceSchema = Schema(
       name: r'downloadPath',
       type: IsarType.string,
     ),
-    r'downloadProgress': PropertySchema(
-      id: 5,
-      name: r'downloadProgress',
-      type: IsarType.double,
-    ),
     r'downloadStartDate': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'downloadStartDate',
       type: IsarType.long,
     ),
     r'downloadStatus': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'downloadStatus',
       type: IsarType.byte,
       enumMap: _VideoSourcedownloadStatusEnumValueMap,
     ),
     r'fileLength': PropertySchema(
-      id: 8,
+      id: 7,
       name: r'fileLength',
       type: IsarType.long,
     ),
     r'format': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'format',
       type: IsarType.string,
     ),
     r'fps': PropertySchema(
-      id: 10,
+      id: 9,
       name: r'fps',
       type: IsarType.long,
     ),
     r'height': PropertySchema(
-      id: 11,
+      id: 10,
       name: r'height',
       type: IsarType.long,
     ),
     r'isOnlyVideo': PropertySchema(
-      id: 12,
+      id: 11,
       name: r'isOnlyVideo',
       type: IsarType.bool,
     ),
-    r'isWaiting': PropertySchema(
-      id: 13,
-      name: r'isWaiting',
-      type: IsarType.bool,
-    ),
     r'label': PropertySchema(
-      id: 14,
+      id: 12,
       name: r'label',
       type: IsarType.string,
     ),
     r'resolution': PropertySchema(
-      id: 15,
+      id: 13,
       name: r'resolution',
       type: IsarType.string,
     ),
     r'url': PropertySchema(
-      id: 16,
+      id: 14,
       name: r'url',
       type: IsarType.string,
     ),
     r'width': PropertySchema(
-      id: 17,
+      id: 15,
       name: r'width',
       type: IsarType.long,
     )
@@ -6202,19 +6192,17 @@ void _videoSourceSerialize(
   writer.writeLong(offsets[2], object.downloadFinishDate);
   writer.writeLong(offsets[3], object.downloadLength);
   writer.writeString(offsets[4], object.downloadPath);
-  writer.writeDouble(offsets[5], object.downloadProgress);
-  writer.writeLong(offsets[6], object.downloadStartDate);
-  writer.writeByte(offsets[7], object.downloadStatus.index);
-  writer.writeLong(offsets[8], object.fileLength);
-  writer.writeString(offsets[9], object.format);
-  writer.writeLong(offsets[10], object.fps);
-  writer.writeLong(offsets[11], object.height);
-  writer.writeBool(offsets[12], object.isOnlyVideo);
-  writer.writeBool(offsets[13], object.isWaiting);
-  writer.writeString(offsets[14], object.label);
-  writer.writeString(offsets[15], object.resolution);
-  writer.writeString(offsets[16], object.url);
-  writer.writeLong(offsets[17], object.width);
+  writer.writeLong(offsets[5], object.downloadStartDate);
+  writer.writeByte(offsets[6], object.downloadStatus.index);
+  writer.writeLong(offsets[7], object.fileLength);
+  writer.writeString(offsets[8], object.format);
+  writer.writeLong(offsets[9], object.fps);
+  writer.writeLong(offsets[10], object.height);
+  writer.writeBool(offsets[11], object.isOnlyVideo);
+  writer.writeString(offsets[12], object.label);
+  writer.writeString(offsets[13], object.resolution);
+  writer.writeString(offsets[14], object.url);
+  writer.writeLong(offsets[15], object.width);
 }
 
 VideoSource _videoSourceDeserialize(
@@ -6226,22 +6214,22 @@ VideoSource _videoSourceDeserialize(
   final object = VideoSource(
     bitrate: reader.readLongOrNull(offsets[0]),
     byteSize: reader.readLongOrNull(offsets[1]),
-    format: reader.readStringOrNull(offsets[9]),
-    fps: reader.readLongOrNull(offsets[10]),
-    height: reader.readLongOrNull(offsets[11]),
-    isOnlyVideo: reader.readBoolOrNull(offsets[12]) ?? false,
-    label: reader.readStringOrNull(offsets[14]),
-    url: reader.readStringOrNull(offsets[16]) ?? '',
-    width: reader.readLongOrNull(offsets[17]),
+    format: reader.readStringOrNull(offsets[8]),
+    fps: reader.readLongOrNull(offsets[9]),
+    height: reader.readLongOrNull(offsets[10]),
+    isOnlyVideo: reader.readBoolOrNull(offsets[11]) ?? false,
+    label: reader.readStringOrNull(offsets[12]),
+    url: reader.readStringOrNull(offsets[14]) ?? '',
+    width: reader.readLongOrNull(offsets[15]),
   );
   object.downloadFinishDate = reader.readLongOrNull(offsets[2]);
   object.downloadLength = reader.readLongOrNull(offsets[3]);
   object.downloadPath = reader.readStringOrNull(offsets[4]);
-  object.downloadStartDate = reader.readLongOrNull(offsets[6]);
+  object.downloadStartDate = reader.readLongOrNull(offsets[5]);
   object.downloadStatus = _VideoSourcedownloadStatusValueEnumMap[
-          reader.readByteOrNull(offsets[7])] ??
+          reader.readByteOrNull(offsets[6])] ??
       DownloadStatus.none;
-  object.fileLength = reader.readLongOrNull(offsets[8]);
+  object.fileLength = reader.readLongOrNull(offsets[7]);
   return object;
 }
 
@@ -6263,32 +6251,28 @@ P _videoSourceDeserializeProp<P>(
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readDouble(offset)) as P;
-    case 6:
       return (reader.readLongOrNull(offset)) as P;
-    case 7:
+    case 6:
       return (_VideoSourcedownloadStatusValueEnumMap[
               reader.readByteOrNull(offset)] ??
           DownloadStatus.none) as P;
-    case 8:
+    case 7:
       return (reader.readLongOrNull(offset)) as P;
-    case 9:
+    case 8:
       return (reader.readStringOrNull(offset)) as P;
+    case 9:
+      return (reader.readLongOrNull(offset)) as P;
     case 10:
       return (reader.readLongOrNull(offset)) as P;
     case 11:
-      return (reader.readLongOrNull(offset)) as P;
-    case 12:
       return (reader.readBoolOrNull(offset) ?? false) as P;
-    case 13:
-      return (reader.readBool(offset)) as P;
-    case 14:
+    case 12:
       return (reader.readStringOrNull(offset)) as P;
-    case 15:
+    case 13:
       return (reader.readString(offset)) as P;
-    case 16:
+    case 14:
       return (reader.readStringOrNull(offset) ?? '') as P;
-    case 17:
+    case 15:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -6757,72 +6741,6 @@ extension VideoSourceQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'downloadPath',
         value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      downloadProgressEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'downloadProgress',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      downloadProgressGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'downloadProgress',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      downloadProgressLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'downloadProgress',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      downloadProgressBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'downloadProgress',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
       ));
     });
   }
@@ -7327,16 +7245,6 @@ extension VideoSourceQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isOnlyVideo',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      isWaitingEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isWaiting',
         value: value,
       ));
     });
@@ -7865,44 +7773,34 @@ const AudioSourceSchema = Schema(
       name: r'downloadPath',
       type: IsarType.string,
     ),
-    r'downloadProgress': PropertySchema(
-      id: 5,
-      name: r'downloadProgress',
-      type: IsarType.double,
-    ),
     r'downloadStartDate': PropertySchema(
-      id: 6,
+      id: 5,
       name: r'downloadStartDate',
       type: IsarType.long,
     ),
     r'downloadStatus': PropertySchema(
-      id: 7,
+      id: 6,
       name: r'downloadStatus',
       type: IsarType.byte,
       enumMap: _AudioSourcedownloadStatusEnumValueMap,
     ),
     r'fileLength': PropertySchema(
-      id: 8,
+      id: 7,
       name: r'fileLength',
       type: IsarType.long,
     ),
     r'format': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'format',
       type: IsarType.string,
     ),
-    r'isWaiting': PropertySchema(
-      id: 10,
-      name: r'isWaiting',
-      type: IsarType.bool,
-    ),
     r'label': PropertySchema(
-      id: 11,
+      id: 9,
       name: r'label',
       type: IsarType.string,
     ),
     r'url': PropertySchema(
-      id: 12,
+      id: 10,
       name: r'url',
       type: IsarType.string,
     )
@@ -7952,14 +7850,12 @@ void _audioSourceSerialize(
   writer.writeLong(offsets[2], object.downloadFinishDate);
   writer.writeLong(offsets[3], object.downloadLength);
   writer.writeString(offsets[4], object.downloadPath);
-  writer.writeDouble(offsets[5], object.downloadProgress);
-  writer.writeLong(offsets[6], object.downloadStartDate);
-  writer.writeByte(offsets[7], object.downloadStatus.index);
-  writer.writeLong(offsets[8], object.fileLength);
-  writer.writeString(offsets[9], object.format);
-  writer.writeBool(offsets[10], object.isWaiting);
-  writer.writeString(offsets[11], object.label);
-  writer.writeString(offsets[12], object.url);
+  writer.writeLong(offsets[5], object.downloadStartDate);
+  writer.writeByte(offsets[6], object.downloadStatus.index);
+  writer.writeLong(offsets[7], object.fileLength);
+  writer.writeString(offsets[8], object.format);
+  writer.writeString(offsets[9], object.label);
+  writer.writeString(offsets[10], object.url);
 }
 
 AudioSource _audioSourceDeserialize(
@@ -7971,18 +7867,18 @@ AudioSource _audioSourceDeserialize(
   final object = AudioSource(
     bitrate: reader.readLongOrNull(offsets[0]),
     byteSize: reader.readLongOrNull(offsets[1]),
-    format: reader.readStringOrNull(offsets[9]),
-    label: reader.readStringOrNull(offsets[11]),
-    url: reader.readStringOrNull(offsets[12]) ?? '',
+    format: reader.readStringOrNull(offsets[8]),
+    label: reader.readStringOrNull(offsets[9]),
+    url: reader.readStringOrNull(offsets[10]) ?? '',
   );
   object.downloadFinishDate = reader.readLongOrNull(offsets[2]);
   object.downloadLength = reader.readLongOrNull(offsets[3]);
   object.downloadPath = reader.readStringOrNull(offsets[4]);
-  object.downloadStartDate = reader.readLongOrNull(offsets[6]);
+  object.downloadStartDate = reader.readLongOrNull(offsets[5]);
   object.downloadStatus = _AudioSourcedownloadStatusValueEnumMap[
-          reader.readByteOrNull(offsets[7])] ??
+          reader.readByteOrNull(offsets[6])] ??
       DownloadStatus.none;
-  object.fileLength = reader.readLongOrNull(offsets[8]);
+  object.fileLength = reader.readLongOrNull(offsets[7]);
   return object;
 }
 
@@ -8004,22 +7900,18 @@ P _audioSourceDeserializeProp<P>(
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readDouble(offset)) as P;
-    case 6:
       return (reader.readLongOrNull(offset)) as P;
-    case 7:
+    case 6:
       return (_AudioSourcedownloadStatusValueEnumMap[
               reader.readByteOrNull(offset)] ??
           DownloadStatus.none) as P;
-    case 8:
+    case 7:
       return (reader.readLongOrNull(offset)) as P;
+    case 8:
+      return (reader.readStringOrNull(offset)) as P;
     case 9:
       return (reader.readStringOrNull(offset)) as P;
     case 10:
-      return (reader.readBool(offset)) as P;
-    case 11:
-      return (reader.readStringOrNull(offset)) as P;
-    case 12:
       return (reader.readStringOrNull(offset) ?? '') as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -8493,72 +8385,6 @@ extension AudioSourceQueryFilter
   }
 
   QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      downloadProgressEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'downloadProgress',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      downloadProgressGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'downloadProgress',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      downloadProgressLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'downloadProgress',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      downloadProgressBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'downloadProgress',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
       downloadStartDateIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -8909,16 +8735,6 @@ extension AudioSourceQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'format',
         value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      isWaitingEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isWaiting',
-        value: value,
       ));
     });
   }

@@ -20,8 +20,9 @@ import 'text_view.dart';
 
 class SearchItem extends StatelessWidget {
   final MediaInfo mediaInfo;
+  final VoidCallback? onClickMore;
 
-  const SearchItem({super.key, required this.mediaInfo});
+  const SearchItem({super.key, required this.mediaInfo,this.onClickMore});
 
   @override
   Widget build(BuildContext context) {
@@ -102,15 +103,7 @@ class SearchItem extends StatelessWidget {
                 )),
                 const Width(2),
                 GestureDetector(
-                    onTap: () async {
-                      // final youtubeExp = YoutubeExplode();
-                      // final maniFest = await youtubeExp.videos.streams.getManifest(mediaInfo.youtubeId!);
-                      // final videoUrl = maniFest.videoOnly.last.url.toString();
-                      // final audioUrl = maniFest.audioOnly.last.url.toString();
-                      // GlobalDownloadController().addToDownloadList(DownloadInfo(mediaInfo)
-                      //   ..videoUrl = videoUrl
-                      //   ..audioUrl = audioUrl);
-                    },
+                    onTap: onClickMore,
                     child: Container(
                       padding: const EdgeInsets.all(4),
                       color: Colors.transparent,

@@ -22,10 +22,20 @@ class GlobalDownloadController extends GetxController {
   void addToDownloadList(DownloadInfo downloadInfo) {
     DownloadInfo? download = _getDownloadInfoOrNull(downloadInfo);
     if (download != null) {
-      removeDownloadInfo(downloadInfo);
+      removeDownloadInfo(download);
     }
     downloadList.add(downloadInfo);
-    if (downloadList.length > maxDownloadCount) return;
+    final mediaInfo = downloadInfo.mediaInfo;
+    final videoSource = downloadInfo.videoSource;
+    videoSource?.downloadStatus = DownloadStatus.downloading;
+    if (downloadList.length > maxDownloadCount){
+      videoSource?.downloadStatus = DownloadStatus.waiting;
+      _mediaDao.insert(mediaInfo);
+      _updateUI(mediaInfo.identify);
+      return;
+    }
+    _mediaDao.insert(mediaInfo);
+    _updateUI(mediaInfo.identify);
     _doDownload(downloadInfo);
   }
 
@@ -43,9 +53,11 @@ class GlobalDownloadController extends GetxController {
 
     if (videoUrl == null) return;
     final fileName = mediaInfo.youtubeId ?? mediaInfo.title;
-    final relativePath = '${fileName.toMd5()}.mp4';
+    final label = videoSource?.label ?? '${videoSource?.bitrate}';
+    final relativePath = '${fileName.toMd5()}-$label.mp4';
     final videoSavePath = await FileUtils.getDownloadFilePath(relativePath);
     videoSource?.downloadPath = relativePath;
+    videoSource?.downloadStatus = DownloadStatus.downloading;
     _mediaDao.insert(mediaInfo);
 
     downloader.download(
@@ -63,8 +75,9 @@ class GlobalDownloadController extends GetxController {
           LogUtils.e('视频下载失败 $errorCode');
         },
         onReceiveProgress: (count, total) {
+          videoSource?.fileLength = total;
           videoSource?.downloadLength = count;
-          LogUtils.print('当前视频文件下载进度 ${mediaInfo.title}  $count  $total');
+          LogUtils.printLog('当前视频文件下载进度 ${mediaInfo.title}  $count  $total');
           if (count >= total) {
             final audioUrl = videoSource?.childSource?.url;
             if (audioUrl != null) {
@@ -108,8 +121,9 @@ class GlobalDownloadController extends GetxController {
           LogUtils.e('音频下载失败 $errorCode');
         },
         onReceiveProgress: (count, total) {
+          audioSource.fileLength = total;
           audioSource.downloadLength = count;
-          LogUtils.print('当前音频文件下载进度 ${mediaInfo.title}  $count  $total');
+          LogUtils.printLog('当前音频文件下载进度 ${mediaInfo.title}  $count  $total');
           if (count >= total) {
             audioSource.downloadStatus = DownloadStatus.success;
             audioSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
@@ -125,6 +139,9 @@ class GlobalDownloadController extends GetxController {
   void pause(MediaInfo mediaInfo) {
     final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
     downloadInfo?.cancelToken.cancel();
+    downloadInfo?.videoSource?.downloadStatus = DownloadStatus.pause;
+    _mediaDao.insert(mediaInfo);
+    _updateUI(mediaInfo.identify);
   }
 
   DownloadInfo? _queryDownloadInfoOrNull(MediaInfo mediaInfo) {

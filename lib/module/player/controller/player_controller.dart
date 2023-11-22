@@ -88,14 +88,8 @@ class PlayerController extends GetxController {
     if (chewieController?.hasListeners ?? false) {
       chewieController?.removeListener(_videoPlayerListener);
     }
-    VideoPlayerController videoPlayerController;
-    if (nowPlayMedia?.isLocalVideo ?? false) {
-      videoPlayerController = VideoPlayerController.file(File(nowPlayMedia!.localPath!));
-    } else if (_mediaInfo.value?.downloadPath?.isNotEmpty ?? false) {
-      videoPlayerController = VideoPlayerController.file(File(_mediaInfo.value!.downloadPath!));
-    } else {
-      videoPlayerController = VideoPlayerController.file(File(_mediaInfo.value!.downloadPath!));
-    }
+    VideoPlayerController videoPlayerController = VideoPlayerController.file(File(nowPlayMedia!.localPath!));
+
     chewieController = ChewieController(
         videoPlayerController: videoPlayerController,
         autoInitialize: false,

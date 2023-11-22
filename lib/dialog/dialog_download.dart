@@ -19,8 +19,9 @@ import 'package:get/get.dart';
 
 class DialogDownload extends StatefulWidget {
   final MediaInfo mediaInfo;
+  final Function(BaseMediaSource mediaSource)? onClickDownload;
 
-  const DialogDownload({Key? key, required this.mediaInfo}) : super(key: key);
+  const DialogDownload({Key? key, required this.mediaInfo, this.onClickDownload}) : super(key: key);
 
   @override
   State<DialogDownload> createState() => _DialogDownloadState();
@@ -42,7 +43,7 @@ class _DialogDownloadState extends State<DialogDownload> {
       decoration: allRadiusDecoration(16, color: AppThemeController.backgroundColor(context)),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        children: [const Height(4), _closeButton(), const Height(12), _title(), _content()],
+        children: [const Height(4), _closeButton(), const Height(12), _title(), const Height(20), _content()],
       ),
     );
   }
@@ -90,12 +91,12 @@ class _DialogDownloadState extends State<DialogDownload> {
   Widget _content() {
     return Obx(() {
       if (_controller.viewStatus.value == ViewStatus.success) {
-        return DefaultTabController(
-            length: 2,
-            child: Expanded(
-                child: Column(
-              children: [_tabBar(), const Height(12), _tabBarView()],
-            )));
+        return Expanded(
+          child: VideoChildTab(
+            mediaInfo: mediaInfo,
+            onClickDownload: widget.onClickDownload,
+          ),
+        );
       } else if (_controller.viewStatus.value == ViewStatus.failed) {
         return Container(
           margin: const EdgeInsets.only(top: 56),

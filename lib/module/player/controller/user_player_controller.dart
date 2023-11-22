@@ -58,28 +58,32 @@ class UserPlayerController {
   Timer? _controlPanelTimer;
   final _mediaInfoHelper = MediaInfoHelper.get;
 
-  Future<void> playNewSource(MediaInfo mediaInfo) async {
+  Future<void> playNewSource(MediaInfo mediaInfo, {VideoSource? videoSource}) async {
     _nowPlayingMedia.value = mediaInfo;
     await stop();
-    if (mediaInfo.downloadStatus == DownloadStatus.success) {
-      final videoPath = await FileUtils.getDownloadFilePath(mediaInfo.downloadPath!);
-      String? audioPath;
-      if (mediaInfo.downloadAudioPath != null) {
-        audioPath = await FileUtils.getDownloadFilePath(mediaInfo.downloadAudioPath!);
-      }
-      await _chewiePlayerImpl.playNewSource(videoPath, audioUrl: audioPath);
-    } else {
+    if (videoSource == null) {
+      const targetResolution = defaultResolution;
+      videoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
+    }
+    String? videoUrl;
+    String? audioUrl;
+    if (videoSource == null) {
       final media = await VideoUtils.requestVideoSource(mediaInfo);
       if (media != null) mediaInfo = media;
-      const targetResolution = 720;
-      final playVideoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
-      if (playVideoSource == null) return;
-      String? audioUrl;
-      if (mediaInfo.isNeedAudioTrack(targetResolution: targetResolution)) {
-        audioUrl = mediaInfo.audioSources?.first.url;
+      const targetResolution = defaultResolution;
+      videoSource = VideoUtils.getTargetVideoUrl(targetResolution, mediaInfo);
+      if (videoSource == null) return;
+      videoUrl = videoSource.url;
+      audioUrl = videoSource.childSource?.url;
+    } else if (videoSource.isDownloadAvailable == true) {
+      videoUrl = await FileUtils.getDownloadFilePath(videoSource.downloadPath!);
+      String? audioPath = videoSource.childSource?.downloadPath;
+      if (audioPath != null) {
+        audioUrl = await FileUtils.getDownloadFilePath(audioPath);
       }
-      await _chewiePlayerImpl.playNewSource(playVideoSource.url, audioUrl: audioUrl);
     }
+    if (videoUrl == null) return;
+    await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
     setupStreams();
   }
 

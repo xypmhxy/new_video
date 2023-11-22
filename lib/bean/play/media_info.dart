@@ -279,6 +279,7 @@ class BaseMediaSource {
   String? format;
   int? byteSize;
   int? bitrate;
+  @ignore
   BaseMediaSource? childSource;
 
   @enumerated
@@ -294,6 +295,7 @@ class BaseMediaSource {
   @ignore
   bool get isDownloading => downloadStatus == DownloadStatus.downloading;
 
+  @ignore
   bool get isWaiting => downloadStatus == DownloadStatus.waiting;
 
   @ignore
@@ -308,7 +310,14 @@ class BaseMediaSource {
   @ignore
   bool get isFailed => downloadStatus == DownloadStatus.failed;
 
-  double get downloadProgress => downloadLength == null || fileLength == null ? 0 : downloadLength! / fileLength!;
+  double downloadProgress({bool withChild = false}) {
+    if (downloadLength == null || fileLength == null) return 0;
+    final totalLength = fileLength! + (childSource?.fileLength ?? 0);
+    return downloadLength! / totalLength;
+  }
+
+  @ignore
+  bool get isDownloadAvailable => isSuccess && downloadPath != null;
 }
 
 @embedded

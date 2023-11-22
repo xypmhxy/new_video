@@ -7,7 +7,7 @@ class LogUtils {
   static final filterTag = {};
   static final LoggerChannel _loggerChannel = LoggerChannel();
 
-  static print(String msg) {
+  static printLog(String msg) {
     print(msg);
   }
 
