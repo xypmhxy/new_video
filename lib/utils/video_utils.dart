@@ -18,7 +18,7 @@ class VideoUtils {
 
   static Future<MediaInfo?> requestVideoSource(MediaInfo mediaInfo) async {
     final youtubeExplode = YoutubeExplode();
-    if (mediaInfo.videoSources?.isEmpty ?? true) {
+    if (true) {
       try {
         if (mediaInfo.youtubeId == null) return null;
         List<VideoSource> videoSources = [];
@@ -40,13 +40,17 @@ class VideoUtils {
           });
 
           //解析视频
-          for (final mux in manifest.video) {
+          for (final mux in manifest.muxed) {
             final videoSource = parseMuxedVideo(mux);
-            if (mediaInfo.isNeedAudioTrack(videoSource: videoSource)) {
-              videoSource.childSource = audioSource.last;
-            }
             videoSources.add(videoSource);
           }
+
+          for (final mux in manifest.videoOnly) {
+            final videoSource = parseMuxedVideo(mux);
+            videoSource.childSource = audioSource.last;
+            videoSources.add(videoSource);
+          }
+
           videoSources.sort((a, b) {
             if (a.width == null || b.width == null) return 0;
             return a.width! > b.width! ? 1 : 0;

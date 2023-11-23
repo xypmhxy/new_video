@@ -119,6 +119,7 @@ class ChewiePlayerImpl implements PlayerInterface {
   Future<void> stop() async {
     try {
       await pause();
+      _duration = Duration.zero;
       _chewieController?.removeListener(_videoPlayerListener);
       _chewieController?.dispose();
       _chewieController = null;

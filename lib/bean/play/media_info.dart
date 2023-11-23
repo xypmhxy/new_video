@@ -3,6 +3,7 @@
 * 时间  2023/8/5 10:13
 */
 
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:free_tube_player/extension/date_time_extension.dart';
@@ -348,11 +349,7 @@ class VideoSource extends BaseMediaSource {
 
   int getResolution() {
     if (width == null || height == null) return 0;
-    if (width! >= height!) {
-      return height!;
-    } else {
-      return width!;
-    }
+    return min(width!, height!);
   }
 
   String formatSize() {
@@ -366,7 +363,7 @@ class VideoSource extends BaseMediaSource {
   }
 
   bool isNeedAudioTrack() {
-    return getResolution() > 1080;
+    return getResolution() >= 1080;
   }
 
   String get resolution => '${width}x$height';
