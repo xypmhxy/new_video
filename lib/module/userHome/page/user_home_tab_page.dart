@@ -15,6 +15,7 @@ import 'package:free_tube_player/module/home/page/tmdb_page.dart';
 import 'package:free_tube_player/module/home/page/video_home_page.dart';
 import 'package:free_tube_player/module/userHome/controller/user_home_tab_page_controller.dart';
 import 'package:free_tube_player/module/userHome/page/user_youtube_home.dart';
+import 'package:free_tube_player/widget/play_bottom_bar.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:get/get.dart';
 
@@ -47,16 +48,21 @@ class _UserModePageState extends State<UserHomeTabPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: _bottomNavigationBar(),
-      body: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: pageController.pageController,
-          children: const [
-            SizedBox(),
-            TMDBPage(),
-            UserYoutubeHome(),
-            VideoHomePage(),
-            SizedBox(),
-          ]),
+      body: Column(
+        children: [
+          Expanded(
+              child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: pageController.pageController,
+                  children: const [
+                UserYoutubeHome(),
+                TMDBPage(),
+                VideoHomePage(),
+                SizedBox(),
+              ])),
+          PlayBottomBar()
+        ],
+      ),
     );
   }
 
@@ -70,9 +76,14 @@ class _UserModePageState extends State<UserHomeTabPage> {
                 pageController.onTapBottomNavigationBar(index);
               },
               items: [
+                // _bottomItem(
+                //   pageController.isSelect(0) ? Assets.svgHomeShortVideoSelect : Assets.svgHomeShortVideoNormal,
+                //   S.current.shorts,
+                //   color: pageController.isSelect(0) ? ColorRes.themeColor : ColorRes.accentTextColor,
+                // ),
                 _bottomItem(
-                  pageController.isSelect(0) ? Assets.svgHomeShortVideoSelect : Assets.svgHomeShortVideoNormal,
-                  S.current.shorts,
+                  pageController.isSelect(0) ? Assets.svgHomeSelect : Assets.svgHomeNormal,
+                  S.current.home,
                   color: pageController.isSelect(0) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
@@ -81,19 +92,14 @@ class _UserModePageState extends State<UserHomeTabPage> {
                   color: pageController.isSelect(1) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
-                  pageController.isSelect(2) ? Assets.svgHomeSelect : Assets.svgHomeNormal,
-                  S.current.home,
+                  pageController.isSelect(2) ? Assets.svgHomeLocalFileSelect : Assets.svgHomeLocalFileNormal,
+                  S.current.file,
                   color: pageController.isSelect(2) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
-                  pageController.isSelect(3) ? Assets.svgHomeLocalFileSelect : Assets.svgHomeLocalFileNormal,
-                  S.current.file,
-                  color: pageController.isSelect(3) ? ColorRes.themeColor : ColorRes.accentTextColor,
-                ),
-                _bottomItem(
-                  pageController.isSelect(4) ? Assets.svgHomeLibrarySelect : Assets.svgHomeLibraryNormal,
+                  pageController.isSelect(3) ? Assets.svgHomeLibrarySelect : Assets.svgHomeLibraryNormal,
                   S.current.library,
-                  color: pageController.isSelect(4) ? ColorRes.themeColor : ColorRes.accentTextColor,
+                  color: pageController.isSelect(3) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
               ]),
         ));

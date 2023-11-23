@@ -47,6 +47,7 @@ class UserPlayerController {
   final isFullScreen = false.obs;
   final isLoop = false.obs;
   final isBackgroundPlayback = false.obs;
+  final isPlayerAvailable = false.obs;
   double? dragStartX;
   double? dragStartY;
 
@@ -54,6 +55,7 @@ class UserPlayerController {
   StreamSubscription? _positionSubs;
   StreamSubscription? _durationSubs;
   StreamSubscription? _bufferSubs;
+  StreamSubscription? _playerAvailableSubs;
 
   Timer? _controlPanelTimer;
   final _mediaInfoHelper = MediaInfoHelper.get;
@@ -83,6 +85,7 @@ class UserPlayerController {
       }
     }
     if (videoUrl == null) return;
+    LogUtils.i('准备播放 ${videoSource.label}');
     await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
     setupStreams();
   }
@@ -123,6 +126,7 @@ class UserPlayerController {
     _positionSubs?.cancel();
     _durationSubs?.cancel();
     _bufferSubs?.cancel();
+    _playerAvailableSubs?.cancel();
     position.value = Duration.zero;
     duration.value = Duration.zero;
     isLoop.value = false;
@@ -292,6 +296,10 @@ class UserPlayerController {
     _bufferSubs = _chewiePlayerImpl.watchBuffer.listen((buff) {
       buffered.value = buff;
     });
+
+    _playerAvailableSubs = _chewiePlayerImpl.watchPlayerAvailable.listen((isAvailable) {
+      isPlayerAvailable.value = isAvailable;
+    });
   }
 
   Future<void> requestPlaySource(MediaInfo mediaInfo) async {
@@ -333,6 +341,8 @@ class UserPlayerController {
 
   ChewieController get chewieController => _chewiePlayerImpl.chewieController!;
 
+  ChewieController? get chewieControllerOrNull => _chewiePlayerImpl.chewieController;
+
   MediaInfo? get nowPlayingMedia => _nowPlayingMedia.value;
 
   double get videoRatio => chewieController.videoPlayerController.value.aspectRatio ?? 1.0;
@@ -340,6 +350,8 @@ class UserPlayerController {
   int get durationMill => duration.value.inMilliseconds;
 
   int get positionMill => position.value.inMilliseconds;
+
+  double get positionProgress => durationMill == 0 ? 0 : positionMill / durationMill;
 
   bool get isPlaying => playStatus.value == PlayStatus.playing;
 

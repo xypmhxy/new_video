@@ -12,8 +12,8 @@ import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:get/get.dart';
 
 class UserHomeTabPageController {
-  final pageController = PageController(initialPage: 2);
-  final index = 2.obs;
+  final pageController = PageController(initialPage: 0);
+  final index = 0.obs;
   int lastBackPressedTime = 0;
 
   void onTapBottomNavigationBar(int index) {

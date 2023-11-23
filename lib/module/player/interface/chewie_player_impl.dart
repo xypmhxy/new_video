@@ -37,6 +37,9 @@ class ChewiePlayerImpl implements PlayerInterface {
   final StreamController<Duration> _positionController = StreamController.broadcast();
   late Stream watchPosition = _positionController.stream;
 
+  final StreamController<bool> _playerAvailableController = StreamController.broadcast();
+  late Stream watchPlayerAvailable = _playerAvailableController.stream;
+
   @override
   Future<void> playNewSource(String url, {String? audioUrl}) async {
     await stop();
@@ -70,8 +73,10 @@ class ChewiePlayerImpl implements PlayerInterface {
     chewieController?.videoPlayerController.initialize().then((value) async {
       _playStateController.add(PlayStatus.initialized);
     }).onError((error, stackTrace) {
+      _playerAvailableController.add(false);
       LogUtils.e('视频播放失败 ${error.toString()}');
     });
+    _playerAvailableController.add(true);
   }
 
   @override
@@ -122,6 +127,7 @@ class ChewiePlayerImpl implements PlayerInterface {
       _duration = Duration.zero;
       _chewieController?.removeListener(_videoPlayerListener);
       _chewieController?.dispose();
+      _playerAvailableController.add(false);
       _chewieController = null;
     } catch (_) {}
   }
