@@ -99,7 +99,7 @@ class _UserYoutubeHomeState extends State<UserYoutubeHome> with AutomaticKeepAli
     return Obx(() {
       Widget child = const Center(child: LoadingView());
       if (youtubeController.isLoading) {
-        child = const Center(child: LoadingView());
+        child = const Center(child: LoadingView(size: 38,));
       } else if (youtubeController.isEmpty) {
         child = Center(
             child: GestureDetector(

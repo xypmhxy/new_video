@@ -177,45 +177,37 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-                onTap: () {
-                  _userPlayerPageController.onClickLike();
-                },
-                child: _controlItem(
-                  isLike ? Assets.svgLikeSelect : Assets.svgLikeNormal,
-                  S.current.like,
-                  color: isLike ? AppThemeController.primaryThemeColor(context) : null,
-                )),
-            GestureDetector(
-                onTap: () {
-                  userPlayerController.toggleLoop();
-                },
-                child: _controlItem(
-                  isLoop ? Assets.svgLoopSelect : Assets.svgLoopNormal,
-                  S.current.loop,
-                  color: isLoop ? AppThemeController.primaryThemeColor(context) : null,
-                )),
-            GestureDetector(
-                onTap: () {
-                  userPlayerController.toggleBackgroundPlayback();
-                },
-                child: _controlItem(
-                  Assets.svgHeadset,
-                  S.current.backgroundPlayback,
-                  color: isBackgroundPlayback ? AppThemeController.primaryThemeColor(context) : null,
-                )),
-            GestureDetector(
-                onTap: () {
-                  if (userPlayerController.nowPlayingMedia?.youtubeId == null) return;
-                  ShareUtils.shareText(
-                      'https://www.youtube.com/watch?v=${userPlayerController.nowPlayingMedia?.youtubeId}');
-                },
-                child: _controlItem(
-                  Assets.svgShare,
-                  S.current.share,
-                  color: isBackgroundPlayback ? AppThemeController.primaryThemeColor(context) : null,
-                )),
-            _downloadView(S.current.download),
+            Expanded(
+                child: GestureDetector(
+                    onTap: () {
+                      _userPlayerPageController.onClickLike();
+                    },
+                    child: _controlItem(
+                      isLike ? Assets.svgLikeSelect : Assets.svgLikeNormal,
+                      S.current.like,
+                      color: isLike ? AppThemeController.primaryThemeColor(context) : null,
+                    ))),
+            Expanded(
+                child: GestureDetector(
+                    onTap: () {
+                      userPlayerController.toggleLoop();
+                    },
+                    child: _controlItem(
+                      isLoop ? Assets.svgLoopSelect : Assets.svgLoopNormal,
+                      S.current.loop,
+                      color: isLoop ? AppThemeController.primaryThemeColor(context) : null,
+                    ))),
+            Expanded(
+                child: GestureDetector(
+                    onTap: () {
+                      userPlayerController.toggleBackgroundPlayback();
+                    },
+                    child: _controlItem(
+                      Assets.svgHeadset,
+                      S.current.backgroundPlayback,
+                      color: isBackgroundPlayback ? AppThemeController.primaryThemeColor(context) : null,
+                    ))),
+            Expanded(child: _downloadView(S.current.download)),
           ],
         );
       }),
@@ -223,36 +215,44 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
   }
 
   Widget _controlItem(String svg, String text, {Color? color}) {
-    return Wrap(
-      spacing: 6,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      direction: Axis.vertical,
-      children: [
-        SVGView(
-          assetName: svg,
-          size: 22,
-          color: color ?? AppThemeController.textPrimaryColor(context),
-        ),
-        TextView.primary(text, fontSize: 12)
-      ],
+    return Container(
+      color: Colors.transparent,
+      alignment: Alignment.centerLeft,
+      child: Wrap(
+        spacing: 6,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        direction: Axis.vertical,
+        children: [
+          SVGView(
+            assetName: svg,
+            size: 24,
+            color: color ?? AppThemeController.textPrimaryColor(context),
+          ),
+          TextView.primary(text, fontSize: 13)
+        ],
+      ),
     );
   }
 
   Widget _downloadView(String text) {
     return Obx(() => Visibility(
         visible: userPlayerController.isLive == false,
-        child: Wrap(
-          spacing: 6,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          direction: Axis.vertical,
-          children: [
-            DownloadCustomView(
-              mediaInfo: userPlayerController.nowPlayingMedia,
-              videoSource: userPlayerController.videoSource.value,
-              iconSize: 24,
-            ),
-            TextView.primary(text, fontSize: 12)
-          ],
+        child: Container(
+          color: Colors.transparent,
+          alignment: Alignment.centerRight,
+          child: Wrap(
+            spacing: 6,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            direction: Axis.vertical,
+            children: [
+              DownloadCustomView(
+                mediaInfo: userPlayerController.nowPlayingMedia,
+                videoSource: userPlayerController.videoSource.value,
+                iconSize: 24,
+              ),
+              TextView.primary(text, fontSize: 12)
+            ],
+          ),
         )));
   }
 
