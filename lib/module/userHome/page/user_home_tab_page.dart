@@ -19,6 +19,8 @@ import 'package:free_tube_player/widget/play_bottom_bar.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:get/get.dart';
 
+import 'user_library_page.dart';
+
 class UserHomeTabPage extends StatefulWidget {
   const UserHomeTabPage({super.key});
 
@@ -58,12 +60,16 @@ class _UserModePageState extends State<UserHomeTabPage> {
                 UserYoutubeHome(),
                 TMDBPage(),
                 VideoHomePage(),
-                SizedBox(),
+                UserLibraryPage(),
               ])),
-          PlayBottomBar()
+          _bottomPlayerView()
         ],
       ),
     );
+  }
+
+  Widget _bottomPlayerView() {
+    return const PlayBottomBar();
   }
 
   Widget _bottomNavigationBar() {

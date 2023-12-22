@@ -14,4 +14,9 @@ extension NumberExtension on num {
     }
     return '$this';
   }
+
+  String parse2Percent({int fractionDigits = 1}) {
+    final percent = this * 100;
+    return '${percent.toStringAsFixed(fractionDigits)}%';
+  }
 }

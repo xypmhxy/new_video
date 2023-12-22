@@ -9,6 +9,10 @@ class Assets {
   static const String imagesCorrect = 'images/correct.png';
   static const String imagesError = 'images/error.png';
   static const String imagesImagePlaceholder360 = 'images/image_placeholder_360.png';
+  static const String imagesLibAdd = 'images/lib_add.png';
+  static const String imagesLibDownload = 'images/lib_download.png';
+  static const String imagesLibLike = 'images/lib_like.png';
+  static const String imagesLibWatchLater = 'images/lib_watch_later.png';
   static const String imagesSplashAppIcon = 'images/splash_app_icon.png';
   static const String imagesThemeIcon128 = 'images/theme_icon_128.png';
   static const String imagesWarning = 'images/warning.png';
@@ -43,6 +47,10 @@ class Assets {
   static const String svgSelect = 'assets/svg/select.svg';
   static const String svgSetting = 'assets/svg/setting.svg';
   static const String svgShare = 'assets/svg/share.svg';
+  static const String svgToastAttention = 'assets/svg/toast_attention.svg';
+  static const String svgToastCorrect = 'assets/svg/toast_correct.svg';
   static const String svgVideoEditor = 'assets/svg/video_editor.svg';
+  static const String svgWatchLater = 'assets/svg/watch_later.svg';
+  static const String svgWatchLaterSolid = 'assets/svg/watch_later_solid.svg';
 
 }

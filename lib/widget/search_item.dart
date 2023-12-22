@@ -22,7 +22,7 @@ class SearchItem extends StatelessWidget {
   final MediaInfo mediaInfo;
   final VoidCallback? onClickMore;
 
-  const SearchItem({super.key, required this.mediaInfo,this.onClickMore});
+  const SearchItem({super.key, required this.mediaInfo, this.onClickMore});
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +35,17 @@ class SearchItem extends StatelessWidget {
   Widget _thumbImage() {
     return Stack(
       children: [
-        ClipRRect(
+        Hero(
+          tag: mediaInfo.identify,
+          child: ClipRRect(
             borderRadius: getBorderRadius(8),
             child: ImageView.network(
               imageUrl: mediaInfo.thumbnail ?? '',
               height: screenWidth * 0.5 * .67,
               width: screenWidth * .5,
-            )),
+            ),
+          ),
+        ),
         Positioned(
             bottom: 4,
             right: 4,

@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
+import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
@@ -36,7 +37,7 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
         visible: playerController.isShowControlPanel.value,
         child: Stack(
           alignment: Alignment.center,
-          children: [_backButton(), _playSpeed(),  _playWidget(), _progressBar()],
+          children: [_backButton(), _playSpeed(), _playWidget(), _progressBar()],
         )));
   }
 
@@ -70,14 +71,15 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
     return Obx(() => PopupMenuButton<double>(
           itemBuilder: (context) {
             return <PopupMenuItem<double>>[
-              const PopupMenuItem(value: 0.5, child: TextView.primary('0.5x', color: textColor, fontSize: 17)),
-              const PopupMenuItem(value: 0.75, child: TextView.primary('0.75x', color: textColor, fontSize: 17)),
-              const PopupMenuItem(value: 1.0, child: TextView.primary('1.0x', color: textColor, fontSize: 17)),
-              const PopupMenuItem(value: 1.25, child: TextView.primary('1.25x', color: textColor, fontSize: 17)),
-              const PopupMenuItem(value: 1.5, child: TextView.primary('1.5x', color: textColor, fontSize: 17)),
-              const PopupMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 17))
+              const PopupMenuItem(value: 0.5, child: TextView.primary('0.5x', color: textColor, fontSize: 16)),
+              const PopupMenuItem(value: 0.75, child: TextView.primary('0.75x', color: textColor, fontSize: 16)),
+              const PopupMenuItem(value: 1.0, child: TextView.primary('1.0x', color: textColor, fontSize: 16)),
+              const PopupMenuItem(value: 1.25, child: TextView.primary('1.25x', color: textColor, fontSize: 16)),
+              const PopupMenuItem(value: 1.5, child: TextView.primary('1.5x', color: textColor, fontSize: 16)),
+              const PopupMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 16))
             ];
           },
+          color: ColorRes.backgroundColor,
           iconSize: 1,
           onCanceled: () {
             PlayerController.get.startDelayCloseControlPanel();
@@ -90,7 +92,8 @@ class _PlayerFullControlPanelState extends State<PlayerFullControlPanel> {
           },
           child: TextView.primary(
             '${PlayerController.get.playSpeed.value}',
-            fontSize: 17,
+            color: ColorRes.textPrimaryColor,
+            fontSize: 16,
           ),
         ));
   }

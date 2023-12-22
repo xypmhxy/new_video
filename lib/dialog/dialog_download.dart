@@ -153,7 +153,7 @@ class DownloadDialogController {
 
   Future<void> requestVideoSource(MediaInfo mediaInfo) async {
     viewStatus.value = ViewStatus.loading;
-    final media = await VideoUtils.requestVideoSource(mediaInfo);
+    final media = await VideoDataHelper.get.requestVideoSource(mediaInfo,isNeedRetry: true);
     if (media == null) {
       viewStatus.value = ViewStatus.failed;
       return;

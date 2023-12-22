@@ -25,8 +25,12 @@ class MediaInfoDao {
     return _isar.mediaInfos.filter().youtubeIdEqualTo(youtubeId).findFirst();
   }
 
-  Future<List<MediaInfo>> queryAllPlayHistory() {
-    return _isar.mediaInfos.filter().playHistoryIsNotNull().findAll();
+  Future<List<MediaInfo>> queryAllPlayHistory({int limit = 150}) async {
+    return _isar.mediaInfos.filter().playHistory((q) => q.playPositionIsNotNull()).sortByRecentPlayDateDesc().limit(limit).findAll();
+  }
+
+  Future<MediaInfo?> queryById(int id) {
+    return _isar.mediaInfos.filter().idEqualTo(id).findFirst();
   }
 
   Future<bool> delete(int id) {

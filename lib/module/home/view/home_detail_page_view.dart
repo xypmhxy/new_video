@@ -37,6 +37,10 @@ class HomeDetailPageView extends BasePageView<HomeDetailPageCallback> {
         padding: const EdgeInsets.all(20),
         itemBuilder: (_, index) {
           final mediaInfo = videoGroup.mediaInfoList[index];
+          String resolution = '${mediaInfo.width} x ${mediaInfo.height}';
+          if (mediaInfo.isLocalVideo == false) {
+            resolution = '${mediaInfo.videoSources?.first.width} x ${mediaInfo.videoSources?.first.height}';
+          }
           return GestureDetector(
               onTap: () {
                 pageCallback.onItemClick.call(mediaInfo);
@@ -48,13 +52,18 @@ class HomeDetailPageView extends BasePageView<HomeDetailPageCallback> {
                     children: [
                       Stack(
                         children: [
-                          ClipRRect(
+                          Hero(
+                            tag: mediaInfo.identify,
+                            child: ClipRRect(
                               borderRadius: getBorderRadius(4),
-                              child: ImageView.memory(
-                                imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
+                              child: AutoImageView(
                                 width: 144,
                                 height: 86,
-                              )),
+                                imageUrl: mediaInfo.thumbnail,
+                                imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
+                              ),
+                            ),
+                          ),
                           Positioned(
                               bottom: 6,
                               left: 4,
@@ -80,45 +89,47 @@ class HomeDetailPageView extends BasePageView<HomeDetailPageCallback> {
                               )),
                           if (mediaInfo.historyProgress != null && mediaInfo.historyProgress! > 0)
                             Positioned(
-                                bottom: 3,
-                                left: 4,
-                                right: 4,
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
                                 child: ClipRRect(
                                   borderRadius: getBorderRadius(2),
-                                  child: LinearProgressIndicator(minHeight: 2, value: mediaInfo.historyProgress!),
+                                  child: LinearProgressIndicator(
+                                    minHeight: 2,
+                                    value: mediaInfo.historyProgress!,
+                                    backgroundColor: Colors.black26,
+                                  ),
                                 ))
                         ],
                       ),
                       const Width(10),
-                      SizedBox(
+                      Expanded(
+                          child: SizedBox(
                         height: 86,
-                        child: Wrap(
-                          direction: Axis.vertical,
-                          spacing: 6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextView.primary(
                               mediaInfo.title,
                               fontSize: 14,
+                              maxLines: 2,
                               fontWeight: FontWeight.w500,
                             ),
+                            const Height(4),
                             TextView.primary(
-                              '${mediaInfo.width} x ${mediaInfo.height}',
+                              resolution,
                               fontSize: 12,
                               color: AppThemeController.textPrimaryColor(context).withOpacity(.7),
                             ),
+                            const Height(4),
                             TextView.primary(
-                              mediaInfo.formatSize(),
+                              mediaInfo.isLocalVideo ? mediaInfo.formatSize() : mediaInfo.createDateFormat,
                               fontSize: 12,
                               color: AppThemeController.textPrimaryColor(context).withOpacity(.7),
                             ),
-                            TextView.primary(
-                              mediaInfo.createDateFormat,
-                              fontSize: 12,
-                              color: AppThemeController.textPrimaryColor(context).withOpacity(.7),
-                            )
                           ],
                         ),
-                      )
+                      ))
                     ],
                   )));
         },

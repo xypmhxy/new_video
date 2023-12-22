@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:io';
 
@@ -69,25 +70,31 @@ class GlobalDownloadController extends GetxController {
           _mediaDao.insert(mediaInfo);
           _updateUI(mediaInfo.identify);
           if (errorCode == 416) {
-            final downloadPath = videoSource?.downloadPath;
-            _deleteFile(downloadPath);
+            _deleteFile(videoSource);
           }
           LogUtils.e('视频下载失败 $errorCode');
         },
-        onReceiveProgress: (count, total) {
+        onReceiveProgress: (count, total) async {
           videoSource?.fileLength = total;
           videoSource?.downloadLength = count;
           LogUtils.printLog('当前视频文件下载进度 ${mediaInfo.title}  $count  $total');
           if (count >= total) {
-            final audioUrl = videoSource?.childSource?.url;
-            if (audioUrl != null) {
-              _doDownloadAudio(downloadInfo, videoSource!.childSource! as AudioSource);
+            final needAudioDownload = (videoSource as VideoSource?)?.isNeedAudioTrack() ?? false;
+            if (needAudioDownload) {
+              LogUtils.i('视频下载完成开始下载音频 ${mediaInfo.title}');
+              final audioResult = await _doDownloadAudio(downloadInfo, videoSource!.audioSource!);
+              if (audioResult) {
+                videoSource.downloadStatus = DownloadStatus.success;
+                videoSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
+                removeDownloadInfo(downloadInfo);
+                LogUtils.i('视频下载完成 ${mediaInfo.title}');
+              }
             } else {
               videoSource?.downloadStatus = DownloadStatus.success;
               videoSource?.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
-              // removeDownloadFromList(downloadInfo);
+              removeDownloadInfo(downloadInfo);
+              LogUtils.i('视频下载完成 ${mediaInfo.title}');
             }
-            LogUtils.i('视频下载完成 ${mediaInfo.title}');
           }
           _mediaDao.insert(mediaInfo);
           _updateUI(mediaInfo.identify);
@@ -95,7 +102,8 @@ class GlobalDownloadController extends GetxController {
         });
   }
 
-  Future<void> _doDownloadAudio(DownloadInfo downloadInfo, AudioSource audioSource) async {
+  Future<bool> _doDownloadAudio(DownloadInfo downloadInfo, AudioSource audioSource) async {
+    Completer<bool> completer = Completer();
     final downloader = downloadInfo.downloader;
     final mediaInfo = downloadInfo.mediaInfo;
     final audioUrl = audioSource.url;
@@ -105,7 +113,7 @@ class GlobalDownloadController extends GetxController {
     if (File(audioSavePath).existsSync()) {
       _mediaDao.insert(mediaInfo);
       _updateUI(mediaInfo.identify);
-      return;
+      return false;
     }
     audioSource.downloadPath = relativePath;
     _mediaDao.insert(mediaInfo);
@@ -113,12 +121,13 @@ class GlobalDownloadController extends GetxController {
     downloader.download(
         url: audioUrl,
         savePath: audioSavePath,
+        cancelToken: downloadInfo.cancelToken,
         downloadFailed: ({errorCode}) {
           if (errorCode == 416) {
-            final downloadPath = audioSource.downloadPath;
-            _deleteFile(downloadPath);
+            _deleteFile(audioSource);
           }
           LogUtils.e('音频下载失败 $errorCode');
+          completer.complete(false);
         },
         onReceiveProgress: (count, total) {
           audioSource.fileLength = total;
@@ -127,13 +136,16 @@ class GlobalDownloadController extends GetxController {
           if (count >= total) {
             audioSource.downloadStatus = DownloadStatus.success;
             audioSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
-            // removeDownloadFromList(downloadInfo);
             LogUtils.i('音频下载完成 ${mediaInfo.title}');
           }
           _mediaDao.insert(mediaInfo);
           _updateUI(mediaInfo.identify);
+          if (count >= total) {
+            completer.complete(true);
+          }
           // _downloadStreamController.add(downloadInfo);
         });
+    return completer.future;
   }
 
   void pause(MediaInfo mediaInfo) {
@@ -151,8 +163,9 @@ class GlobalDownloadController extends GetxController {
       removeDownloadInfo(downloadInfo);
     }
     mediaSource ??= downloadInfo?.videoSource;
-    await _deleteFile(mediaSource?.downloadPath);
+    await _deleteFile(mediaSource);
     mediaSource?.clearDownload();
+    mediaSource?.audioSource?.clearDownload();
     _mediaDao.insert(mediaInfo);
     _updateUI(mediaInfo.identify);
   }
@@ -175,10 +188,19 @@ class GlobalDownloadController extends GetxController {
     update([id]);
   }
 
-  Future<void> _deleteFile(String? downloadPath) async {
-    if (downloadPath == null) return;
-    downloadPath = await FileUtils.getDownloadFilePath(downloadPath);
-    final file = File(downloadPath);
-    if (file.existsSync()) file.deleteSync();
+  Future<void> _deleteFile(BaseMediaSource? videoSource) async {
+    String? downloadPath = videoSource?.downloadPath;
+    if (downloadPath != null) {
+      downloadPath = await FileUtils.getDownloadFilePath(downloadPath);
+      final file = File(downloadPath);
+      if (file.existsSync()) file.deleteSync();
+    }
+
+    String? audioPath = videoSource?.audioSource?.downloadPath;
+    if (audioPath != null) {
+      audioPath = await FileUtils.getDownloadFilePath(audioPath);
+      final audioFile = File(audioPath);
+      if (audioFile.existsSync()) audioFile.deleteSync();
+    }
   }
 }

@@ -13,7 +13,7 @@ class VideoChildTab extends StatefulWidget {
   final MediaInfo mediaInfo;
   final Function(BaseMediaSource mediaSource)? onClickDownload;
 
-  const VideoChildTab({super.key, required this.mediaInfo, this.onClickDownload});
+  const  VideoChildTab({super.key, required this.mediaInfo, this.onClickDownload});
 
   @override
   State<VideoChildTab> createState() => _VideoChildTabState();
@@ -98,13 +98,8 @@ class _VideoChildTabState extends State<VideoChildTab> with AutomaticKeepAliveCl
   }
 
   void dealVideoSources() {
-    this.videoSources.clear();
-    final videoSources = mediaInfo.videoSources?.reversed.toList() ?? [];
-    for (final videoSource in videoSources) {
-      final existVideoSource = this.videoSources.firstWhereOrNull((element) => element.label == videoSource.label);
-      if (existVideoSource != null) continue;
-      this.videoSources.add(videoSource);
-    }
+    videoSources.clear();
+    videoSources.addAll(mediaInfo.videoSources ?? []);
   }
 
   MediaInfo get mediaInfo => widget.mediaInfo;

@@ -12,6 +12,7 @@ import 'package:free_tube_player/module/history/controller/history_page_controll
 import 'package:free_tube_player/module/history/view/history_page_view.dart';
 import 'package:free_tube_player/module/home/page/home_detail_page.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
+import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -48,7 +49,11 @@ class _HistoryPageState extends State<HistoryPage> implements HistoryPageCallbac
 
   @override
   void onItemClick(MediaInfo mediaInfo) {
-    playMediaInfo(mediaInfo: mediaInfo);
+    if (mediaInfo.isLocalVideo){
+      playMediaInfo(mediaInfo: mediaInfo);
+    }else{
+      startUserPlayPage(mediaInfo: mediaInfo);
+    }
   }
 
   @override

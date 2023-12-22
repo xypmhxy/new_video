@@ -103,10 +103,11 @@ class VideoGroupListView extends StatelessWidget {
                               children: [
                                 Hero(
                                     tag: mediaInfo.identify,
-                                    child: ImageView.memory(
-                                      imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
+                                    child: AutoImageView(
                                       width: 144,
                                       height: 86,
+                                      imageUrl: mediaInfo.thumbnail ?? '',
+                                      imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
                                     )),
                                 Positioned(
                                     bottom: 6,
@@ -134,12 +135,16 @@ class VideoGroupListView extends StatelessWidget {
                                     )),
                                 if (mediaInfo.historyProgress != null && mediaInfo.historyProgress! > 0)
                                   Positioned(
-                                      bottom: 3,
-                                      left: 4,
-                                      right: 4,
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
                                       child: ClipRRect(
                                         borderRadius: getBorderRadius(2),
-                                        child: LinearProgressIndicator(minHeight: 2, value: mediaInfo.historyProgress!),
+                                        child: LinearProgressIndicator(
+                                          minHeight: 2,
+                                          value: mediaInfo.historyProgress!,
+                                          backgroundColor: Colors.black26,
+                                        ),
                                       ))
                               ],
                             )),

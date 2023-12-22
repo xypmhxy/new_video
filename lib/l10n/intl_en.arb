@@ -58,5 +58,15 @@
   "audio": "Audio",
   "backPressedConfirm": "Please click again to exit to desktop",
   "getPlaySourceFailed": "Failed to obtain playback information",
-  "removeDownloadConfirmText": "Are you sure to remove the current download"
+  "removeDownloadConfirmText": "Are you sure to remove the current download",
+  "addToPlaylistSuccess": "Added successfully",
+  "addToPlaylistFailed": "Added failed",
+  "watchLater": "Watch later",
+  "removePlaylistSuccess": "Removal successful",
+  "removePlaylistFailed": "Removal failed",
+  "addWatchLaterSuccess": "Added to watch later",
+  "viewAll": "View All",
+  "newPlaylist": "New Playlist",
+  "watchLaterCaps": "Watch Later",
+  "likedVideos": "Liked Videos"
 }

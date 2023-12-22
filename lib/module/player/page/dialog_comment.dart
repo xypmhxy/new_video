@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
+import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/comment_controller.dart';
 import 'package:free_tube_player/widget/comment_item_view.dart';
@@ -126,7 +127,7 @@ class _DialogCommentState extends State<DialogComment> with AutomaticKeepAliveCl
                 border: isSelected ? null : Border.all(color: AppThemeController.primaryThemeColor(context), width: 1),
                 borderRadius: getBorderRadius(28)),
             child: TextView.primary(text,
-                color: isSelected ? null : AppThemeController.primaryThemeColor(context),
+                color: isSelected ? ColorRes.textPrimaryColor : AppThemeController.primaryThemeColor(context),
                 fontWeight: FontWeight.normal)));
   }
 

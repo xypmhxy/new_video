@@ -60,7 +60,7 @@ class _UserYoutubeHomeState extends State<UserYoutubeHome> with AutomaticKeepAli
           children: [
             ImageView.asset(
               Assets.imagesThemeIcon128,
-              size: 30,
+              size: 32,
             ),
             const Width(18),
             TextView.primary(AppUtils.appName, fontSize: 22, fontWeight: FontWeight.bold),

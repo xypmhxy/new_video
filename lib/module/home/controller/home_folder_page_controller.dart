@@ -17,7 +17,7 @@ class HomeFolderPageController extends BaseVideoController {
   Future<void> queryVideos() async {
     setLoading();
     videoGroupList.clear();
-    final List<Album> videoAlbums = await VideoUtils.getVideoAlbums();
+    final List<Album> videoAlbums = await VideoDataHelper.get.getVideoAlbums();
     final date = DateTime.now().millisecondsSinceEpoch;
     for (final videoAlbum in videoAlbums) {
       if (videoAlbum.isAllAlbum && videoAlbums.length > 1) continue;

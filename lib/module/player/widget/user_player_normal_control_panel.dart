@@ -6,6 +6,9 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/app/common/decoration.dart';
+import 'package:free_tube_player/app/resource/color_res.dart';
+import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
@@ -38,7 +41,7 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
         visible: playerController.isShowControlPanel.value,
         child: Stack(
           alignment: Alignment.center,
-          children: [_background(), _backButton(), _playSpeed(), _playWidget(), _progressBar()],
+          children: [_background(), _backButton(), _topToolBar(), _playWidget(), _progressBar()],
         )));
   }
 
@@ -63,37 +66,80 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
             )));
   }
 
-  Widget _playSpeed() {
-    const textColor = Colors.white;
+  Widget _topToolBar() {
     return Positioned(
         top: XScreen.getStatusBarH(context) + 12,
-        right: 20,
-        child: Obx(() => PopupMenuButton<double>(
-              itemBuilder: (context) {
-                return <PopupMenuItem<double>>[
-                  const PopupMenuItem(value: 0.5, child: TextView.primary('0.5x', color: textColor, fontSize: 17)),
-                  const PopupMenuItem(value: 0.75, child: TextView.primary('0.75x', color: textColor, fontSize: 17)),
-                  const PopupMenuItem(value: 1.0, child: TextView.primary('1.0x', color: textColor, fontSize: 17)),
-                  const PopupMenuItem(value: 1.25, child: TextView.primary('1.25x', color: textColor, fontSize: 17)),
-                  const PopupMenuItem(value: 1.5, child: TextView.primary('1.5x', color: textColor, fontSize: 17)),
-                  const PopupMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 17))
-                ];
-              },
-              iconSize: 1,
-              onCanceled: () {
-                playerController.startDelayCloseControlPanel();
-              },
-              onOpened: () {
-                playerController.showControlPanelLongTime();
-              },
-              onSelected: (value) {
-                playerController.setPlaybackSpeed(value);
-              },
-              child: TextView.primary(
-                '${playerController.playSpeed.value}x',
-                fontSize: 17,
-              ),
-            )));
+        right: 16,
+        child: Row(
+          children: [_qualityDropDown(), const Width(20), _playSpeed()],
+        ));
+  }
+
+  Widget _playSpeed() {
+    final textColor = AppThemeController.textPrimaryColor(context);
+    return Obx(() => PopupMenuButton<double>(
+          itemBuilder: (context) {
+            return <PopupMenuItem<double>>[
+              PopupMenuItem(value: 0.5, child: TextView.primary('0.5x', color: textColor, fontSize: 15)),
+              PopupMenuItem(value: 0.75, child: TextView.primary('0.75x', color: textColor, fontSize: 15)),
+              PopupMenuItem(value: 1.0, child: TextView.primary('1.0x', color: textColor, fontSize: 15)),
+              PopupMenuItem(value: 1.25, child: TextView.primary('1.25x', color: textColor, fontSize: 15)),
+              PopupMenuItem(value: 1.5, child: TextView.primary('1.5x', color: textColor, fontSize: 15)),
+              PopupMenuItem(value: 2.0, child: TextView.primary('2.0x', color: textColor, fontSize: 15))
+            ];
+          },
+          // color: ColorRes.backgroundColor,
+          iconSize: 1,
+          onCanceled: () {
+            playerController.startDelayCloseControlPanel();
+          },
+          onOpened: () {
+            playerController.showControlPanelLongTime();
+          },
+          onSelected: (value) {
+            playerController.setPlaybackSpeed(value);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: ColorRes.textPrimaryColor, width: 2), borderRadius: getBorderRadius(8)),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+            child: TextView.primary(
+              '${playerController.playSpeed.value}x',
+              color: ColorRes.textPrimaryColor,
+              fontSize: 14,
+            ),
+          ),
+        ));
+  }
+
+  Widget _qualityDropDown() {
+    return Obx(() => Visibility(
+        visible: playerController.isLive == false,
+        child: PopupMenuButton<String>(
+          itemBuilder: (context) {
+            return getQualityChildren();
+          },
+          iconSize: 1,
+          onCanceled: () {
+            playerController.startDelayCloseControlPanel();
+          },
+          onOpened: () {
+            playerController.showControlPanelLongTime();
+          },
+          onSelected: (value) {
+            playerController.changeQuality(value);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: ColorRes.textPrimaryColor, width: 2), borderRadius: getBorderRadius(8)),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+            child: TextView.primary(
+              '${playerController.videoSource.value?.label}',
+              color: ColorRes.textPrimaryColor,
+              fontSize: 14,
+            ),
+          ),
+        )));
   }
 
   Widget _playWidget() {
@@ -194,5 +240,31 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
       fontSize: 11,
       color: AppThemeController.counterTextPrimaryColor(context),
     );
+  }
+
+  List<PopupMenuItem<String>> getQualityChildren() {
+    final videoSources = resetVideoSources();
+    List<PopupMenuItem<String>> menuItems = [];
+    final textColor = AppThemeController.textPrimaryColor(context);
+    for (final videoSource in videoSources) {
+      final item = PopupMenuItem(
+          value: videoSource.label,
+          child: TextView.primary(videoSource.label ?? 'none', color: textColor, fontSize: 15));
+      menuItems.add(item);
+    }
+    return menuItems;
+  }
+
+  List<VideoSource> resetVideoSources() {
+    final videoSources = playerController.nowPlayingMedia?.videoSources ?? [];
+    List<VideoSource> sources = [];
+    sources.addAll(videoSources);
+    final sourcesReversed = sources.reversed.toList() ?? [];
+    for (final videoSource in sourcesReversed) {
+      final existVideoSource = sources.firstWhereOrNull((element) => element.label == videoSource.label);
+      if (existVideoSource != null) continue;
+      sources.add(videoSource);
+    }
+    return sources;
   }
 }

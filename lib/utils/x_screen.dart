@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:free_tube_player/app/app_theme_controller.dart';
+import 'package:free_tube_player/app/resource/color_res.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
 
 /**
  * @Author: Sky24n
@@ -48,7 +51,7 @@ class XScreen {
 
   _init() {
     MediaQueryData mediaQuery = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single);
-    if (_mediaQueryData != mediaQuery) {
+    if (_mediaQueryData != mediaQuery && _screenWidth == 0.0) {
       _mediaQueryData = mediaQuery;
       _screenWidth = mediaQuery.size.width;
       _screenHeight = mediaQuery.size.height;
@@ -249,6 +252,7 @@ class XScreen {
         statusBarColor: Colors.transparent,
         statusBarBrightness: brightness,
         statusBarIconBrightness: brightness,
+        systemNavigationBarColor: isWhite ? Colors.white : ColorRes.backgroundColor  ,
         systemNavigationBarIconBrightness: brightness));
   }
 

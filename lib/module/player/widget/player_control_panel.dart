@@ -88,7 +88,7 @@ class _PlayerControlPanelState extends State<PlayerControlPanel> {
 
   Widget _movePositionWidget() {
     return Positioned(
-      top: playerController.isFullScreen.value ? 36 : 76,
+      top: playerController.isFullScreen.value ? 36 : 52,
       left: 0,
       right: 0,
       child: Align(
@@ -108,7 +108,7 @@ class _PlayerControlPanelState extends State<PlayerControlPanel> {
 
   Widget _brightnessView() {
     return Positioned(
-      top: playerController.isFullScreen.value ? 36 : 76,
+      top: playerController.isFullScreen.value ? 36 : 52,
       left: 0,
       right: 0,
       child: Align(
@@ -119,25 +119,26 @@ class _PlayerControlPanelState extends State<PlayerControlPanel> {
                 visible: playerController.brightness.value != null,
                 child: Container(
                   decoration: allRadiusDecoration(8, color: Colors.black38),
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(
                         Icons.brightness_6_rounded,
-                        size: 18,
+                        size: 20,
                         color: Colors.white,
                       ),
-                      const Width(12),
+                      const Width(8),
                       SizedBox(
-                          width: 100,
-                          child: LinearProgressIndicator(
-                            borderRadius: getBorderRadius(2),
-                            color: Colors.white,
-                            backgroundColor: Colors.white24,
-                            minHeight: 3,
-                            value: playerController.brightness.value ?? 0.0,
-                          ))
+                        width: 120,
+                        child: LinearProgressIndicator(
+                          borderRadius: getBorderRadius(2),
+                          minHeight: 2,
+                          backgroundColor: Colors.white24,
+                          color: Colors.white,
+                          value: playerController.brightness.value,
+                        ),
+                      )
                     ],
                   ),
                 ),

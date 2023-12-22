@@ -3,11 +3,12 @@
 * 时间  2023/9/10 10:27
 */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/utils/date_utils.dart';
-import 'package:free_tube_player/utils/dialog_utils.dart';
 import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:get/get.dart';
 
@@ -15,10 +16,14 @@ class UserHomeTabPageController {
   final pageController = PageController(initialPage: 0);
   final index = 0.obs;
   int lastBackPressedTime = 0;
+  bool isContinuePlay = false;
+
+  final pageChangeStreamController = StreamController<int>.broadcast();
 
   void onTapBottomNavigationBar(int index) {
     this.index.value = index;
     pageController.jumpToPage(index);
+    pageChangeStreamController.add(index);
   }
 
   bool isSelect(int index) {
@@ -35,9 +40,13 @@ class UserHomeTabPageController {
         }
       } else {
         userPlayerController.pause();
+        isContinuePlay = true;
       }
     } else {
-      ///
+      if (isContinuePlay) {
+        userPlayerController.play();
+      }
+      isContinuePlay = false;
     }
   }
 

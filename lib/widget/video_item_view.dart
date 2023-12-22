@@ -30,13 +30,17 @@ class VideoItemView extends StatelessWidget {
       children: [
         Stack(
           children: [
-            ClipRRect(
+            Hero(
+              tag: mediaInfo.identify,
+              child: ClipRRect(
                 borderRadius: getBorderRadius(16),
                 child: ImageView.network(
                   imageUrl: mediaInfo.thumbnail ?? '',
                   height: screenWidth * 0.5,
                   width: screenWidth - 40,
-                )),
+                ),
+              ),
+            ),
             Positioned(
                 bottom: 10,
                 right: 10,

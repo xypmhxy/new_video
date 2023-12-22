@@ -144,7 +144,7 @@ class EditPageController extends BaseController {
       completer.complete(true);
     });
     if (result == false) {
-      ToastUtils.show(S.current.rewardNotLoad);
+      ToastUtils.show(S.current.rewardNotLoad,isCorrect: false);
       return false;
     }
     return completer.future;

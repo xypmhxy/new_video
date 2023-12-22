@@ -22,7 +22,7 @@ class HomeFilePageController extends BaseVideoController implements OnMediaInfoC
     setLoading();
     videoGroupList.clear();
     final videoGroupMap = <int, List<MediaInfo>>{};
-    final List<Album> videoAlbums = await VideoUtils.getVideoAlbums();
+    final List<Album> videoAlbums = await VideoDataHelper.get.getVideoAlbums();
     final nowDateTime = DateTime.now();
 
     for (final videoAlbum in videoAlbums) {

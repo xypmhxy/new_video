@@ -13,7 +13,9 @@ import 'package:free_tube_player/module/player/controller/comment_controller.dar
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_page_controller.dart';
 import 'package:free_tube_player/module/player/page/dialog_comment.dart';
+import 'package:free_tube_player/utils/share_utils.dart';
 import 'package:free_tube_player/widget/divider.dart';
+import 'package:free_tube_player/widget/download_custom_view.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
@@ -40,6 +42,7 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
         .requestWatchPageInfo(userPlayerController.nowPlayingMedia!)
         .then((value) => _commentController.requestComment(_userPlayerPageController.video.value));
     _userPlayerPageController.requestAuthorInfo(userPlayerController.nowPlayingMedia?.authorId ?? '');
+    _userPlayerPageController.setupSomething();
     super.initState();
   }
 
@@ -168,18 +171,21 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
   Widget _controlBar() {
     return SliverToBoxAdapter(
       child: Obx(() {
-        final mediaInfo = userPlayerController.nowPlayingMedia;
-        final isLike = mediaInfo?.isLike ?? false;
+        final isLike = _userPlayerPageController.isLike.value;
         final isLoop = userPlayerController.isLoop.value;
         final isBackgroundPlayback = userPlayerController.isBackgroundPlayback.value;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _controlItem(
-              isLike ? Assets.svgLikeSelect : Assets.svgLikeNormal,
-              mediaInfo?.formatLikeCount() ?? '-',
-              color: isLike ? AppThemeController.primaryThemeColor(context) : null,
-            ),
+            GestureDetector(
+                onTap: () {
+                  _userPlayerPageController.onClickLike();
+                },
+                child: _controlItem(
+                  isLike ? Assets.svgLikeSelect : Assets.svgLikeNormal,
+                  S.current.like,
+                  color: isLike ? AppThemeController.primaryThemeColor(context) : null,
+                )),
             GestureDetector(
                 onTap: () {
                   userPlayerController.toggleLoop();
@@ -198,7 +204,18 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
                   S.current.backgroundPlayback,
                   color: isBackgroundPlayback ? AppThemeController.primaryThemeColor(context) : null,
                 )),
-            _controlItem(Assets.svgDownload, S.current.download),
+            GestureDetector(
+                onTap: () {
+                  if (userPlayerController.nowPlayingMedia?.youtubeId == null) return;
+                  ShareUtils.shareText(
+                      'https://www.youtube.com/watch?v=${userPlayerController.nowPlayingMedia?.youtubeId}');
+                },
+                child: _controlItem(
+                  Assets.svgShare,
+                  S.current.share,
+                  color: isBackgroundPlayback ? AppThemeController.primaryThemeColor(context) : null,
+                )),
+            _downloadView(S.current.download),
           ],
         );
       }),
@@ -213,12 +230,30 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
       children: [
         SVGView(
           assetName: svg,
-          size: 24,
+          size: 22,
           color: color ?? AppThemeController.textPrimaryColor(context),
         ),
         TextView.primary(text, fontSize: 12)
       ],
     );
+  }
+
+  Widget _downloadView(String text) {
+    return Obx(() => Visibility(
+        visible: userPlayerController.isLive == false,
+        child: Wrap(
+          spacing: 6,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          direction: Axis.vertical,
+          children: [
+            DownloadCustomView(
+              mediaInfo: userPlayerController.nowPlayingMedia,
+              videoSource: userPlayerController.videoSource.value,
+              iconSize: 24,
+            ),
+            TextView.primary(text, fontSize: 12)
+          ],
+        )));
   }
 
   Widget _authorInfo() {

@@ -8,6 +8,7 @@ import 'dart:typed_data';
 
 import 'package:free_tube_player/extension/date_time_extension.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
+import 'package:free_tube_player/utils/date_utils.dart';
 import 'package:isar/isar.dart';
 
 part 'media_info.g.dart';
@@ -15,8 +16,6 @@ part 'media_info.g.dart';
 enum SourceType { local, youtube, bilibili }
 
 enum DownloadStatus { none, waiting, downloading, pause, success, failed }
-
-enum MediaType { unknown, audio, video }
 
 @collection
 class MediaInfo {
@@ -37,8 +36,6 @@ class MediaInfo {
   List<VideoSource>? videoSources;
   List<AudioSource>? audioSources;
   String suffix = '';
-  @enumerated
-  SourceType sourceType = SourceType.local;
 
   //local
   int assetsCreateDate = 0;
@@ -56,14 +53,8 @@ class MediaInfo {
   String? description;
   String? publishedTime;
   String? viewCountText;
+  int recentGetUrlTime = 0;
 
-  // String? downloadPath;
-  // String? downloadAudioPath;
-  // int? downloadAudioLength;
-  // int? downloadLength;
-  // int? downloadStartDate;
-  // int? downloadFinishDate;
-  bool isLike = false;
   int? likeCount;
   int? dislikeCount;
 
@@ -81,8 +72,6 @@ class MediaInfo {
     this.isDelete = false,
     this.playHistory,
     this.suffix = '',
-    this.sourceType = SourceType.local,
-    // this.downloadStatus = DownloadStatus.none,
     this.assetsCreateDate = 0,
     this.assetsId,
     this.directoryId,
@@ -92,19 +81,19 @@ class MediaInfo {
   });
 
   MediaInfo.fromMap(Map map) {
+    final nowDate = DateTime.now().millisecondsSinceEpoch;
     title = map['title'] ?? defaultTitle;
     author = map['author'] ?? defaultAuthor;
     width = map['width'];
     height = map['height'];
-    createDate = map['createDate'] ?? 0;
-    updateDate = map['updateDate'] ?? 0;
+    createDate = map['createDate'] ?? nowDate;
+    updateDate = map['updateDate'] ?? nowDate;
     duration = map['duration'] ?? 0;
     byteSize = map['byteSize'];
     isDelete = map['isDelete'] ?? false;
     playHistory = map['playHistory'];
     suffix = map['suffix'] ?? '';
-    sourceType = map['sourceType'] ?? map['youtubeId'] != null ? SourceType.youtube : SourceType.local;
-    // downloadStatus = map['downloadStatus'] ?? DownloadStatus.none;
+    // sourceType = map['sourceType'] ?? map['youtubeId'] != null ? SourceType.youtube : SourceType.local;
     assetsCreateDate = map['assetsCreateDate'] ?? 0;
     assetsId = map['assetsId'];
     directoryId = map['directoryId'];
@@ -118,13 +107,6 @@ class MediaInfo {
     description = map['description'];
     publishedTime = map['publishedTime'];
     viewCountText = map['viewCountText'];
-    // downloadPath = map['downloadPath'];
-    // downloadAudioPath = map['downloadAudioPath'];
-    // downloadAudioLength = map['downloadAudioLength'];
-    // downloadLength = map['downloadLength'];
-    // downloadStartDate = map['downloadStartDate'];
-    // downloadFinishDate = map['downloadFinishDate'];
-    isLike = map['isLike'] ?? false;
     likeCount = map['likeCount'];
     dislikeCount = map['dislikeCount'];
   }
@@ -142,8 +124,6 @@ class MediaInfo {
       'isDelete': isDelete,
       'playHistory': playHistory,
       'suffix': suffix,
-      'sourceType': sourceType,
-      // 'downloadStatus': downloadStatus,
       'assetsCreateDate': assetsCreateDate,
       'assetsId': assetsId,
       'directoryId': directoryId,
@@ -157,19 +137,12 @@ class MediaInfo {
       'description': description,
       'publishedTime': publishedTime,
       'viewCountText': viewCountText,
-      // 'downloadPath': downloadPath,
-      // 'downloadAudioPath': downloadAudioPath,
-      // 'downloadAudioLength': downloadAudioLength,
-      // 'downloadLength': downloadLength,
-      // 'downloadStartDate': downloadStartDate,
-      // 'downloadFinishDate': downloadFinishDate,
-      'isLike': isLike,
       'likeCount': likeCount,
       'dislikeCount': dislikeCount,
     };
   }
 
-  bool get isLocalVideo => sourceType == SourceType.local;
+  // bool get isLocalVideo => sourceType == SourceType.local;
 
   String get identify => _getIdentify();
 
@@ -182,6 +155,8 @@ class MediaInfo {
   int? get historyPosition => playHistory?.playPosition;
 
   double? get historyProgress => playHistory?.playPosition == null ? null : playHistory!.playPosition! / duration;
+
+  int get recentPlayDate => playHistory?.recentPlayDate ?? 0;
 
   String get createDateFormat => DateTime.fromMillisecondsSinceEpoch(createDate).format();
 
@@ -209,10 +184,6 @@ class MediaInfo {
   double? getVideoRatio() {
     if (width == null || height == null) return null;
     return width! / height!;
-  }
-
-  bool isNeedAudioTrack({VideoSource? videoSource}) {
-    return videoSource?.isNeedAudioTrack() == true || sourceType == SourceType.bilibili;
   }
 
   VideoSource? getVideoSource(int width) {
@@ -246,17 +217,14 @@ class MediaInfo {
   @ignore
   bool get isLive => youtubeId != null && duration == 0;
 
-  // bool isDownloading(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.downloading;
-  //
-  // bool isWaiting(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.waiting;
-  //
-  // bool isPause(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.pause;
-  //
-  // bool isSuccess(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.success;
-  //
-  // bool isFailed(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.failed;
-  //
-  // bool isInQueue(BaseMediaSource videoSource) => videoSource.downloadStatus == DownloadStatus.failed;
+  @ignore
+  bool get isLocalVideo => localPath != null && youtubeId == null;
+
+  bool isUrlAvailable() {
+    final nowDate = DateTime.now().millisecondsSinceEpoch;
+    final intervalTime = nowDate - recentGetUrlTime;
+    return intervalTime <= DateUtil.MIN * 90;
+  }
 
   @override
   String toString() {
@@ -280,8 +248,9 @@ class BaseMediaSource {
   String? format;
   int? byteSize;
   int? bitrate;
-  @ignore
-  BaseMediaSource? childSource;
+  @enumerated
+  SourceType sourceType = SourceType.local;
+  AudioSource? audioSource;
 
   @enumerated
   DownloadStatus downloadStatus = DownloadStatus.none;
@@ -291,7 +260,7 @@ class BaseMediaSource {
   int? downloadFinishDate;
   String? downloadPath;
 
-  BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.childSource});
+  BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.audioSource});
 
   @ignore
   bool get isDownloading => downloadStatus == DownloadStatus.downloading;
@@ -311,14 +280,21 @@ class BaseMediaSource {
   @ignore
   bool get isFailed => downloadStatus == DownloadStatus.failed;
 
-  double downloadProgress({bool withChild = false}) {
+  double downloadProgress() {
     if (downloadLength == null || fileLength == null) return 0;
-    final totalLength = fileLength! + (childSource?.fileLength ?? 0);
-    return downloadLength! / totalLength;
+    final totalLength = fileLength! + (audioSource?.fileLength ?? 0);
+    final totalDownload = downloadLength! + (audioSource?.downloadLength ?? 0);
+    return totalDownload / totalLength;
   }
 
   @ignore
   bool get isDownloadAvailable => isSuccess && downloadPath != null;
+
+  @ignore
+  bool get isYoutube => sourceType == SourceType.youtube;
+
+  @ignore
+  bool get isBilibili => sourceType == SourceType.bilibili;
 
   void clearDownload() {
     downloadStartDate = null;
@@ -363,7 +339,7 @@ class VideoSource extends BaseMediaSource {
   }
 
   bool isNeedAudioTrack() {
-    return getResolution() >= 1080;
+    return isBilibili || audioSource != null;
   }
 
   String get resolution => '${width}x$height';

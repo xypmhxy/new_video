@@ -42,6 +42,7 @@ class YoutubeHomeApi extends BaseDio {
       }
     } catch (e) {
       LogUtils.e('requestHomeTab error $e');
+      //需要事件
     }
     return [];
   }
@@ -56,9 +57,6 @@ class YoutubeHomeApi extends BaseDio {
         title = textRuns.first["text"] ?? "";
       }
       if (title.isEmpty) continue;
-      if (title.toLowerCase().contains('live')) {
-        print('live');
-      }
       final continuationCommand = header['chipCloudChipRenderer']['navigationEndpoint']?['continuationCommand'];
       final token = continuationCommand?['token'] ?? '';
       final clickParams = continuationCommand?['command']?['clickTrackingParams'] ?? '';

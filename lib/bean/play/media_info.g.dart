@@ -118,91 +118,85 @@ const MediaInfoSchema = CollectionSchema(
       name: r'isDelete',
       type: IsarType.bool,
     ),
-    r'isLike': PropertySchema(
-      id: 20,
-      name: r'isLike',
-      type: IsarType.bool,
-    ),
-    r'isLocalVideo': PropertySchema(
-      id: 21,
-      name: r'isLocalVideo',
-      type: IsarType.bool,
-    ),
     r'likeCount': PropertySchema(
-      id: 22,
+      id: 20,
       name: r'likeCount',
       type: IsarType.long,
     ),
     r'localBytesThumbnail': PropertySchema(
-      id: 23,
+      id: 21,
       name: r'localBytesThumbnail',
       type: IsarType.byteList,
     ),
     r'localPath': PropertySchema(
-      id: 24,
+      id: 22,
       name: r'localPath',
       type: IsarType.string,
     ),
     r'playHistory': PropertySchema(
-      id: 25,
+      id: 23,
       name: r'playHistory',
       type: IsarType.object,
       target: r'PlayHistory',
     ),
     r'publishedTime': PropertySchema(
-      id: 26,
+      id: 24,
       name: r'publishedTime',
       type: IsarType.string,
     ),
-    r'sourceType': PropertySchema(
-      id: 27,
-      name: r'sourceType',
-      type: IsarType.byte,
-      enumMap: _MediaInfosourceTypeEnumValueMap,
+    r'recentGetUrlTime': PropertySchema(
+      id: 25,
+      name: r'recentGetUrlTime',
+      type: IsarType.long,
+    ),
+    r'recentPlayDate': PropertySchema(
+      id: 26,
+      name: r'recentPlayDate',
+      type: IsarType.long,
     ),
     r'suffix': PropertySchema(
-      id: 28,
+      id: 27,
       name: r'suffix',
       type: IsarType.string,
     ),
     r'thumbnail': PropertySchema(
-      id: 29,
+      id: 28,
       name: r'thumbnail',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 30,
+      id: 29,
       name: r'title',
       type: IsarType.string,
     ),
     r'updateDate': PropertySchema(
-      id: 31,
+      id: 30,
       name: r'updateDate',
       type: IsarType.long,
     ),
     r'updateDateFormat': PropertySchema(
-      id: 32,
+      id: 31,
       name: r'updateDateFormat',
       type: IsarType.string,
     ),
     r'videoSources': PropertySchema(
-      id: 33,
+      id: 32,
       name: r'videoSources',
       type: IsarType.objectList,
       target: r'VideoSource',
     ),
     r'viewCountText': PropertySchema(
-      id: 34,
+      id: 33,
       name: r'viewCountText',
       type: IsarType.string,
     ),
     r'width': PropertySchema(
-      id: 35,
+      id: 34,
       name: r'width',
       type: IsarType.long,
     ),
     r'youtubeId': PropertySchema(
-      id: 36,
+      id: 35,
       name: r'youtubeId',
       type: IsarType.string,
     )
@@ -374,33 +368,32 @@ void _mediaInfoSerialize(
   writer.writeDouble(offsets[17], object.historyProgress);
   writer.writeString(offsets[18], object.identify);
   writer.writeBool(offsets[19], object.isDelete);
-  writer.writeBool(offsets[20], object.isLike);
-  writer.writeBool(offsets[21], object.isLocalVideo);
-  writer.writeLong(offsets[22], object.likeCount);
-  writer.writeByteList(offsets[23], object.localBytesThumbnail);
-  writer.writeString(offsets[24], object.localPath);
+  writer.writeLong(offsets[20], object.likeCount);
+  writer.writeByteList(offsets[21], object.localBytesThumbnail);
+  writer.writeString(offsets[22], object.localPath);
   writer.writeObject<PlayHistory>(
-    offsets[25],
+    offsets[23],
     allOffsets,
     PlayHistorySchema.serialize,
     object.playHistory,
   );
-  writer.writeString(offsets[26], object.publishedTime);
-  writer.writeByte(offsets[27], object.sourceType.index);
-  writer.writeString(offsets[28], object.suffix);
-  writer.writeString(offsets[29], object.thumbnail);
-  writer.writeString(offsets[30], object.title);
-  writer.writeLong(offsets[31], object.updateDate);
-  writer.writeString(offsets[32], object.updateDateFormat);
+  writer.writeString(offsets[24], object.publishedTime);
+  writer.writeLong(offsets[25], object.recentGetUrlTime);
+  writer.writeLong(offsets[26], object.recentPlayDate);
+  writer.writeString(offsets[27], object.suffix);
+  writer.writeString(offsets[28], object.thumbnail);
+  writer.writeString(offsets[29], object.title);
+  writer.writeLong(offsets[30], object.updateDate);
+  writer.writeString(offsets[31], object.updateDateFormat);
   writer.writeObjectList<VideoSource>(
-    offsets[33],
+    offsets[32],
     allOffsets,
     VideoSourceSchema.serialize,
     object.videoSources,
   );
-  writer.writeString(offsets[34], object.viewCountText);
-  writer.writeLong(offsets[35], object.width);
-  writer.writeString(offsets[36], object.youtubeId);
+  writer.writeString(offsets[33], object.viewCountText);
+  writer.writeLong(offsets[34], object.width);
+  writer.writeString(offsets[35], object.youtubeId);
 }
 
 MediaInfo _mediaInfoDeserialize(
@@ -431,32 +424,29 @@ MediaInfo _mediaInfoDeserialize(
   object.height = reader.readLongOrNull(offsets[15]);
   object.id = id;
   object.isDelete = reader.readBool(offsets[19]);
-  object.isLike = reader.readBool(offsets[20]);
-  object.likeCount = reader.readLongOrNull(offsets[22]);
-  object.localBytesThumbnail = reader.readByteList(offsets[23]);
-  object.localPath = reader.readStringOrNull(offsets[24]);
+  object.likeCount = reader.readLongOrNull(offsets[20]);
+  object.localBytesThumbnail = reader.readByteList(offsets[21]);
+  object.localPath = reader.readStringOrNull(offsets[22]);
   object.playHistory = reader.readObjectOrNull<PlayHistory>(
-    offsets[25],
+    offsets[23],
     PlayHistorySchema.deserialize,
     allOffsets,
   );
-  object.publishedTime = reader.readStringOrNull(offsets[26]);
-  object.sourceType =
-      _MediaInfosourceTypeValueEnumMap[reader.readByteOrNull(offsets[27])] ??
-          SourceType.local;
-  object.suffix = reader.readString(offsets[28]);
-  object.thumbnail = reader.readStringOrNull(offsets[29]);
-  object.title = reader.readString(offsets[30]);
-  object.updateDate = reader.readLong(offsets[31]);
+  object.publishedTime = reader.readStringOrNull(offsets[24]);
+  object.recentGetUrlTime = reader.readLong(offsets[25]);
+  object.suffix = reader.readString(offsets[27]);
+  object.thumbnail = reader.readStringOrNull(offsets[28]);
+  object.title = reader.readString(offsets[29]);
+  object.updateDate = reader.readLong(offsets[30]);
   object.videoSources = reader.readObjectList<VideoSource>(
-    offsets[33],
+    offsets[32],
     VideoSourceSchema.deserialize,
     allOffsets,
     VideoSource(),
   );
-  object.viewCountText = reader.readStringOrNull(offsets[34]);
-  object.width = reader.readLongOrNull(offsets[35]);
-  object.youtubeId = reader.readStringOrNull(offsets[36]);
+  object.viewCountText = reader.readStringOrNull(offsets[33]);
+  object.width = reader.readLongOrNull(offsets[34]);
+  object.youtubeId = reader.readStringOrNull(offsets[35]);
   return object;
 }
 
@@ -513,64 +503,50 @@ P _mediaInfoDeserializeProp<P>(
     case 19:
       return (reader.readBool(offset)) as P;
     case 20:
-      return (reader.readBool(offset)) as P;
-    case 21:
-      return (reader.readBool(offset)) as P;
-    case 22:
       return (reader.readLongOrNull(offset)) as P;
-    case 23:
+    case 21:
       return (reader.readByteList(offset)) as P;
-    case 24:
+    case 22:
       return (reader.readStringOrNull(offset)) as P;
-    case 25:
+    case 23:
       return (reader.readObjectOrNull<PlayHistory>(
         offset,
         PlayHistorySchema.deserialize,
         allOffsets,
       )) as P;
-    case 26:
+    case 24:
       return (reader.readStringOrNull(offset)) as P;
-    case 27:
-      return (_MediaInfosourceTypeValueEnumMap[reader.readByteOrNull(offset)] ??
-          SourceType.local) as P;
-    case 28:
-      return (reader.readString(offset)) as P;
-    case 29:
-      return (reader.readStringOrNull(offset)) as P;
-    case 30:
-      return (reader.readString(offset)) as P;
-    case 31:
+    case 25:
       return (reader.readLong(offset)) as P;
-    case 32:
+    case 26:
+      return (reader.readLong(offset)) as P;
+    case 27:
       return (reader.readString(offset)) as P;
-    case 33:
+    case 28:
+      return (reader.readStringOrNull(offset)) as P;
+    case 29:
+      return (reader.readString(offset)) as P;
+    case 30:
+      return (reader.readLong(offset)) as P;
+    case 31:
+      return (reader.readString(offset)) as P;
+    case 32:
       return (reader.readObjectList<VideoSource>(
         offset,
         VideoSourceSchema.deserialize,
         allOffsets,
         VideoSource(),
       )) as P;
-    case 34:
+    case 33:
       return (reader.readStringOrNull(offset)) as P;
-    case 35:
+    case 34:
       return (reader.readLongOrNull(offset)) as P;
-    case 36:
+    case 35:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
-
-const _MediaInfosourceTypeEnumValueMap = {
-  'local': 0,
-  'youtube': 1,
-  'bilibili': 2,
-};
-const _MediaInfosourceTypeValueEnumMap = {
-  0: SourceType.local,
-  1: SourceType.youtube,
-  2: SourceType.bilibili,
-};
 
 Id _mediaInfoGetId(MediaInfo object) {
   return object.id;
@@ -2727,26 +2703,6 @@ extension MediaInfoQueryFilter
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> isLikeEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isLike',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> isLocalVideoEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isLocalVideo',
-        value: value,
-      ));
-    });
-  }
-
   QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> likeCountIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -3302,52 +3258,110 @@ extension MediaInfoQueryFilter
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> sourceTypeEqualTo(
-      SourceType value) {
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      recentGetUrlTimeEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'sourceType',
+        property: r'recentGetUrlTime',
         value: value,
       ));
     });
   }
 
   QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
-      sourceTypeGreaterThan(
-    SourceType value, {
+      recentGetUrlTimeGreaterThan(
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'sourceType',
+        property: r'recentGetUrlTime',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> sourceTypeLessThan(
-    SourceType value, {
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      recentGetUrlTimeLessThan(
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'sourceType',
+        property: r'recentGetUrlTime',
         value: value,
       ));
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> sourceTypeBetween(
-    SourceType lower,
-    SourceType upper, {
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      recentGetUrlTimeBetween(
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'sourceType',
+        property: r'recentGetUrlTime',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      recentPlayDateEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'recentPlayDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      recentPlayDateGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'recentPlayDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      recentPlayDateLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'recentPlayDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      recentPlayDateBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'recentPlayDate',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -4693,30 +4707,6 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByIsLike() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isLike', Sort.asc);
-    });
-  }
-
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByIsLikeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isLike', Sort.desc);
-    });
-  }
-
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByIsLocalVideo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isLocalVideo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByIsLocalVideoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isLocalVideo', Sort.desc);
-    });
-  }
-
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByLikeCount() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'likeCount', Sort.asc);
@@ -4753,15 +4743,28 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortBySourceType() {
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByRecentGetUrlTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'sourceType', Sort.asc);
+      return query.addSortBy(r'recentGetUrlTime', Sort.asc);
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortBySourceTypeDesc() {
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      sortByRecentGetUrlTimeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'sourceType', Sort.desc);
+      return query.addSortBy(r'recentGetUrlTime', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByRecentPlayDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'recentPlayDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByRecentPlayDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'recentPlayDate', Sort.desc);
     });
   }
 
@@ -5107,30 +5110,6 @@ extension MediaInfoQuerySortThenBy
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByIsLike() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isLike', Sort.asc);
-    });
-  }
-
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByIsLikeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isLike', Sort.desc);
-    });
-  }
-
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByIsLocalVideo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isLocalVideo', Sort.asc);
-    });
-  }
-
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByIsLocalVideoDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isLocalVideo', Sort.desc);
-    });
-  }
-
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByLikeCount() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'likeCount', Sort.asc);
@@ -5167,15 +5146,28 @@ extension MediaInfoQuerySortThenBy
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenBySourceType() {
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByRecentGetUrlTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'sourceType', Sort.asc);
+      return query.addSortBy(r'recentGetUrlTime', Sort.asc);
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenBySourceTypeDesc() {
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      thenByRecentGetUrlTimeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'sourceType', Sort.desc);
+      return query.addSortBy(r'recentGetUrlTime', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByRecentPlayDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'recentPlayDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByRecentPlayDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'recentPlayDate', Sort.desc);
     });
   }
 
@@ -5406,18 +5398,6 @@ extension MediaInfoQueryWhereDistinct
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByIsLike() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isLike');
-    });
-  }
-
-  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByIsLocalVideo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isLocalVideo');
-    });
-  }
-
   QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByLikeCount() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'likeCount');
@@ -5446,9 +5426,15 @@ extension MediaInfoQueryWhereDistinct
     });
   }
 
-  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctBySourceType() {
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByRecentGetUrlTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'sourceType');
+      return query.addDistinctBy(r'recentGetUrlTime');
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByRecentPlayDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'recentPlayDate');
     });
   }
 
@@ -5638,18 +5624,6 @@ extension MediaInfoQueryProperty
     });
   }
 
-  QueryBuilder<MediaInfo, bool, QQueryOperations> isLikeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isLike');
-    });
-  }
-
-  QueryBuilder<MediaInfo, bool, QQueryOperations> isLocalVideoProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isLocalVideo');
-    });
-  }
-
   QueryBuilder<MediaInfo, int?, QQueryOperations> likeCountProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'likeCount');
@@ -5682,9 +5656,15 @@ extension MediaInfoQueryProperty
     });
   }
 
-  QueryBuilder<MediaInfo, SourceType, QQueryOperations> sourceTypeProperty() {
+  QueryBuilder<MediaInfo, int, QQueryOperations> recentGetUrlTimeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'sourceType');
+      return query.addPropertyName(r'recentGetUrlTime');
+    });
+  }
+
+  QueryBuilder<MediaInfo, int, QQueryOperations> recentPlayDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'recentPlayDate');
     });
   }
 
@@ -6064,84 +6044,96 @@ const VideoSourceSchema = Schema(
   name: r'VideoSource',
   id: 7682483451518015526,
   properties: {
-    r'bitrate': PropertySchema(
+    r'audioSource': PropertySchema(
       id: 0,
+      name: r'audioSource',
+      type: IsarType.object,
+      target: r'AudioSource',
+    ),
+    r'bitrate': PropertySchema(
+      id: 1,
       name: r'bitrate',
       type: IsarType.long,
     ),
     r'byteSize': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'byteSize',
       type: IsarType.long,
     ),
     r'downloadFinishDate': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'downloadFinishDate',
       type: IsarType.long,
     ),
     r'downloadLength': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'downloadLength',
       type: IsarType.long,
     ),
     r'downloadPath': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'downloadPath',
       type: IsarType.string,
     ),
     r'downloadStartDate': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'downloadStartDate',
       type: IsarType.long,
     ),
     r'downloadStatus': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'downloadStatus',
       type: IsarType.byte,
       enumMap: _VideoSourcedownloadStatusEnumValueMap,
     ),
     r'fileLength': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'fileLength',
       type: IsarType.long,
     ),
     r'format': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'format',
       type: IsarType.string,
     ),
     r'fps': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'fps',
       type: IsarType.long,
     ),
     r'height': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'height',
       type: IsarType.long,
     ),
     r'isOnlyVideo': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'isOnlyVideo',
       type: IsarType.bool,
     ),
     r'label': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'label',
       type: IsarType.string,
     ),
     r'resolution': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'resolution',
       type: IsarType.string,
     ),
+    r'sourceType': PropertySchema(
+      id: 15,
+      name: r'sourceType',
+      type: IsarType.byte,
+      enumMap: _VideoSourcesourceTypeEnumValueMap,
+    ),
     r'url': PropertySchema(
-      id: 14,
+      id: 16,
       name: r'url',
       type: IsarType.string,
     ),
     r'width': PropertySchema(
-      id: 15,
+      id: 17,
       name: r'width',
       type: IsarType.long,
     )
@@ -6158,6 +6150,14 @@ int _videoSourceEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.audioSource;
+    if (value != null) {
+      bytesCount += 3 +
+          AudioSourceSchema.estimateSize(
+              value, allOffsets[AudioSource]!, allOffsets);
+    }
+  }
   {
     final value = object.downloadPath;
     if (value != null) {
@@ -6187,22 +6187,29 @@ void _videoSourceSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.bitrate);
-  writer.writeLong(offsets[1], object.byteSize);
-  writer.writeLong(offsets[2], object.downloadFinishDate);
-  writer.writeLong(offsets[3], object.downloadLength);
-  writer.writeString(offsets[4], object.downloadPath);
-  writer.writeLong(offsets[5], object.downloadStartDate);
-  writer.writeByte(offsets[6], object.downloadStatus.index);
-  writer.writeLong(offsets[7], object.fileLength);
-  writer.writeString(offsets[8], object.format);
-  writer.writeLong(offsets[9], object.fps);
-  writer.writeLong(offsets[10], object.height);
-  writer.writeBool(offsets[11], object.isOnlyVideo);
-  writer.writeString(offsets[12], object.label);
-  writer.writeString(offsets[13], object.resolution);
-  writer.writeString(offsets[14], object.url);
-  writer.writeLong(offsets[15], object.width);
+  writer.writeObject<AudioSource>(
+    offsets[0],
+    allOffsets,
+    AudioSourceSchema.serialize,
+    object.audioSource,
+  );
+  writer.writeLong(offsets[1], object.bitrate);
+  writer.writeLong(offsets[2], object.byteSize);
+  writer.writeLong(offsets[3], object.downloadFinishDate);
+  writer.writeLong(offsets[4], object.downloadLength);
+  writer.writeString(offsets[5], object.downloadPath);
+  writer.writeLong(offsets[6], object.downloadStartDate);
+  writer.writeByte(offsets[7], object.downloadStatus.index);
+  writer.writeLong(offsets[8], object.fileLength);
+  writer.writeString(offsets[9], object.format);
+  writer.writeLong(offsets[10], object.fps);
+  writer.writeLong(offsets[11], object.height);
+  writer.writeBool(offsets[12], object.isOnlyVideo);
+  writer.writeString(offsets[13], object.label);
+  writer.writeString(offsets[14], object.resolution);
+  writer.writeByte(offsets[15], object.sourceType.index);
+  writer.writeString(offsets[16], object.url);
+  writer.writeLong(offsets[17], object.width);
 }
 
 VideoSource _videoSourceDeserialize(
@@ -6212,24 +6219,32 @@ VideoSource _videoSourceDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = VideoSource(
-    bitrate: reader.readLongOrNull(offsets[0]),
-    byteSize: reader.readLongOrNull(offsets[1]),
-    format: reader.readStringOrNull(offsets[8]),
-    fps: reader.readLongOrNull(offsets[9]),
-    height: reader.readLongOrNull(offsets[10]),
-    isOnlyVideo: reader.readBoolOrNull(offsets[11]) ?? false,
-    label: reader.readStringOrNull(offsets[12]),
-    url: reader.readStringOrNull(offsets[14]) ?? '',
-    width: reader.readLongOrNull(offsets[15]),
+    bitrate: reader.readLongOrNull(offsets[1]),
+    byteSize: reader.readLongOrNull(offsets[2]),
+    format: reader.readStringOrNull(offsets[9]),
+    fps: reader.readLongOrNull(offsets[10]),
+    height: reader.readLongOrNull(offsets[11]),
+    isOnlyVideo: reader.readBoolOrNull(offsets[12]) ?? false,
+    label: reader.readStringOrNull(offsets[13]),
+    url: reader.readStringOrNull(offsets[16]) ?? '',
+    width: reader.readLongOrNull(offsets[17]),
   );
-  object.downloadFinishDate = reader.readLongOrNull(offsets[2]);
-  object.downloadLength = reader.readLongOrNull(offsets[3]);
-  object.downloadPath = reader.readStringOrNull(offsets[4]);
-  object.downloadStartDate = reader.readLongOrNull(offsets[5]);
+  object.audioSource = reader.readObjectOrNull<AudioSource>(
+    offsets[0],
+    AudioSourceSchema.deserialize,
+    allOffsets,
+  );
+  object.downloadFinishDate = reader.readLongOrNull(offsets[3]);
+  object.downloadLength = reader.readLongOrNull(offsets[4]);
+  object.downloadPath = reader.readStringOrNull(offsets[5]);
+  object.downloadStartDate = reader.readLongOrNull(offsets[6]);
   object.downloadStatus = _VideoSourcedownloadStatusValueEnumMap[
-          reader.readByteOrNull(offsets[6])] ??
+          reader.readByteOrNull(offsets[7])] ??
       DownloadStatus.none;
-  object.fileLength = reader.readLongOrNull(offsets[7]);
+  object.fileLength = reader.readLongOrNull(offsets[8]);
+  object.sourceType =
+      _VideoSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[15])] ??
+          SourceType.local;
   return object;
 }
 
@@ -6241,7 +6256,11 @@ P _videoSourceDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readObjectOrNull<AudioSource>(
+        offset,
+        AudioSourceSchema.deserialize,
+        allOffsets,
+      )) as P;
     case 1:
       return (reader.readLongOrNull(offset)) as P;
     case 2:
@@ -6249,30 +6268,36 @@ P _videoSourceDeserializeProp<P>(
     case 3:
       return (reader.readLongOrNull(offset)) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
-    case 5:
       return (reader.readLongOrNull(offset)) as P;
+    case 5:
+      return (reader.readStringOrNull(offset)) as P;
     case 6:
+      return (reader.readLongOrNull(offset)) as P;
+    case 7:
       return (_VideoSourcedownloadStatusValueEnumMap[
               reader.readByteOrNull(offset)] ??
           DownloadStatus.none) as P;
-    case 7:
-      return (reader.readLongOrNull(offset)) as P;
     case 8:
-      return (reader.readStringOrNull(offset)) as P;
-    case 9:
       return (reader.readLongOrNull(offset)) as P;
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
     case 10:
       return (reader.readLongOrNull(offset)) as P;
     case 11:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 12:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 13:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 14:
-      return (reader.readStringOrNull(offset) ?? '') as P;
+      return (reader.readString(offset)) as P;
     case 15:
+      return (_VideoSourcesourceTypeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          SourceType.local) as P;
+    case 16:
+      return (reader.readStringOrNull(offset) ?? '') as P;
+    case 17:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -6295,9 +6320,37 @@ const _VideoSourcedownloadStatusValueEnumMap = {
   4: DownloadStatus.success,
   5: DownloadStatus.failed,
 };
+const _VideoSourcesourceTypeEnumValueMap = {
+  'local': 0,
+  'youtube': 1,
+  'bilibili': 2,
+};
+const _VideoSourcesourceTypeValueEnumMap = {
+  0: SourceType.local,
+  1: SourceType.youtube,
+  2: SourceType.bilibili,
+};
 
 extension VideoSourceQueryFilter
     on QueryBuilder<VideoSource, VideoSource, QFilterCondition> {
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      audioSourceIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'audioSource',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      audioSourceIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'audioSource',
+      ));
+    });
+  }
+
   QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
       bitrateIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -7535,6 +7588,62 @@ extension VideoSourceQueryFilter
     });
   }
 
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      sourceTypeEqualTo(SourceType value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sourceType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      sourceTypeGreaterThan(
+    SourceType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'sourceType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      sourceTypeLessThan(
+    SourceType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'sourceType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      sourceTypeBetween(
+    SourceType lower,
+    SourceType upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'sourceType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> urlEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -7739,7 +7848,14 @@ extension VideoSourceQueryFilter
 }
 
 extension VideoSourceQueryObject
-    on QueryBuilder<VideoSource, VideoSource, QFilterCondition> {}
+    on QueryBuilder<VideoSource, VideoSource, QFilterCondition> {
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> audioSource(
+      FilterQuery<AudioSource> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'audioSource');
+    });
+  }
+}
 
 // coverage:ignore-file
 // ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
@@ -7748,59 +7864,71 @@ const AudioSourceSchema = Schema(
   name: r'AudioSource',
   id: -6394188906617519483,
   properties: {
-    r'bitrate': PropertySchema(
+    r'audioSource': PropertySchema(
       id: 0,
+      name: r'audioSource',
+      type: IsarType.object,
+      target: r'AudioSource',
+    ),
+    r'bitrate': PropertySchema(
+      id: 1,
       name: r'bitrate',
       type: IsarType.long,
     ),
     r'byteSize': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'byteSize',
       type: IsarType.long,
     ),
     r'downloadFinishDate': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'downloadFinishDate',
       type: IsarType.long,
     ),
     r'downloadLength': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'downloadLength',
       type: IsarType.long,
     ),
     r'downloadPath': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'downloadPath',
       type: IsarType.string,
     ),
     r'downloadStartDate': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'downloadStartDate',
       type: IsarType.long,
     ),
     r'downloadStatus': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'downloadStatus',
       type: IsarType.byte,
       enumMap: _AudioSourcedownloadStatusEnumValueMap,
     ),
     r'fileLength': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'fileLength',
       type: IsarType.long,
     ),
     r'format': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'format',
       type: IsarType.string,
     ),
     r'label': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'label',
       type: IsarType.string,
     ),
+    r'sourceType': PropertySchema(
+      id: 11,
+      name: r'sourceType',
+      type: IsarType.byte,
+      enumMap: _AudioSourcesourceTypeEnumValueMap,
+    ),
     r'url': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'url',
       type: IsarType.string,
     )
@@ -7817,6 +7945,14 @@ int _audioSourceEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  {
+    final value = object.audioSource;
+    if (value != null) {
+      bytesCount += 3 +
+          AudioSourceSchema.estimateSize(
+              value, allOffsets[AudioSource]!, allOffsets);
+    }
+  }
   {
     final value = object.downloadPath;
     if (value != null) {
@@ -7845,17 +7981,24 @@ void _audioSourceSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.bitrate);
-  writer.writeLong(offsets[1], object.byteSize);
-  writer.writeLong(offsets[2], object.downloadFinishDate);
-  writer.writeLong(offsets[3], object.downloadLength);
-  writer.writeString(offsets[4], object.downloadPath);
-  writer.writeLong(offsets[5], object.downloadStartDate);
-  writer.writeByte(offsets[6], object.downloadStatus.index);
-  writer.writeLong(offsets[7], object.fileLength);
-  writer.writeString(offsets[8], object.format);
-  writer.writeString(offsets[9], object.label);
-  writer.writeString(offsets[10], object.url);
+  writer.writeObject<AudioSource>(
+    offsets[0],
+    allOffsets,
+    AudioSourceSchema.serialize,
+    object.audioSource,
+  );
+  writer.writeLong(offsets[1], object.bitrate);
+  writer.writeLong(offsets[2], object.byteSize);
+  writer.writeLong(offsets[3], object.downloadFinishDate);
+  writer.writeLong(offsets[4], object.downloadLength);
+  writer.writeString(offsets[5], object.downloadPath);
+  writer.writeLong(offsets[6], object.downloadStartDate);
+  writer.writeByte(offsets[7], object.downloadStatus.index);
+  writer.writeLong(offsets[8], object.fileLength);
+  writer.writeString(offsets[9], object.format);
+  writer.writeString(offsets[10], object.label);
+  writer.writeByte(offsets[11], object.sourceType.index);
+  writer.writeString(offsets[12], object.url);
 }
 
 AudioSource _audioSourceDeserialize(
@@ -7865,20 +8008,28 @@ AudioSource _audioSourceDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = AudioSource(
-    bitrate: reader.readLongOrNull(offsets[0]),
-    byteSize: reader.readLongOrNull(offsets[1]),
-    format: reader.readStringOrNull(offsets[8]),
-    label: reader.readStringOrNull(offsets[9]),
-    url: reader.readStringOrNull(offsets[10]) ?? '',
+    bitrate: reader.readLongOrNull(offsets[1]),
+    byteSize: reader.readLongOrNull(offsets[2]),
+    format: reader.readStringOrNull(offsets[9]),
+    label: reader.readStringOrNull(offsets[10]),
+    url: reader.readStringOrNull(offsets[12]) ?? '',
   );
-  object.downloadFinishDate = reader.readLongOrNull(offsets[2]);
-  object.downloadLength = reader.readLongOrNull(offsets[3]);
-  object.downloadPath = reader.readStringOrNull(offsets[4]);
-  object.downloadStartDate = reader.readLongOrNull(offsets[5]);
+  object.audioSource = reader.readObjectOrNull<AudioSource>(
+    offsets[0],
+    AudioSourceSchema.deserialize,
+    allOffsets,
+  );
+  object.downloadFinishDate = reader.readLongOrNull(offsets[3]);
+  object.downloadLength = reader.readLongOrNull(offsets[4]);
+  object.downloadPath = reader.readStringOrNull(offsets[5]);
+  object.downloadStartDate = reader.readLongOrNull(offsets[6]);
   object.downloadStatus = _AudioSourcedownloadStatusValueEnumMap[
-          reader.readByteOrNull(offsets[6])] ??
+          reader.readByteOrNull(offsets[7])] ??
       DownloadStatus.none;
-  object.fileLength = reader.readLongOrNull(offsets[7]);
+  object.fileLength = reader.readLongOrNull(offsets[8]);
+  object.sourceType =
+      _AudioSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[11])] ??
+          SourceType.local;
   return object;
 }
 
@@ -7890,7 +8041,11 @@ P _audioSourceDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readObjectOrNull<AudioSource>(
+        offset,
+        AudioSourceSchema.deserialize,
+        allOffsets,
+      )) as P;
     case 1:
       return (reader.readLongOrNull(offset)) as P;
     case 2:
@@ -7898,20 +8053,26 @@ P _audioSourceDeserializeProp<P>(
     case 3:
       return (reader.readLongOrNull(offset)) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
-    case 5:
       return (reader.readLongOrNull(offset)) as P;
+    case 5:
+      return (reader.readStringOrNull(offset)) as P;
     case 6:
+      return (reader.readLongOrNull(offset)) as P;
+    case 7:
       return (_AudioSourcedownloadStatusValueEnumMap[
               reader.readByteOrNull(offset)] ??
           DownloadStatus.none) as P;
-    case 7:
-      return (reader.readLongOrNull(offset)) as P;
     case 8:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 9:
       return (reader.readStringOrNull(offset)) as P;
     case 10:
+      return (reader.readStringOrNull(offset)) as P;
+    case 11:
+      return (_AudioSourcesourceTypeValueEnumMap[
+              reader.readByteOrNull(offset)] ??
+          SourceType.local) as P;
+    case 12:
       return (reader.readStringOrNull(offset) ?? '') as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -7934,9 +8095,37 @@ const _AudioSourcedownloadStatusValueEnumMap = {
   4: DownloadStatus.success,
   5: DownloadStatus.failed,
 };
+const _AudioSourcesourceTypeEnumValueMap = {
+  'local': 0,
+  'youtube': 1,
+  'bilibili': 2,
+};
+const _AudioSourcesourceTypeValueEnumMap = {
+  0: SourceType.local,
+  1: SourceType.youtube,
+  2: SourceType.bilibili,
+};
 
 extension AudioSourceQueryFilter
     on QueryBuilder<AudioSource, AudioSource, QFilterCondition> {
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      audioSourceIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'audioSource',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      audioSourceIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'audioSource',
+      ));
+    });
+  }
+
   QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
       bitrateIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -8888,6 +9077,62 @@ extension AudioSourceQueryFilter
     });
   }
 
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      sourceTypeEqualTo(SourceType value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sourceType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      sourceTypeGreaterThan(
+    SourceType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'sourceType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      sourceTypeLessThan(
+    SourceType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'sourceType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      sourceTypeBetween(
+    SourceType lower,
+    SourceType upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'sourceType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> urlEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -9021,4 +9266,11 @@ extension AudioSourceQueryFilter
 }
 
 extension AudioSourceQueryObject
-    on QueryBuilder<AudioSource, AudioSource, QFilterCondition> {}
+    on QueryBuilder<AudioSource, AudioSource, QFilterCondition> {
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> audioSource(
+      FilterQuery<AudioSource> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'audioSource');
+    });
+  }
+}

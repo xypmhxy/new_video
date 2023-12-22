@@ -649,6 +649,106 @@ class S {
       args: [],
     );
   }
+
+  /// `Added successfully`
+  String get addToPlaylistSuccess {
+    return Intl.message(
+      'Added successfully',
+      name: 'addToPlaylistSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Added failed`
+  String get addToPlaylistFailed {
+    return Intl.message(
+      'Added failed',
+      name: 'addToPlaylistFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Watch later`
+  String get watchLater {
+    return Intl.message(
+      'Watch later',
+      name: 'watchLater',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Removal successful`
+  String get removePlaylistSuccess {
+    return Intl.message(
+      'Removal successful',
+      name: 'removePlaylistSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Removal failed`
+  String get removePlaylistFailed {
+    return Intl.message(
+      'Removal failed',
+      name: 'removePlaylistFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Added to watch later`
+  String get addWatchLaterSuccess {
+    return Intl.message(
+      'Added to watch later',
+      name: 'addWatchLaterSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View All`
+  String get viewAll {
+    return Intl.message(
+      'View All',
+      name: 'viewAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Playlist`
+  String get newPlaylist {
+    return Intl.message(
+      'New Playlist',
+      name: 'newPlaylist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Watch Later`
+  String get watchLaterCaps {
+    return Intl.message(
+      'Watch Later',
+      name: 'watchLaterCaps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Liked Videos`
+  String get likedVideos {
+    return Intl.message(
+      'Liked Videos',
+      name: 'likedVideos',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

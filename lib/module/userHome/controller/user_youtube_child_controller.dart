@@ -8,6 +8,7 @@ import 'package:free_tube_player/bean/home/youtube_home_tab.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
@@ -18,6 +19,7 @@ class UserYoutubeChildController extends BaseController {
   final refreshController = RefreshController();
   final _videoActionHelper = VideoActionHelper();
   String continuation = '';
+  bool isAllowRetry = true;
 
   UserYoutubeChildController(this.youtubeHomeTab) {
     if (youtubeHomeTab.mediaInfos?.isNotEmpty ?? false) {
@@ -44,8 +46,15 @@ class UserYoutubeChildController extends BaseController {
           youtubeHomeTab.continuation = continuation ?? '';
         });
     if (mediaInfos.isEmpty) {
+      if (isAllowRetry) {
+        isAllowRetry = false;
+        LogUtils.i('获取首页信息失败重试开始');
+        queryTabVideos();
+        return;
+      }
       setEmpty();
     } else {
+      isAllowRetry = true;
       setSuccess();
     }
     refreshController.refreshCompleted(resetFooterState: true);

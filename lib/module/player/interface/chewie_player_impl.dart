@@ -11,10 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/extension/string_extension.dart';
+import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/interface/player_interface.dart';
 import 'package:free_tube_player/module/player/widget/user_player_control_panel.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
+import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:video_player/video_player.dart';
 
 class ChewiePlayerImpl implements PlayerInterface {
@@ -37,15 +39,14 @@ class ChewiePlayerImpl implements PlayerInterface {
   final StreamController<Duration> _positionController = StreamController.broadcast();
   late Stream watchPosition = _positionController.stream;
 
-  final StreamController<bool> _playerAvailableController = StreamController.broadcast();
-  late Stream watchPlayerAvailable = _playerAvailableController.stream;
+  // final StreamController<bool> _playerAvailableController = StreamController.broadcast();
+  // late Stream watchPlayerAvailable = _playerAvailableController.stream;
 
   @override
   Future<void> playNewSource(String url, {String? audioUrl}) async {
     await stop();
-    _playStatus = PlayStatus.loading;
     if (chewieController?.hasListeners ?? false) {
-      chewieController?.removeListener(_videoPlayerListener);
+      chewieController?.removeListener(_chewiListener);
     }
     late VideoPlayerController videoPlayerController;
     if (url.isHttp()) {
@@ -63,6 +64,7 @@ class ChewiePlayerImpl implements PlayerInterface {
         showControls: true,
         useRootNavigator: false,
         deviceOrientationsOnEnterFullScreen: [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
+        deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
         customControls: UserPlayerControlPanel(
             playerController: userPlayerController, onBackPressed: userPlayerController.onBackPressed),
         errorBuilder: (_, e) {
@@ -70,13 +72,17 @@ class ChewiePlayerImpl implements PlayerInterface {
           return Container(color: Colors.deepOrange);
         });
     chewieController?.videoPlayerController.addListener(_videoPlayerListener);
+    LogUtils.i('开始初始化播放器...');
     chewieController?.videoPlayerController.initialize().then((value) async {
       _playStateController.add(PlayStatus.initialized);
     }).onError((error, stackTrace) {
-      _playerAvailableController.add(false);
-      LogUtils.e('视频播放失败 ${error.toString()}');
+      // _playerAvailableController.add(false);
+      LogUtils.e('视频播放失败 ${error.toString()} url = $url');
+      ToastUtils.show(S.current.getPlaySourceFailed,isCorrect: false);
     });
-    _playerAvailableController.add(true);
+
+    _chewieController?.addListener(_chewiListener);
+    // _playerAvailableController.add(true);
   }
 
   @override
@@ -125,14 +131,22 @@ class ChewiePlayerImpl implements PlayerInterface {
     try {
       await pause();
       _duration = Duration.zero;
-      _chewieController?.removeListener(_videoPlayerListener);
+      _chewieController?.videoPlayerController.removeListener(_videoPlayerListener);
+      _chewieController?.removeListener(_chewiListener);
       _chewieController?.dispose();
-      _playerAvailableController.add(false);
       _chewieController = null;
     } catch (_) {}
   }
 
   ChewieController? get chewieController => _chewieController;
+
+  void _chewiListener(){
+    final isFullScreen = chewieController?.isFullScreen ?? false;
+    if (_isFullScreen != isFullScreen) {
+      _isFullScreen = isFullScreen;
+      _fullScreenController.add(isFullScreen);
+    }
+  }
 
   void _videoPlayerListener() {
     final isPlaying = chewieController?.isPlaying ?? false;
@@ -156,10 +170,6 @@ class ChewiePlayerImpl implements PlayerInterface {
     final position = chewieController?.videoPlayerController.value.position ?? Duration.zero;
     _positionController.add(position);
 
-    final isFullScreen = chewieController?.isFullScreen ?? false;
-    if (_isFullScreen != isFullScreen) {
-      _isFullScreen = isFullScreen;
-      _fullScreenController.add(isFullScreen);
-    }
+
   }
 }

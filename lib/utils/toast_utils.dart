@@ -6,13 +6,15 @@ class ToastUtils {
   static show(String text,
       {Alignment alignment = Alignment.center,
       bool isDefaultDismissType = false,
-      int milliseconds = 3000}) {
-    SmartDialog.showToast("",
-        maskColor: Colors.red,
-        animationType: SmartAnimationType.fade,
-        animationTime: const Duration(milliseconds: 500),
+      int milliseconds = 3000,
+      bool isCorrect = true}) {
+    SmartDialog.showToast("", animationType: SmartAnimationType.fade, animationTime: const Duration(milliseconds: 500),
         builder: (context) {
-      return ToastView(msg: text, alignment: alignment);
+      return ToastView(
+        msg: text,
+        alignment: alignment,
+        isCorrect: isCorrect,
+      );
     },
         displayTime: Duration(milliseconds: milliseconds),
         displayType: SmartToastType.onlyRefresh,

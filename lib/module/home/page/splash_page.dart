@@ -17,6 +17,7 @@ import 'package:free_tube_player/helper/network_change_helper.dart';
 import 'package:free_tube_player/module/home/page/home_page.dart';
 import 'package:free_tube_player/module/userHome/page/user_home_tab_page.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
+import 'package:free_tube_player/utils/playlist_create_utils.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';
@@ -56,7 +57,9 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   }
 
   Future<void> initOther() async {
-    DatabaseManager.get.setup().whenComplete(() {});
+    DatabaseManager.get.setup().whenComplete(() {
+      PlaylistCreateUtils.createPlaylist();
+    });
     AppUtils.queryNetworkInfo();
     BlindnessHelper.instance.requestClock();
     _networkChangeSubs = NetworkChangeHelper.get.watchNetworkChange.listen((event) {

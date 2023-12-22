@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
+import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:get/get.dart';
 
 import 'resource/color_res.dart';
@@ -37,7 +38,7 @@ class AppThemeController extends GetxController {
         disabledColor: disabledColor,
         splashColor: primaryColor.withOpacity(.1),
         bottomSheetTheme: BottomSheetThemeData(backgroundColor: bottomSheetBackground),
-        dividerColor: isLight ? Colors.black45 : Colors.white38,
+        dividerColor: isLight ? Colors.black45 : Colors.white30,
         colorScheme: ColorScheme(
             brightness: brightness,
             primary: primaryColor,
@@ -100,6 +101,7 @@ class AppThemeController extends GetxController {
       Get.changeThemeMode(ThemeMode.dark);
       SPUtils.setInt('theme_mode', ThemeMode.dark.index);
     }
+    XScreen.statusBarContentColor(isWhite: getThemeMode() == ThemeMode.light);
   }
 
   static ThemeMode getThemeMode() {

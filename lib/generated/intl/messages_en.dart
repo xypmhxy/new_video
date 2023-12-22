@@ -24,6 +24,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addToPlaylistFailed":
+            MessageLookupByLibrary.simpleMessage("Added failed"),
+        "addToPlaylistSuccess":
+            MessageLookupByLibrary.simpleMessage("Added successfully"),
+        "addWatchLaterSuccess":
+            MessageLookupByLibrary.simpleMessage("Added to watch later"),
         "all": MessageLookupByLibrary.simpleMessage("All"),
         "audio": MessageLookupByLibrary.simpleMessage("Audio"),
         "backPressedConfirm": MessageLookupByLibrary.simpleMessage(
@@ -54,11 +60,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "home": MessageLookupByLibrary.simpleMessage("Home"),
         "library": MessageLookupByLibrary.simpleMessage("Library"),
         "like": MessageLookupByLibrary.simpleMessage("Like"),
+        "likedVideos": MessageLookupByLibrary.simpleMessage("Liked Videos"),
         "live": MessageLookupByLibrary.simpleMessage("Live"),
         "loop": MessageLookupByLibrary.simpleMessage("Loop"),
         "mostLike": MessageLookupByLibrary.simpleMessage("Most like"),
         "mostReplies": MessageLookupByLibrary.simpleMessage("Most Replies"),
         "movie": MessageLookupByLibrary.simpleMessage("Movie"),
+        "newPlaylist": MessageLookupByLibrary.simpleMessage("New Playlist"),
         "newest": MessageLookupByLibrary.simpleMessage("Newest"),
         "noData": MessageLookupByLibrary.simpleMessage("No video found"),
         "noDataAndroid": MessageLookupByLibrary.simpleMessage("No video found"),
@@ -77,6 +85,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
         "removeDownloadConfirmText": MessageLookupByLibrary.simpleMessage(
             "Are you sure to remove the current download"),
+        "removePlaylistFailed":
+            MessageLookupByLibrary.simpleMessage("Removal failed"),
+        "removePlaylistSuccess":
+            MessageLookupByLibrary.simpleMessage("Removal successful"),
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "replies": MessageLookupByLibrary.simpleMessage("Replies"),
         "rewardNotLoad": MessageLookupByLibrary.simpleMessage(
@@ -95,6 +107,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "top": MessageLookupByLibrary.simpleMessage("Top"),
         "trim": MessageLookupByLibrary.simpleMessage("Trim"),
         "userAgreement": MessageLookupByLibrary.simpleMessage("User Agreement"),
-        "video": MessageLookupByLibrary.simpleMessage("Video")
+        "video": MessageLookupByLibrary.simpleMessage("Video"),
+        "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
+        "watchLater": MessageLookupByLibrary.simpleMessage("Watch later"),
+        "watchLaterCaps": MessageLookupByLibrary.simpleMessage("Watch Later")
       };
 }

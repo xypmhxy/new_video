@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
@@ -20,6 +21,7 @@ import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:get/get.dart';
+import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -51,6 +53,7 @@ class PlayerController extends GetxController {
   final brightness = Rxn<double>();
 
   final _mediaInfoHelper = MediaInfoHelper.get;
+  final _nativeDeviceOrientation = NativeDeviceOrientationCommunicator();
 
   ChewieController? chewieController;
   double? moveStartX;
@@ -60,6 +63,7 @@ class PlayerController extends GetxController {
   Timer? _timer;
   Timer? _controlPanelTimer;
   Completer<bool>? _adShowCompleter;
+  StreamSubscription? _orientationSubs;
 
   void _init() {
     playStatus.listen((playStatus) {
@@ -86,7 +90,7 @@ class PlayerController extends GetxController {
   Future<void> preparePlay() async {
     playStatus.value = PlayStatus.loading;
     if (chewieController?.hasListeners ?? false) {
-      chewieController?.removeListener(_videoPlayerListener);
+      chewieController?.videoPlayerController.removeListener(_videoPlayerListener);
     }
     VideoPlayerController videoPlayerController = VideoPlayerController.file(File(nowPlayMedia!.localPath!));
 
@@ -112,9 +116,10 @@ class PlayerController extends GetxController {
       if (_adShowCompleter?.isCompleted == false) {
         await _adShowCompleter?.future;
       }
+      setupStream();
       chewieController?.play();
     }).onError((error, stackTrace) {
-      ToastUtils.show('视频播放失败 ${error.toString()}');
+      ToastUtils.show('视频播放失败 ${error.toString()}', isCorrect: false);
     });
   }
 
@@ -220,7 +225,7 @@ class PlayerController extends GetxController {
     if (moveStartY == null || currentVolume == null || moveStartX == null) return;
     final distance = moveStartY! - dy;
     double rate = distance / screenHeight;
-    if (moveStartX! >= screenWidth / 2) {
+    if (moveStartX! >= screenHeight / 2) {
       double newValue = currentVolume! + rate;
       newValue = newValue >= 1.0 ? 1.0 : newValue;
       newValue = newValue < 0.0 ? 0 : newValue;
@@ -288,6 +293,25 @@ class PlayerController extends GetxController {
     }
   }
 
+  void setupStream() {
+    chewieController?.addListener(_chewiListener);
+    _orientationSubs = _nativeDeviceOrientation.onOrientationChanged(useSensor: true).listen((event) {
+      if (isFullScreen.value) {
+        if (event == NativeDeviceOrientation.landscapeLeft) {
+          SystemChrome.setPreferredOrientations([
+            // 强制横屏
+            DeviceOrientation.landscapeLeft,
+          ]);
+        } else if (event == NativeDeviceOrientation.landscapeRight) {
+          SystemChrome.setPreferredOrientations([
+            // 强制横屏
+            DeviceOrientation.landscapeRight,
+          ]);
+        }
+      }
+    });
+  }
+
   ///
   void _videoPlayerListener() {
     final isPlaying = chewieController?.isPlaying ?? false;
@@ -308,6 +332,13 @@ class PlayerController extends GetxController {
     // this.buffered.value = buffered;
   }
 
+  void _chewiListener() {
+    final isFullScreen = chewieController?.isFullScreen ?? false;
+    if (this.isFullScreen.value != isFullScreen) {
+      this.isFullScreen.value = isFullScreen;
+    }
+  }
+
   ///
   double get videoRatio => chewieController?.videoPlayerController.value.aspectRatio ?? 1.0;
 
@@ -319,6 +350,9 @@ class PlayerController extends GetxController {
 
   ///
   Future<void> release() async {
+    _orientationSubs?.cancel();
+    chewieController?.removeListener(_chewiListener);
+    chewieController?.videoPlayerController.removeListener(_videoPlayerListener);
     await chewieController?.pause();
     await chewieController?.videoPlayerController.dispose();
     chewieController?.dispose();
@@ -333,6 +367,7 @@ class PlayerController extends GetxController {
     _mediaInfo.value = null;
     position.value = Duration.zero;
     duration.value = Duration.zero;
+
   }
 
   void sendMediaInfoEvent() {

@@ -10,6 +10,7 @@ import 'package:free_tube_player/helper/media_info_helper.dart';
 import 'package:free_tube_player/module/home/callback/home_detail_page_callback.dart';
 import 'package:free_tube_player/module/home/view/home_detail_page_view.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
+import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 
 class HomeDetailPage extends StatefulWidget {
@@ -50,7 +51,11 @@ class _HomeDetailPageState extends State<HomeDetailPage> implements HomeDetailPa
 
   @override
   void onItemClick(MediaInfo mediaInfo) {
-    playMediaInfo(mediaInfo: mediaInfo);
+    if (mediaInfo.isLocalVideo){
+      playMediaInfo(mediaInfo: mediaInfo);
+    }else{
+      startUserPlayPage(mediaInfo: mediaInfo);
+    }
   }
 
   @override
