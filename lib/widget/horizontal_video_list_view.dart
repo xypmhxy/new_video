@@ -24,7 +24,7 @@ class HorizontalVideoListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 177,
+        height: 180,
         child: ListView.separated(
             padding: const EdgeInsets.only(left: 20),
             scrollDirection: Axis.horizontal,

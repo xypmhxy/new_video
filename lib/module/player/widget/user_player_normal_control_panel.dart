@@ -12,6 +12,7 @@ import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
+import 'package:free_tube_player/utils/share_utils.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
@@ -71,8 +72,24 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
         top: XScreen.getStatusBarH(context) + 12,
         right: 16,
         child: Row(
-          children: [_qualityDropDown(), const Width(20), _playSpeed()],
+          children: [_share(), _qualityDropDown(),  Width(playerController.isLive ? 0 : 20), _playSpeed()],
         ));
+  }
+
+  Widget _share() {
+    return GestureDetector(
+      onTap: () {
+        if (playerController.nowPlayingMedia == null) return;
+        ShareUtils.shareText('https://www.youtube.com/watch?v=${playerController.nowPlayingMedia?.youtubeId}');
+      },
+      child: Container(
+          margin: const EdgeInsets.only(right: 20),
+          child: const SVGView(
+            assetName: Assets.svgShare,
+            color: ColorRes.textPrimaryColor,
+            size: 22,
+          )),
+    );
   }
 
   Widget _playSpeed() {

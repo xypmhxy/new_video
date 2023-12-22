@@ -12,6 +12,7 @@ import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
+import 'package:free_tube_player/utils/share_utils.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/download_custom_view.dart';
 import 'package:free_tube_player/widget/player_seek_bar.dart';
@@ -81,8 +82,31 @@ class _UserPlayerFullControlPanelState extends State<UserPlayerFullControlPanel>
         top: 16,
         right: 48,
         child: Row(
-          children: [_qualityDropDown(), const Width(20), _speedDropDown(), const Width(20), _downloadView()],
+          children: [
+            _share(),
+            _qualityDropDown(),
+            Width(playerController.isLive ? 0 : 20),
+            _speedDropDown(),
+            const Width(20),
+            _downloadView()
+          ],
         ));
+  }
+
+  Widget _share() {
+    return GestureDetector(
+      onTap: () {
+        if (playerController.nowPlayingMedia == null) return;
+        ShareUtils.shareText('https://www.youtube.com/watch?v=${playerController.nowPlayingMedia?.youtubeId}');
+      },
+      child: Container(
+          margin: const EdgeInsets.only(right: 20),
+          child: const SVGView(
+            assetName: Assets.svgShare,
+            color: ColorRes.textPrimaryColor,
+            size: 22,
+          )),
+    );
   }
 
   Widget _speedDropDown() {
@@ -111,8 +135,7 @@ class _UserPlayerFullControlPanelState extends State<UserPlayerFullControlPanel>
           },
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(  color: ColorRes.textPrimaryColor, width: 2),
-                borderRadius: getBorderRadius(8)),
+                border: Border.all(color: ColorRes.textPrimaryColor, width: 2), borderRadius: getBorderRadius(8)),
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
             child: TextView.primary(
               '${playerController.playSpeed.value}x',
@@ -143,8 +166,7 @@ class _UserPlayerFullControlPanelState extends State<UserPlayerFullControlPanel>
           },
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: ColorRes.textPrimaryColor, width: 2),
-                borderRadius: getBorderRadius(8)),
+                border: Border.all(color: ColorRes.textPrimaryColor, width: 2), borderRadius: getBorderRadius(8)),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             child: TextView.primary(
               '${playerController.videoSource.value?.label}',
