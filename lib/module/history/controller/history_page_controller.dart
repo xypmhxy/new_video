@@ -18,6 +18,7 @@ class HistoryPageController extends BaseController {
   final _mediaInfoHelper = MediaInfoHelper.get;
 
   Future<void> queryAllHistory() async {
+    List<VideoGroup> tempList = [];
     setLoading();
     final histories = await _mediaInfoDao.queryAllPlayHistory();
     if (histories.isEmpty) {
@@ -41,13 +42,14 @@ class HistoryPageController extends BaseController {
       final value = entry.value;
       final dateTime = DateTime.fromMillisecondsSinceEpoch(key);
       final videoGroup = VideoGroup(dateTime.format(format: DateFormats.mo_d), value, key);
-      videoGroupList.add(videoGroup);
+      tempList.add(videoGroup);
     }
-    videoGroupList.sort((a, b) {
+    tempList.sort((a, b) {
       final aDate = a.date;
       final bDate = b.date;
       return bDate.compareTo(aDate);
     });
+    videoGroupList.value = tempList;
   }
 
   Future<void> rename(MediaInfo mediaInfo, String newName) async {

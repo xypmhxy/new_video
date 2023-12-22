@@ -42,6 +42,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "confirmDelete": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this video?"),
+        "confirmDeleteHistory": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to delete this video\'s history?"),
         "cover": MessageLookupByLibrary.simpleMessage("Cover"),
         "darkMode": MessageLookupByLibrary.simpleMessage("Dark Mode"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),

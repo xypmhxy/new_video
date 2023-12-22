@@ -75,7 +75,7 @@ class ImpMoreAction {
 
   void _showDeleteHistoryConfirmDialog(VideoGroup videoGroup, MediaInfo mediaInfo, {VoidCallback? onDelete}) {
     DialogUtils.showCenterDialog(DialogConfirm(
-      title: S.current.confirmDelete,
+      title: S.current.confirmDeleteHistory,
       onCancel: () {
         DialogUtils.dismiss();
       },

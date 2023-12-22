@@ -7,6 +7,7 @@ import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/video_group.dart';
 import 'package:free_tube_player/helper/imp_more_action.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
+import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/module/home/callback/home_detail_page_callback.dart';
 import 'package:free_tube_player/module/home/view/home_detail_page_view.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
@@ -22,10 +23,11 @@ class HomeDetailPage extends StatefulWidget {
   State<HomeDetailPage> createState() => _HomeDetailPageState();
 }
 
-class _HomeDetailPageState extends State<HomeDetailPage> implements HomeDetailPageCallback,OnMediaInfoChangedListener {
+class _HomeDetailPageState extends State<HomeDetailPage> implements HomeDetailPageCallback, OnMediaInfoChangedListener {
   static const tag = 'HomeDetailPage';
   final _impMoreAction = ImpMoreAction();
   final _mediaInfoHelper = MediaInfoHelper.get;
+  final _videoActionHelper = VideoActionHelper();
 
   @override
   void initState() {
@@ -51,25 +53,37 @@ class _HomeDetailPageState extends State<HomeDetailPage> implements HomeDetailPa
 
   @override
   void onItemClick(MediaInfo mediaInfo) {
-    if (mediaInfo.isLocalVideo){
+    if (mediaInfo.isLocalVideo) {
       playMediaInfo(mediaInfo: mediaInfo);
-    }else{
+    } else {
       startUserPlayPage(mediaInfo: mediaInfo);
     }
   }
 
   @override
   void onItemMoreClick(VideoGroup videoGroup, MediaInfo mediaInfo) {
-    _impMoreAction.showDialog(
-        isShowHistory: true,
-        videoGroup: videoGroup,
-        mediaInfo: mediaInfo,
-        onDelete: () {
-          delete(mediaInfo, videoGroup);
-        },
-        onRename: (newName) {
-          rename(mediaInfo, newName);
-        });
+    if (mediaInfo.isLocalVideo) {
+      _impMoreAction.showDialog(
+          isShowHistory: true,
+          videoGroup: videoGroup,
+          mediaInfo: mediaInfo,
+          onDelete: () {
+            delete(mediaInfo, videoGroup);
+          },
+          onRename: (newName) {
+            rename(mediaInfo, newName);
+          },
+          onHistoryDelete: () {
+            delete(mediaInfo, videoGroup);
+          });
+    } else {
+      _videoActionHelper.showActionDialog(
+          mediaInfo: mediaInfo,
+          isShowHistory: true,
+          onDeleteHistory: () {
+            delete(mediaInfo, videoGroup);
+          });
+    }
   }
 
   Future<void> rename(MediaInfo mediaInfo, String newName) async {
@@ -94,20 +108,15 @@ class _HomeDetailPageState extends State<HomeDetailPage> implements HomeDetailPa
     mediaInfoIndex = videoGroup.mediaInfoList.indexWhere((media) => media.isSame(mediaInfo));
 
     if (mediaInfoIndex == -1) {
-      setState(() {
-      });
+      setState(() {});
       return;
     }
     if (dbType == DBChangeType.delete) {
       videoGroup.mediaInfoList.removeAt(mediaInfoIndex);
-      setState(() {
-
-      });
+      setState(() {});
     } else if (dbType == DBChangeType.update) {
       videoGroup.mediaInfoList[mediaInfoIndex] = mediaInfo;
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 }

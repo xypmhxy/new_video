@@ -61,15 +61,12 @@ class HorizontalVideoListView extends StatelessWidget {
       borderRadius: getBorderRadius(12),
       child: Stack(
         children: [
-          Hero(
-            tag: mediaInfo.identify,
-            child: AutoImageView(
-              width: 144,
-              height: 108,
-              imageUrl: mediaInfo.thumbnail,
-              imageData: mediaInfo.localUint8List,
-              fit: BoxFit.cover,
-            ),
+          AutoImageView(
+            width: 144,
+            height: 108,
+            imageUrl: mediaInfo.thumbnail,
+            imageData: mediaInfo.localUint8List,
+            fit: BoxFit.cover,
           ),
           Positioned(
               bottom: 4,

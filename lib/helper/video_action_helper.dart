@@ -13,6 +13,7 @@ import 'package:free_tube_player/db/dao/playlist_dao.dart';
 import 'package:free_tube_player/dialog/dialog_confirm.dart';
 import 'package:free_tube_player/dialog/dialog_download.dart';
 import 'package:free_tube_player/dialog/dialog_user_more_action.dart';
+import 'package:free_tube_player/helper/media_info_helper.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
 import 'package:free_tube_player/utils/share_utils.dart';
 import 'package:free_tube_player/utils/toast_utils.dart';
@@ -27,12 +28,13 @@ class VideoActionHelper {
   void showActionDialog(
       {required MediaInfo mediaInfo,
       VoidCallback? onDelete,
-      VoidCallback? onHistoryDelete,
+      VoidCallback? onDeleteHistory,
       ValueChanged<String>? onRename,
       VoidCallback? onClickVideoEditor,
       bool isShowHistory = false}) {
     DialogUtils.showBottomSheet(DialogUserMoreAction(
       mediaInfo: mediaInfo,
+      isShowHistory: isShowHistory,
       onClickLike: () async {
         await _onClickLike(mediaInfo);
       },
@@ -46,7 +48,10 @@ class VideoActionHelper {
       onClickWatchLater: () {
         onClickWatchLater(mediaInfo);
       },
-    ));
+      onClickDeleteHistory: () {
+        onClickDeleteHistory(mediaInfo, onDelete: onDeleteHistory);
+      },
+    ),tag: 'user_action_dialog');
   }
 
   void _showDownloadDialog(MediaInfo mediaInfo, {VoidCallback? onDelete}) {
@@ -94,6 +99,21 @@ class VideoActionHelper {
     } else {
       ToastUtils.show(S.current.addWatchLaterSuccess);
     }
+  }
+
+  Future<void> onClickDeleteHistory(MediaInfo mediaInfo, {VoidCallback? onDelete}) async {
+    DialogUtils.showCenterDialog(DialogConfirm(
+      title: S.current.confirmDeleteHistory,
+      onCancel: () {
+        DialogUtils.dismiss();
+      },
+      onConfirm: () async {
+        await MediaInfoHelper.get.clearPlayPosition(mediaInfo);
+        DialogUtils.dismiss();
+        DialogUtils.dismiss(tag: 'user_action_dialog');
+        onDelete?.call();
+      },
+    ));
   }
 
   Future<int> addToPlaylist(Playlist playlist, MediaInfo mediaInfo) async {

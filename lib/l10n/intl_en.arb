@@ -11,6 +11,7 @@
   "cancel": "Cancel",
   "confirm": "Confirm",
   "confirmDelete": "Are you sure you want to delete this video?",
+  "confirmDeleteHistory": "Are you sure you want to delete this video's history?",
   "paramsVideos": "{params} videos",
   "trim": "Trim",
   "cover": "Cover",

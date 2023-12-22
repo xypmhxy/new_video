@@ -18,6 +18,7 @@ class Assets {
   static const String imagesWarning = 'images/warning.png';
   static const String svgAddToList = 'assets/svg/add_to_list.svg';
   static const String svgComment = 'assets/svg/comment.svg';
+  static const String svgUserDelete = 'assets/svg/user_delete.svg';
   static const String svgDelete = 'assets/svg/delete.svg';
   static const String svgDeleteHistory = 'assets/svg/delete_history.svg';
   static const String svgDislike = 'assets/svg/dislike.svg';

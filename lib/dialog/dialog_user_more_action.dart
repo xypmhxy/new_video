@@ -18,14 +18,19 @@ class DialogUserMoreAction extends StatefulWidget {
   final VoidCallback? onClickDownload;
   final AsyncCallback? onClickLike;
   final VoidCallback? onClickWatchLater;
+  final VoidCallback? onClickDeleteHistory;
+  final bool isShowHistory;
 
-  const DialogUserMoreAction(
-      {super.key,
-      required this.mediaInfo,
-      this.onClickShare,
-      this.onClickDownload,
-      this.onClickLike,
-      this.onClickWatchLater});
+  const DialogUserMoreAction({
+    super.key,
+    required this.mediaInfo,
+    this.onClickShare,
+    this.onClickDownload,
+    this.onClickLike,
+    this.onClickWatchLater,
+    this.onClickDeleteHistory,
+    this.isShowHistory = false,
+  });
 
   @override
   State<DialogUserMoreAction> createState() => _DialogUserMoreActionState();
@@ -49,11 +54,11 @@ class _DialogUserMoreActionState extends State<DialogUserMoreAction> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(minHeight: 120, maxHeight: 180),
       decoration: allRadiusDecoration(16, color: AppThemeController.backgroundColor(context)),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        children: [const Height(16), _info(), _content(context)],
+        mainAxisSize: MainAxisSize.min,
+        children: [const Height(16), _info(), _content(context), const Height(20)],
       ),
     );
   }
@@ -95,8 +100,8 @@ class _DialogUserMoreActionState extends State<DialogUserMoreAction> {
   }
 
   Widget _content(BuildContext context) {
-    return Expanded(
-        child: GridView(
+    return GridView(
+      shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
@@ -114,11 +119,13 @@ class _DialogUserMoreActionState extends State<DialogUserMoreAction> {
         _item(context, svg: Assets.svgDownload, title: S.current.download, onPressed: widget.onClickDownload),
         // _item(context, svg: Assets.svgAddToList, title: S.current.playlist, onPressed: onClickAddList),
         _item(context, svg: Assets.svgShare, title: S.current.share, onPressed: widget.onClickShare, size: 29),
-
         _item(context,
             svg: Assets.svgWatchLater, title: S.current.watchLater, onPressed: widget.onClickWatchLater, size: 27),
+        if (widget.isShowHistory)
+          _item(context,
+              svg: Assets.svgUserDelete, title: S.current.clearHistory, onPressed: widget.onClickDeleteHistory, size: 27),
       ],
-    ));
+    );
   }
 
   Widget _item(

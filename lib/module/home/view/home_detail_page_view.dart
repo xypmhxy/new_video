@@ -34,7 +34,7 @@ class HomeDetailPageView extends BasePageView<HomeDetailPageCallback> {
 
   Widget _bodyListView() {
     return ListView.separated(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         itemBuilder: (_, index) {
           final mediaInfo = videoGroup.mediaInfoList[index];
           String resolution = '${mediaInfo.width} x ${mediaInfo.height}';
@@ -72,21 +72,6 @@ class HomeDetailPageView extends BasePageView<HomeDetailPageCallback> {
                                 color: Colors.white,
                                 fontSize: 11,
                               )),
-                          Positioned(
-                              top: 0,
-                              right: 0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  pageCallback.onItemMoreClick.call(videoGroup, mediaInfo);
-                                },
-                                child: const Padding(
-                                    padding: EdgeInsets.all(6),
-                                    child: Icon(
-                                      Icons.more_vert_rounded,
-                                      color: Colors.white,
-                                      size: 16,
-                                    )),
-                              )),
                           if (mediaInfo.historyProgress != null && mediaInfo.historyProgress! > 0)
                             Positioned(
                                 bottom: 0,
@@ -109,13 +94,31 @@ class HomeDetailPageView extends BasePageView<HomeDetailPageCallback> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextView.primary(
-                              mediaInfo.title,
-                              fontSize: 14,
-                              maxLines: 2,
-                              fontWeight: FontWeight.w500,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                    child: TextView.primary(
+                                  mediaInfo.title,
+                                  fontSize: 14,
+                                  maxLines: 2,
+                                  fontWeight: FontWeight.w500,
+                                )),
+                                GestureDetector(
+                                  onTap: () {
+                                    pageCallback.onItemMoreClick.call(videoGroup, mediaInfo);
+                                  },
+                                  child: Container(
+                                      color: Colors.transparent,
+                                      padding: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 8),
+                                      child: const Icon(
+                                        Icons.more_vert_rounded,
+                                        color: Colors.white,
+                                        size: 16,
+                                      )),
+                                )
+                              ],
                             ),
-                            const Height(4),
                             TextView.primary(
                               resolution,
                               fontSize: 12,

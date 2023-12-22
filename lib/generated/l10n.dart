@@ -170,6 +170,16 @@ class S {
     );
   }
 
+  /// `Are you sure you want to delete this video's history?`
+  String get confirmDeleteHistory {
+    return Intl.message(
+      'Are you sure you want to delete this video\'s history?',
+      name: 'confirmDeleteHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{params} videos`
   String paramsVideos(Object params) {
     return Intl.message(

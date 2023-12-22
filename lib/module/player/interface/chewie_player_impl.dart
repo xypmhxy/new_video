@@ -78,7 +78,12 @@ class ChewiePlayerImpl implements PlayerInterface {
     }).onError((error, stackTrace) {
       // _playerAvailableController.add(false);
       LogUtils.e('视频播放失败 ${error.toString()} url = $url');
-      ToastUtils.show(S.current.getPlaySourceFailed,isCorrect: false);
+      final debugInfo = error.toString();
+      if (isDebug) {
+        ToastUtils.show('播放失败 $debugInfo', isCorrect: false);
+      } else {
+        ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
+      }
     });
 
     _chewieController?.addListener(_chewiListener);
@@ -140,7 +145,7 @@ class ChewiePlayerImpl implements PlayerInterface {
 
   ChewieController? get chewieController => _chewieController;
 
-  void _chewiListener(){
+  void _chewiListener() {
     final isFullScreen = chewieController?.isFullScreen ?? false;
     if (_isFullScreen != isFullScreen) {
       _isFullScreen = isFullScreen;
@@ -169,7 +174,5 @@ class ChewiePlayerImpl implements PlayerInterface {
 
     final position = chewieController?.videoPlayerController.value.position ?? Duration.zero;
     _positionController.add(position);
-
-
   }
 }

@@ -79,7 +79,7 @@ class VideoGroupListView extends StatelessWidget {
 
   Widget _childListView(List<MediaInfo> mediaInfoList, VideoGroup videoGroup) {
     return SizedBox(
-      height: 110,
+      height: 130,
       child: ListView.separated(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           scrollDirection: Axis.horizontal,
@@ -117,22 +117,6 @@ class VideoGroupListView extends StatelessWidget {
                                       color: Colors.white,
                                       fontSize: 11,
                                     )),
-                                Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        onItemMoreClick?.call(mediaInfo, videoGroup);
-                                      },
-                                      child: Container(
-                                          color: Colors.transparent,
-                                          padding: const EdgeInsets.all(8),
-                                          child: const Icon(
-                                            Icons.more_vert_rounded,
-                                            color: Colors.white,
-                                            size: 16,
-                                          )),
-                                    )),
                                 if (mediaInfo.historyProgress != null && mediaInfo.historyProgress! > 0)
                                   Positioned(
                                       bottom: 0,
@@ -150,14 +134,37 @@ class VideoGroupListView extends StatelessWidget {
                             )),
                       ),
                       const Height(4),
-                      ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 144),
-                          child: TextView.primary(
-                            mediaInfo.title,
-                            fontSize: 13,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ))
+                      SizedBox(
+                        width: 144,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                                child: TextView.primary(
+                              mediaInfo.title,
+                              fontSize: 13,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                            GestureDetector(
+                              onTap: () {
+                                onItemMoreClick?.call(mediaInfo, videoGroup);
+                              },
+                              child: Container(
+                                  color: Colors.transparent,
+                                  padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 3),
+                                  child: const Icon(
+                                    Icons.more_vert_rounded,
+                                    color: Colors.white,
+                                    size: 16,
+                                  )),
+                            )
+                          ],
+                        ),
+                      )
+                      // ConstrainedBox(
+                      //     constraints: const BoxConstraints(maxWidth: 144),
+                      //     child:)
                     ],
                   );
                 });

@@ -6,7 +6,9 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/video_group.dart';
+import 'package:free_tube_player/dialog/dialog_user_more_action.dart';
 import 'package:free_tube_player/helper/imp_more_action.dart';
+import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/module/history/callback/history_page_callback.dart';
 import 'package:free_tube_player/module/history/controller/history_page_controller.dart';
 import 'package:free_tube_player/module/history/view/history_page_view.dart';
@@ -25,11 +27,14 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> implements HistoryPageCallback {
   final _historyPageController = HistoryPageController();
   final _impMoreAction = ImpMoreAction();
+  final _videoActionHelper = VideoActionHelper();
 
   @override
-  void initState() {
-    _historyPageController.queryAllHistory();
-    super.initState();
+  void didChangeDependencies() {
+    if (TickerMode.of(context)) {
+      _historyPageController.queryAllHistory();
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -49,31 +54,39 @@ class _HistoryPageState extends State<HistoryPage> implements HistoryPageCallbac
 
   @override
   void onItemClick(MediaInfo mediaInfo) {
-    if (mediaInfo.isLocalVideo){
+    if (mediaInfo.isLocalVideo) {
       playMediaInfo(mediaInfo: mediaInfo);
-    }else{
+    } else {
       startUserPlayPage(mediaInfo: mediaInfo);
     }
   }
 
   @override
   void onItemMoreClick(MediaInfo mediaInfo, VideoGroup videoGroup) {
-    _impMoreAction.showDialog(
-        isShowHistory: true,
-        videoGroup: videoGroup,
-        mediaInfo: mediaInfo,
-        onDelete: () {
-          _historyPageController.delete(mediaInfo, videoGroup);
-        },
-        onRename: (newName) {
-          _historyPageController.rename(mediaInfo, newName);
-        },
-        onHistoryDelete: () {
-          _historyPageController.deleteHistory(mediaInfo, videoGroup);
-        });
+    if (mediaInfo.isLocalVideo) {
+      _impMoreAction.showDialog(
+          isShowHistory: true,
+          videoGroup: videoGroup,
+          mediaInfo: mediaInfo,
+          onDelete: () {
+            _historyPageController.delete(mediaInfo, videoGroup);
+          },
+          onRename: (newName) {
+            _historyPageController.rename(mediaInfo, newName);
+          },
+          onHistoryDelete: () {
+            _historyPageController.deleteHistory(mediaInfo, videoGroup);
+          });
+    } else {
+      _videoActionHelper.showActionDialog(
+          mediaInfo: mediaInfo,
+          isShowHistory: true,
+          onDeleteHistory: () {
+            _historyPageController.deleteHistory(mediaInfo, videoGroup);
+          });
+    }
   }
 
   @override
-  void onClickToAuthorize() {
-  }
+  void onClickToAuthorize() {}
 }
