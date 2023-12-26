@@ -9,6 +9,7 @@ import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/playlist.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
 import 'package:free_tube_player/db/dao/playlist_dao.dart';
+import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:get/get.dart';
 
 import 'user_home_tab_page_controller.dart';
@@ -20,6 +21,7 @@ class UserLibraryPageController {
   final likedVideos = <MediaInfo>[].obs;
   final watchLaterVideos = <MediaInfo>[].obs;
   final historyViewStatus = ViewStatus.none.obs;
+  final _videoActionHelper = VideoActionHelper();
   UserHomeTabPageController? _homeTabPageController;
 
   void setup() {
@@ -61,5 +63,15 @@ class UserLibraryPageController {
       watchLaterVideos.clear();
       watchLaterVideos.addAll(watchLaterList.mediaInfoList);
     }
+  }
+
+  Future<void> showMoreDialog(MediaInfo mediaInfo) async {
+    _videoActionHelper.showActionDialog(
+        mediaInfo: mediaInfo,
+        isShowHistory: true,
+        onDeleteHistory: () {
+          historyVideos.removeWhere((element) => element.identify == mediaInfo.identify);
+          historyViewStatus.refresh();
+        });
   }
 }

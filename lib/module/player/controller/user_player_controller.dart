@@ -18,7 +18,7 @@ import 'package:free_tube_player/utils/file_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
-import 'package:free_tube_player/utils/video_utils.dart';
+import 'package:free_tube_player/utils/video_data_helper.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:get/get.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';

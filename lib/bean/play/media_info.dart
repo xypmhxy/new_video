@@ -221,6 +221,7 @@ class MediaInfo {
   bool get isLocalVideo => localPath != null && youtubeId == null;
 
   bool isUrlAvailable() {
+    if (recentGetUrlTime <= 0) return false;
     final nowDate = DateTime.now().millisecondsSinceEpoch;
     final intervalTime = nowDate - recentGetUrlTime;
     return intervalTime <= DateUtil.MIN * 90;

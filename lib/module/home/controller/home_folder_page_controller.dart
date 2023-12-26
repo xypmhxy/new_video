@@ -7,7 +7,7 @@ import 'package:free_tube_player/bean/play/video_group.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
 import 'package:free_tube_player/module/home/controller/base_video_controller.dart';
 import 'package:free_tube_player/utils/media_info_utils.dart';
-import 'package:free_tube_player/utils/video_utils.dart';
+import 'package:free_tube_player/utils/video_data_helper.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 
 class HomeFolderPageController extends BaseVideoController {

@@ -8,7 +8,7 @@ import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/download/view/audio_child_tab.dart';
 import 'package:free_tube_player/module/download/view/video_child_tab.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
-import 'package:free_tube_player/utils/video_utils.dart';
+import 'package:free_tube_player/utils/video_data_helper.dart';
 import 'package:free_tube_player/widget/border_radius_indicator.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';

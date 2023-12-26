@@ -18,8 +18,14 @@ import 'text_view.dart';
 class HorizontalVideoListView extends StatelessWidget {
   final List<MediaInfo> mediaList;
   final ValueChanged<MediaInfo>? onItemClick;
+  final ValueChanged<MediaInfo>? onItemMoreClick;
 
-  const HorizontalVideoListView({super.key, required this.mediaList, this.onItemClick});
+  const HorizontalVideoListView({
+    super.key,
+    required this.mediaList,
+    this.onItemClick,
+    this.onItemMoreClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,17 +85,6 @@ class HorizontalVideoListView extends StatelessWidget {
                     color: Colors.white, fontSize: 12, fontWeight: FontWeight.normal),
               )),
           if (mediaInfo.isLive == false)
-            // Positioned(
-            //     top: 10,
-            //     right: 10,
-            //     child: SizedBox(
-            //         width: 10,
-            //         height: 10,
-            //         child: CircularProgressIndicator(
-            //           strokeWidth: 10,
-            //           backgroundColor: Colors.black38,
-            //           value: mediaInfo.historyProgress!,
-            //         )))
             Positioned(
                 bottom: 0,
                 right: 0,
@@ -119,7 +114,9 @@ class HorizontalVideoListView extends StatelessWidget {
           fontWeight: FontWeight.w600,
         )),
         ImageButton(
-          onPressed: () {},
+          onPressed: () {
+            onItemMoreClick?.call(mediaInfo);
+          },
           splashRadius: 20,
           child: const Icon(
             Icons.more_vert_rounded,

@@ -169,6 +169,9 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
                 startUserPlayPage(mediaInfo: mediaInfo);
               }
             },
+            onItemMoreClick: (mediaInfo) {
+              _userLibraryController.showMoreDialog(mediaInfo);
+            },
           )
         ],
       );
