@@ -91,7 +91,7 @@ class VideoDataHelper {
         LogUtils.e('获取播放链接错误 ${e.toString()} 是否重试 $isNeedRetry');
         dispose();
         if (isNeedRetry) {
-          requestVideoSource(mediaInfo, isNeedRetry: false);
+          await requestVideoSource(mediaInfo, isNeedRetry: false);
         }
         return null;
       }

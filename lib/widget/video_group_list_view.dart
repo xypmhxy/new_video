@@ -101,14 +101,12 @@ class VideoGroupListView extends StatelessWidget {
                             borderRadius: getBorderRadius(4),
                             child: Stack(
                               children: [
-                                Hero(
-                                    tag: mediaInfo.identify,
-                                    child: AutoImageView(
-                                      width: 144,
-                                      height: 86,
-                                      imageUrl: mediaInfo.thumbnail ?? '',
-                                      imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
-                                    )),
+                                AutoImageView(
+                                  width: 144,
+                                  height: 86,
+                                  imageUrl: mediaInfo.thumbnail ?? '',
+                                  imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
+                                ),
                                 Positioned(
                                     bottom: 6,
                                     left: 4,

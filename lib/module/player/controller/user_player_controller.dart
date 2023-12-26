@@ -11,6 +11,7 @@ import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
+import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
 import 'package:free_tube_player/module/player/interface/chewie_player_impl.dart';
 import 'package:free_tube_player/module/player/page/user_player_page.dart';
@@ -18,6 +19,7 @@ import 'package:free_tube_player/utils/file_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
+import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:free_tube_player/utils/video_data_helper.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:get/get.dart';
@@ -57,6 +59,7 @@ class UserPlayerController {
   final isLoop = false.obs;
   final isBackgroundPlayback = false.obs;
   final brightness = Rxn<double>();
+  final fetchPlayInfoProgress = 0.0.obs;
 
   double? dragStartX;
   double? dragStartY;
@@ -77,6 +80,7 @@ class UserPlayerController {
 
   Future<void> playNewSource(MediaInfo mediaInfo, {VideoSource? videoSource}) async {
     LogUtils.i('准备播放...');
+    fetchPlayInfoProgress.value = 0.0;
     _mediaDao.insert(mediaInfo);
     _nowPlayingMedia.value = mediaInfo;
     playStatus.value = PlayStatus.loading;
@@ -89,12 +93,19 @@ class UserPlayerController {
     String? audioUrl;
     if (videoSource == null) {
       final media = await VideoDataHelper.get.requestVideoSource(mediaInfo, isNeedRetry: true);
-      LogUtils.i('链接获取成功...');
-      if (media != null) mediaInfo = media;
+      LogUtils.i('链接获取完成 ${media?.videoSources?.length}');
+      if (media == null){
+        playStatus.value = PlayStatus.none;
+        fetchPlayInfoProgress.value = 0.0;
+        ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
+        return;
+      }
       const targetResolution = defaultResolution;
       videoSource = VideoDataHelper.get.getTargetVideoUrl(targetResolution, mediaInfo);
       if (videoSource == null) {
         playStatus.value = PlayStatus.none;
+        fetchPlayInfoProgress.value = 0.0;
+        ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
         return;
       }
       videoUrl = videoSource.url;
@@ -117,6 +128,7 @@ class UserPlayerController {
     }
     this.videoSource.value = videoSource;
     saveHistoryPosition();
+    fetchPlayInfoProgress.value = 0.5;
     await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
     setupStreams();
   }
@@ -169,6 +181,7 @@ class UserPlayerController {
     isBackgroundPlayback.value = false;
     playStatus.value = PlayStatus.none;
     isFullScreen.value = false;
+    fetchPlayInfoProgress.value = 0.0;
   }
 
   Future<void> togglePanel() async {

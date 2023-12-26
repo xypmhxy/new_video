@@ -6,6 +6,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/extension/comment_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
@@ -32,7 +33,7 @@ class UserPlayerPage extends StatefulWidget {
   State<UserPlayerPage> createState() => _UserPlayerPageState();
 }
 
-class _UserPlayerPageState extends State<UserPlayerPage> {
+class _UserPlayerPageState extends State<UserPlayerPage> with SingleTickerProviderStateMixin {
   final _userPlayerPageController = UserPlayerPageController();
   final _commentController = CommentController();
 
@@ -43,6 +44,7 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
         .then((value) => _commentController.requestComment(_userPlayerPageController.video.value));
     _userPlayerPageController.requestAuthorInfo(userPlayerController.nowPlayingMedia?.authorId ?? '');
     _userPlayerPageController.setupSomething();
+    _userPlayerPageController.setupLoadProgress(this);
     super.initState();
   }
 
@@ -119,18 +121,57 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
           return Stack(
             children: [
               Center(
-                child: Hero(
-                    tag: userPlayerController.nowPlayingMedia?.identify ?? '?',
-                    child: AutoImageView(
-                      imageUrl: userPlayerController.nowPlayingMedia?.thumbnail,
-                      fit: BoxFit.cover,
-                      width: screenWidth,
-                      height: screenWidth / ratio,
-                    )),
+                child: AutoImageView(
+                  imageUrl: userPlayerController.nowPlayingMedia?.thumbnail,
+                  fit: BoxFit.cover,
+                  width: screenWidth,
+                  height: screenWidth / ratio,
+                ),
               ),
-              const Center(
-                child: LoadingView(size: 36),
-              )
+              Container(color: Colors.black26),
+              Center(
+                child: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Stack(
+                    children: [
+                      const Center(
+                        child: LoadingView(size: 30),
+                      ),
+                      Positioned.fill(
+                        child: AnimatedBuilder(
+                            animation: _userPlayerPageController.animationController,
+                            builder: (_, __) {
+                              return CircularProgressIndicator(
+                                strokeCap: StrokeCap.round,
+                                backgroundColor: Colors.black38,
+                                value: _userPlayerPageController.animationController.value,
+                              );
+                            }),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              // Center(
+              //   child: Column(
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: [
+              //       const LoadingView(size: 36),
+              //       SizedBox(
+              //         width: 36,
+              //         child: Obx(
+              //           () => LinearProgressIndicator(
+              //             minHeight: 3,
+              //             borderRadius: getBorderRadius(2),
+              //             backgroundColor: Colors.white54,
+              //             value: userPlayerController.fetchPlayInfoProgress.value,
+              //           ),
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // )
             ],
           );
         }

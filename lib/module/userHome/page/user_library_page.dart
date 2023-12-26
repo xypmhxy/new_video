@@ -12,6 +12,7 @@ import 'package:free_tube_player/module/history/page/history_page.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/module/userHome/controller/user_library_page_controller.dart';
+import 'package:free_tube_player/module/userHome/page/video_list_page.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/horizontal_video_list_view.dart';
@@ -191,15 +192,28 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
         shrinkWrap: true,
         itemBuilder: (_, index) {
           if (index == 0) {
-            return Obx(() => _item(
-                icon: Assets.imagesLibWatchLater,
-                title: S.current.watchLaterCaps,
-                subTitle: S.current.paramsVideos(_userLibraryController.watchLaterVideos.length)));
+            return Obx(() => GestureDetector(
+                onTap: () {
+                  PageNavigation.startNewPage(
+                    VideoListPage(title: S.current.watchLaterCaps, videos: _userLibraryController.watchLaterVideos),
+                  );
+                },
+                child: _item(
+                    icon: Assets.imagesLibWatchLater,
+                    title: S.current.watchLaterCaps,
+                    subTitle: S.current.paramsVideos(_userLibraryController.watchLaterVideos.length))));
           } else if (index == 1) {
-            return Obx(() => _item(
-                icon: Assets.imagesLibLike,
-                title: S.current.likedVideos,
-                subTitle: S.current.paramsVideos(_userLibraryController.likedVideos.length)));
+            return Obx(() => GestureDetector(
+                  onTap: () {
+                    PageNavigation.startNewPage(
+                      VideoListPage(title: S.current.likedVideos, videos: _userLibraryController.likedVideos),
+                    );
+                  },
+                  child: _item(
+                      icon: Assets.imagesLibLike,
+                      title: S.current.likedVideos,
+                      subTitle: S.current.paramsVideos(_userLibraryController.likedVideos.length)),
+                ));
           }
           return _item(icon: Assets.imagesLibLike, title: S.current.likedVideos);
         },

@@ -29,6 +29,8 @@ class UserPlayerPageController extends BaseController {
   PanelController panelController = PanelController();
   StreamSubscription? nowPlayStreamSubscription;
   double brightness = 0.3;
+  late AnimationController animationController;
+  StreamSubscription? _fetchPlayInfoSubs;
 
   UserPlayerPageController();
 
@@ -36,6 +38,8 @@ class UserPlayerPageController extends BaseController {
   dispose() {
     _youtubeExplode.close();
     nowPlayStreamSubscription?.cancel();
+    _fetchPlayInfoSubs?.cancel();
+    animationController.dispose();
     ScreenBrightness().setScreenBrightness(brightness);
     super.dispose();
   }
@@ -44,12 +48,21 @@ class UserPlayerPageController extends BaseController {
     brightness = await ScreenBrightness().current;
   }
 
+  void setupLoadProgress(TickerProvider tickerProvider) {
+    animationController = AnimationController(vsync: tickerProvider, duration: const Duration(seconds: 20), value: 0);
+    animationController.forward();
+    _fetchPlayInfoSubs = userPlayerController.fetchPlayInfoProgress.listen((progress) {
+      if (progress <= animationController.value) return;
+      animationController.animateTo(progress, duration: const Duration(milliseconds: 500));
+    });
+  }
+
   Future<void> queryLikeStatus() async {
     isLike.value = await VideoActionHelper.queryLikeStatus(userPlayerController.nowPlayingMedia);
   }
 
   Future<void> requestWatchPageInfo(MediaInfo mediaInfo) async {
-    try{
+    try {
       queryLikeStatus();
       final video = await _youtubeExplode.videos.get(mediaInfo.youtubeId);
       this.video.value = video;
@@ -59,7 +72,7 @@ class UserPlayerPageController extends BaseController {
         mediaInfo.dislikeCount = watchPage?.videoDislikeCount;
         userPlayerController.refreshMediaInfo();
       }
-    }catch(_){}
+    } catch (_) {}
   }
 
   Future<void> requestAuthorInfo(String channelId) async {

@@ -52,16 +52,13 @@ class HomeDetailPageView extends BasePageView<HomeDetailPageCallback> {
                     children: [
                       Stack(
                         children: [
-                          Hero(
-                            tag: mediaInfo.identify,
-                            child: ClipRRect(
-                              borderRadius: getBorderRadius(4),
-                              child: AutoImageView(
-                                width: 144,
-                                height: 86,
-                                imageUrl: mediaInfo.thumbnail,
-                                imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
-                              ),
+                          ClipRRect(
+                            borderRadius: getBorderRadius(4),
+                            child: AutoImageView(
+                              width: 144,
+                              height: 86,
+                              imageUrl: mediaInfo.thumbnail,
+                              imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
                             ),
                           ),
                           Positioned(

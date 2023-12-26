@@ -35,15 +35,12 @@ class SearchItem extends StatelessWidget {
   Widget _thumbImage() {
     return Stack(
       children: [
-        Hero(
-          tag: mediaInfo.identify,
-          child: ClipRRect(
-            borderRadius: getBorderRadius(8),
-            child: ImageView.network(
-              imageUrl: mediaInfo.thumbnail ?? '',
-              height: screenWidth * 0.5 * .67,
-              width: screenWidth * .5,
-            ),
+        ClipRRect(
+          borderRadius: getBorderRadius(8),
+          child: ImageView.network(
+            imageUrl: mediaInfo.thumbnail ?? '',
+            height: screenWidth * 0.5 * .67,
+            width: screenWidth * .5,
           ),
         ),
         Positioned(
