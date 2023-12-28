@@ -14,6 +14,7 @@ import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/no_data_view.dart';
+import 'package:free_tube_player/widget/play_bottom_bar.dart';
 import 'package:free_tube_player/widget/refresh_header.dart';
 import 'package:free_tube_player/widget/search_item.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
@@ -47,6 +48,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: Column(
         children: [
@@ -54,8 +56,16 @@ class _SearchPageState extends State<SearchPage> {
           _searchBar(),
           const Height(16),
           _content(),
+          _playBottomBar()
         ],
       )),
+    );
+  }
+
+  Widget _playBottomBar() {
+    return const Align(
+      alignment: Alignment.bottomCenter,
+      child: PlayBottomBar(),
     );
   }
 
