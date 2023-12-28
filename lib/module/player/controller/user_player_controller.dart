@@ -15,6 +15,7 @@ import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
 import 'package:free_tube_player/module/player/interface/chewie_player_impl.dart';
 import 'package:free_tube_player/module/player/page/user_player_page.dart';
+import 'package:free_tube_player/utils/date_utils.dart';
 import 'package:free_tube_player/utils/file_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
@@ -79,7 +80,9 @@ class UserPlayerController {
   final _mediaInfoHelper = MediaInfoHelper.get;
 
   Future<void> playNewSource(MediaInfo mediaInfo, {VideoSource? videoSource}) async {
-    LogUtils.i('准备播放...');
+    LogUtils.i('播放--开始播放');
+    final startPrePlayDate = DateUtil.getNowDateMs();
+    int getUrlDate = startPrePlayDate;
     fetchPlayInfoProgress.value = 0.0;
     _mediaDao.insert(mediaInfo);
     _nowPlayingMedia.value = mediaInfo;
@@ -93,8 +96,9 @@ class UserPlayerController {
     String? audioUrl;
     if (videoSource == null) {
       final media = await VideoDataHelper.get.requestVideoSource(mediaInfo, isNeedRetry: true);
-      LogUtils.i('链接获取完成 ${media?.videoSources?.length}');
-      if (media == null){
+      getUrlDate = DateUtil.getNowDateMs();
+      LogUtils.i('播放--播放链接获取完成总耗时 ${getUrlDate - startPrePlayDate} 是否成功 ${media != null}');
+      if (media == null) {
         playStatus.value = PlayStatus.none;
         fetchPlayInfoProgress.value = 0.0;
         ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
@@ -129,8 +133,17 @@ class UserPlayerController {
     this.videoSource.value = videoSource;
     saveHistoryPosition();
     fetchPlayInfoProgress.value = 0.5;
-    await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
     setupStreams();
+    final errorMsg = await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
+    if (errorMsg != null) {
+      if (isDebug) {
+        ToastUtils.show('播放失败 $errorMsg', isCorrect: false);
+      } else {
+        ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
+      }
+    }
+    final playSuccessDate = DateUtil.getNowDateMs();
+    LogUtils.i('播放--初始化耗时 ${playSuccessDate - getUrlDate}');
   }
 
   Future<void> play({bool isByUser = false}) async {

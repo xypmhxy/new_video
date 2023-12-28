@@ -66,8 +66,9 @@ class YoutubeParseUtils {
       authorThumbnail = authorThumbnails?.last?['url'] ?? '';
     }
 
-    final authorId = videoRenderer['channelThumbnailSupportedRenderers']?['channelThumbnailWithLinkRenderer']
+    String? authorId = videoRenderer['channelThumbnailSupportedRenderers']?['channelThumbnailWithLinkRenderer']
         ?['navigationEndpoint']?['browseEndpoint']?['browseId'] as String?;
+    authorId ??= authorRuns?.last['navigationEndpoint']?['browseEndpoint']?['browseId'] as String?;
 
     final map = {
       'title': title,

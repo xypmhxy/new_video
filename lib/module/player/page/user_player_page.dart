@@ -33,7 +33,7 @@ class UserPlayerPage extends StatefulWidget {
   State<UserPlayerPage> createState() => _UserPlayerPageState();
 }
 
-class _UserPlayerPageState extends State<UserPlayerPage> with SingleTickerProviderStateMixin {
+class _UserPlayerPageState extends State<UserPlayerPage> {
   final _userPlayerPageController = UserPlayerPageController();
   final _commentController = CommentController();
 
@@ -43,8 +43,7 @@ class _UserPlayerPageState extends State<UserPlayerPage> with SingleTickerProvid
         .requestWatchPageInfo(userPlayerController.nowPlayingMedia!)
         .then((value) => _commentController.requestComment(_userPlayerPageController.video.value));
     _userPlayerPageController.requestAuthorInfo(userPlayerController.nowPlayingMedia?.authorId ?? '');
-    _userPlayerPageController.setupSomething();
-    _userPlayerPageController.setupLoadProgress(this);
+    _userPlayerPageController.setup();
     super.initState();
   }
 
@@ -130,48 +129,38 @@ class _UserPlayerPageState extends State<UserPlayerPage> with SingleTickerProvid
               ),
               Container(color: Colors.black26),
               Center(
-                child: SizedBox(
-                  width: 48,
-                  height: 48,
-                  child: Stack(
-                    children: [
-                      const Center(
-                        child: LoadingView(size: 30),
-                      ),
-                      Positioned.fill(
-                        child: AnimatedBuilder(
-                            animation: _userPlayerPageController.animationController,
-                            builder: (_, __) {
-                              return CircularProgressIndicator(
-                                strokeCap: StrokeCap.round,
-                                backgroundColor: Colors.black38,
-                                value: _userPlayerPageController.animationController.value,
-                              );
-                            }),
-                      )
-                    ],
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const LoadingView(size: 34),
+                    const Height(4),
+                    Obx(() {
+                      final fetchPlayInfoStatus = _userPlayerPageController.fetchPlayInfoStatus;
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 18,
+                            height: 8,
+                            decoration: allRadiusDecoration(
+                              1,
+                              color: AppThemeController.primaryThemeColor(context)
+                                  .withOpacity(fetchPlayInfoStatus >= .5 ? 1 : .2),
+                            ),
+                          ),
+                          const Width(6),
+                          Container(
+                            width: 18,
+                            height: 8,
+                            decoration: allRadiusDecoration(1,
+                                color: AppThemeController.primaryThemeColor(context).withOpacity(.3)),
+                          )
+                        ],
+                      );
+                    })
+                  ],
                 ),
               ),
-              // Center(
-              //   child: Column(
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: [
-              //       const LoadingView(size: 36),
-              //       SizedBox(
-              //         width: 36,
-              //         child: Obx(
-              //           () => LinearProgressIndicator(
-              //             minHeight: 3,
-              //             borderRadius: getBorderRadius(2),
-              //             backgroundColor: Colors.white54,
-              //             value: userPlayerController.fetchPlayInfoProgress.value,
-              //           ),
-              //         ),
-              //       )
-              //     ],
-              //   ),
-              // )
             ],
           );
         }

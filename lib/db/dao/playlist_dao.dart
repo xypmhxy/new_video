@@ -60,7 +60,7 @@ class PlaylistDao {
   }
 
   Future<List<PlaylistWrapper>> queryPlaylistMedia(int playlistId) async {
-    return await _isar.playlistWrappers.filter().playlistIdEqualTo(playlistId).findAll();
+    return await _isar.playlistWrappers.filter().playlistIdEqualTo(playlistId).sortByCreateDateDesc().findAll();
   }
 
   Future<void> linkMedias(Playlist? playlist) async {

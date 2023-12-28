@@ -48,14 +48,14 @@ class StreamClient {
           cipherManifest.decipher(stream.signature!),
         );
       }
-
-      final contentLength = stream.contentLength ??
-          (await _httpClient.getContentLength(url, validate: false)) ??
-          0;
-
-      if (contentLength <= 0) {
-        continue;
-      }
+      final contentLength = stream.contentLength ?? 0;
+      // final contentLength = stream.contentLength ??
+      //     (await _httpClient.getContentLength(url, validate: false)) ??
+      //     0;
+      //
+      // if (contentLength <= 0) {
+      //   continue;
+      // }
 
       final container = StreamContainer.parse(stream.container!);
       final fileSize = FileSize(contentLength);
@@ -77,8 +77,7 @@ class StreamClient {
             : videoQuality.toVideoResolution();
 
         // Muxed
-        if (!audioCodec.isNullOrWhiteSpace &&
-            stream.source != StreamSource.adaptive) {
+        if (!audioCodec.isNullOrWhiteSpace && stream.source != StreamSource.adaptive) {
           yield MuxedStreamInfo(
             itag,
             url,
@@ -157,35 +156,39 @@ class StreamClient {
         reason: playerResponse.videoPlayabilityError ?? '',
       );
     }
-
     yield* _parseStreamInfo(playerResponse.streams);
 
     if (!playerResponse.dashManifestUrl.isNullOrWhiteSpace) {
-      final dashManifest =
-          await _controller.getDashManifest(playerResponse.dashManifestUrl!);
+      final dashManifest = await _controller.getDashManifest(playerResponse.dashManifestUrl!);
       yield* _parseStreamInfo(dashManifest.streams);
     }
+
+    print('请求--解析完成');
   }
 
   /// Gets the manifest that contains information
   /// about available streams in the specified video.
   Future<StreamManifest> getManifest(dynamic videoId) {
     videoId = VideoId.fromString(videoId);
-
+    var startDate = DateTime.now().millisecondsSinceEpoch;
+    print('请求--开始 $startDate');
     return retry(_httpClient, () async {
       final streams = await _getStreams(videoId).toList();
+      print('请求--结束111 ${DateTime.now().millisecondsSinceEpoch - startDate}');
       if (streams.isEmpty) {
         throw VideoUnavailableException(
           'Video "$videoId" does not contain any playable streams.',
         );
       }
-
-      final response = await _httpClient.head(streams.first.url);
-      if (response.statusCode == 403) {
-        throw YoutubeExplodeException(
-          'Video $videoId returned 403 (stream: ${streams.first.tag}',
-        );
-      }
+      // startDate = DateTime.now().millisecondsSinceEpoch;
+      // print('请求--开始222 ${DateTime.now().millisecondsSinceEpoch - startDate}');
+      // final response = await _httpClient.head(streams.first.url);
+      // print('请求--结束222 ${DateTime.now().millisecondsSinceEpoch - startDate}');
+      // if (response.statusCode == 403) {
+      //   throw YoutubeExplodeException(
+      //     'Video $videoId returned 403 (stream: ${streams.first.tag}',
+      //   );
+      // }
 
       return StreamManifest(streams);
     });
@@ -219,6 +222,5 @@ class StreamClient {
   }
 
   /// Gets the actual stream which is identified by the specified metadata.
-  Stream<List<int>> get(StreamInfo streamInfo) =>
-      _httpClient.getStream(streamInfo);
+  Stream<List<int>> get(StreamInfo streamInfo) => _httpClient.getStream(streamInfo);
 }

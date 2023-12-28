@@ -8,8 +8,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
+import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
+import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/module/userHome/controller/video_list_page_controller.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
@@ -29,7 +31,6 @@ class VideoListPage extends StatefulWidget {
 }
 
 class _VideoListPageState extends State<VideoListPage> {
-
   final _controller = VideoListPageController();
 
   @override
@@ -64,10 +65,6 @@ class _VideoListPageState extends State<VideoListPage> {
             child: ListView.separated(
                 itemBuilder: (_, index) {
                   final mediaInfo = widget.videos[index];
-                  String resolution = '${mediaInfo.width} x ${mediaInfo.height}';
-                  if (mediaInfo.isLocalVideo == false) {
-                    resolution = '${mediaInfo.videoSources?.first.width} x ${mediaInfo.videoSources?.first.height}';
-                  }
                   return GestureDetector(
                       onTap: () {
                         startUserPlayPage(mediaInfo: mediaInfo);
@@ -89,14 +86,21 @@ class _VideoListPageState extends State<VideoListPage> {
                                     ),
                                   ),
                                   Positioned(
-                                      bottom: 6,
-                                      left: 4,
-                                      child: TextView.primary(
-                                        Duration(milliseconds: mediaInfo.duration).toSimpleString(),
-                                        color: Colors.white,
-                                        fontSize: 11,
+                                      bottom: 4,
+                                      right: 4,
+                                      child: Container(
+                                        decoration: allRadiusDecoration(8,
+                                            color: mediaInfo.isLive ? ColorRes.themeColor : ColorRes.backgroundColor),
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                        child: TextView.primary(
+                                            mediaInfo.isLive ? S.current.live : mediaInfo.durationFormat,
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.normal),
                                       )),
-                                  if (mediaInfo.historyProgress != null && mediaInfo.historyProgress! > 0)
+                                  if (mediaInfo.isLive == false &&
+                                      mediaInfo.historyProgress != null &&
+                                      mediaInfo.historyProgress! > 0)
                                     Positioned(
                                         bottom: 0,
                                         left: 0,
@@ -144,7 +148,7 @@ class _VideoListPageState extends State<VideoListPage> {
                                       ],
                                     ),
                                     TextView.primary(
-                                      resolution,
+                                      mediaInfo.getResolutionFormat(),
                                       fontSize: 12,
                                       color: AppThemeController.textPrimaryColor(context).withOpacity(.7),
                                     ),

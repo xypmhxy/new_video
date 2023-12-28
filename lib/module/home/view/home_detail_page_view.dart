@@ -7,8 +7,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
+import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/bean/play/video_group.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
+import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/home/callback/home_detail_page_callback.dart';
 import 'package:free_tube_player/widget/base_page_view.dart';
 import 'package:free_tube_player/widget/divider.dart';
@@ -62,14 +64,18 @@ class HomeDetailPageView extends BasePageView<HomeDetailPageCallback> {
                             ),
                           ),
                           Positioned(
-                              bottom: 6,
-                              left: 4,
-                              child: TextView.primary(
-                                Duration(milliseconds: mediaInfo.duration).toSimpleString(),
-                                color: Colors.white,
-                                fontSize: 11,
+                              bottom: 4,
+                              right: 4,
+                              child: Container(
+                                decoration: allRadiusDecoration(8,
+                                    color: mediaInfo.isLive ? ColorRes.themeColor : ColorRes.backgroundColor),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                child: TextView.primary(mediaInfo.isLive ? S.current.live : mediaInfo.durationFormat,
+                                    color: Colors.white, fontSize: 12, fontWeight: FontWeight.normal),
                               )),
-                          if (mediaInfo.historyProgress != null && mediaInfo.historyProgress! > 0)
+                          if (mediaInfo.isLive == false &&
+                              mediaInfo.historyProgress != null &&
+                              mediaInfo.historyProgress! > 0)
                             Positioned(
                                 bottom: 0,
                                 left: 0,

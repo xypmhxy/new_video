@@ -3,7 +3,6 @@
 * 时间  2023/9/13 08:06
 */
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:chewie/chewie.dart';
@@ -11,12 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/extension/string_extension.dart';
-import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/interface/player_interface.dart';
 import 'package:free_tube_player/module/player/widget/user_player_control_panel.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
-import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:video_player/video_player.dart';
 
 class ChewiePlayerImpl implements PlayerInterface {
@@ -43,7 +40,8 @@ class ChewiePlayerImpl implements PlayerInterface {
   // late Stream watchPlayerAvailable = _playerAvailableController.stream;
 
   @override
-  Future<void> playNewSource(String url, {String? audioUrl}) async {
+  Future<String?> playNewSource(String url, {String? audioUrl}) async {
+    Completer<String?> completer = Completer();
     await stop();
     if (chewieController?.hasListeners ?? false) {
       chewieController?.removeListener(_chewiListener);
@@ -74,20 +72,15 @@ class ChewiePlayerImpl implements PlayerInterface {
     chewieController?.videoPlayerController.addListener(_videoPlayerListener);
     LogUtils.i('开始初始化播放器...');
     chewieController?.videoPlayerController.initialize().then((value) async {
+      completer.complete(null);
       _playStateController.add(PlayStatus.initialized);
     }).onError((error, stackTrace) {
-      // _playerAvailableController.add(false);
-      LogUtils.e('视频播放失败 ${error.toString()} url = $url');
+      LogUtils.e('初始化视频播放失败 ${error.toString()} url = $url');
       final debugInfo = error.toString();
-      if (isDebug) {
-        ToastUtils.show('播放失败 $debugInfo', isCorrect: false);
-      } else {
-        ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
-      }
+      completer.complete(debugInfo);
     });
-
     _chewieController?.addListener(_chewiListener);
-    // _playerAvailableController.add(true);
+    return completer.future;
   }
 
   @override

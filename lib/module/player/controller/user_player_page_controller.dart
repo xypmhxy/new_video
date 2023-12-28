@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/play/author_info.dart';
@@ -26,10 +25,10 @@ class UserPlayerPageController extends BaseController {
   final _videoActionHelper = VideoActionHelper();
   final _playlistDao = PlaylistDao();
   final isLike = false.obs;
-  PanelController panelController = PanelController();
-  StreamSubscription? nowPlayStreamSubscription;
+  final fetchPlayInfoStatus = 0.0.obs;
+  final panelController = PanelController();
+
   double brightness = 0.3;
-  late AnimationController animationController;
   StreamSubscription? _fetchPlayInfoSubs;
 
   UserPlayerPageController();
@@ -37,24 +36,19 @@ class UserPlayerPageController extends BaseController {
   @override
   dispose() {
     _youtubeExplode.close();
-    nowPlayStreamSubscription?.cancel();
     _fetchPlayInfoSubs?.cancel();
-    animationController.dispose();
+    fetchPlayInfoStatus.value = 0.0;
     ScreenBrightness().setScreenBrightness(brightness);
     super.dispose();
   }
 
-  void setupSomething() async {
-    brightness = await ScreenBrightness().current;
-  }
-
-  void setupLoadProgress(TickerProvider tickerProvider) {
-    animationController = AnimationController(vsync: tickerProvider, duration: const Duration(seconds: 20), value: 0);
-    animationController.forward();
+  void setup() async {
     _fetchPlayInfoSubs = userPlayerController.fetchPlayInfoProgress.listen((progress) {
-      if (progress <= animationController.value) return;
-      animationController.animateTo(progress, duration: const Duration(milliseconds: 500));
+      fetchPlayInfoStatus.value = progress;
     });
+    Future.delayed(const Duration(seconds: 6)).then((value) => fetchPlayInfoStatus.value = 0.5);
+
+    brightness = await ScreenBrightness().current;
   }
 
   Future<void> queryLikeStatus() async {

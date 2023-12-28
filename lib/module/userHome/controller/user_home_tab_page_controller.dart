@@ -39,14 +39,16 @@ class UserHomeTabPageController {
           userPlayerController.play();
         }
       } else {
-        userPlayerController.pause();
-        isContinuePlay = true;
+        if (userPlayerController.isPlaying) {
+          userPlayerController.pause();
+          isContinuePlay = true;
+        }
       }
     } else {
       if (isContinuePlay) {
         userPlayerController.play();
+        isContinuePlay = false;
       }
-      isContinuePlay = false;
     }
   }
 

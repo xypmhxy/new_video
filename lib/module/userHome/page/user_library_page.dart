@@ -20,6 +20,7 @@ import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/library_icon_view.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
+import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
@@ -129,8 +130,6 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
             child: LoadingView(size: 36),
           ),
         );
-      } else if (viewStatus.value == ViewStatus.empty) {
-        return const SizedBox();
       }
       return Column(
         children: [
@@ -144,6 +143,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
                       onTap: () {
+                        if (_userLibraryController.historyVideos.isEmpty) return;
                         PageNavigation.startNewPage(const HistoryPage());
                       },
                       child: Container(
@@ -161,19 +161,25 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
             ),
           ),
           const Height(16),
-          HorizontalVideoListView(
-            mediaList: _userLibraryController.historyVideos,
-            onItemClick: (mediaInfo) {
-              if (mediaInfo.isLocalVideo) {
-                playMediaInfo(mediaInfo: mediaInfo);
-              } else {
-                startUserPlayPage(mediaInfo: mediaInfo);
-              }
-            },
-            onItemMoreClick: (mediaInfo) {
-              _userLibraryController.showMoreDialog(mediaInfo);
-            },
-          )
+          Visibility(
+              visible: viewStatus.value == ViewStatus.success,
+              replacement: NoDataView(
+                text: S.current.noData,
+                iconSize: 100,
+              ),
+              child: HorizontalVideoListView(
+                mediaList: _userLibraryController.historyVideos,
+                onItemClick: (mediaInfo) {
+                  if (mediaInfo.isLocalVideo) {
+                    playMediaInfo(mediaInfo: mediaInfo);
+                  } else {
+                    startUserPlayPage(mediaInfo: mediaInfo);
+                  }
+                },
+                onItemMoreClick: (mediaInfo) {
+                  _userLibraryController.showMoreDialog(mediaInfo);
+                },
+              ))
         ],
       );
     });

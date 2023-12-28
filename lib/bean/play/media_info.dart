@@ -164,6 +164,15 @@ class MediaInfo {
 
   String get durationFormat => Duration(milliseconds: duration).toSimpleString();
 
+  @ignore
+  bool get isLive => youtubeId != null && duration == 0;
+
+  @ignore
+  bool get isLocalVideo => localPath != null && youtubeId == null;
+
+  @ignore
+  Uint8List? get localUint8List => localBytesThumbnail == null ? null : Uint8List.fromList(localBytesThumbnail!);
+
   String formatSize() {
     if (byteSize == null || byteSize == 0) return '0MB';
     final sizeMB = byteSize! / 1024 / 1024;
@@ -178,8 +187,17 @@ class MediaInfo {
     return mediaInfo?.identify == identify;
   }
 
-  @ignore
-  Uint8List? get localUint8List => localBytesThumbnail == null ? null : Uint8List.fromList(localBytesThumbnail!);
+  String getResolutionFormat() {
+    if (width != null && height != null) {
+      return '$width x $height';
+    }
+    final sourceWidth = videoSources?.first.width;
+    final sourceHeight = videoSources?.first.height;
+    if (sourceWidth != null && sourceHeight != null) {
+      return '$sourceWidth x $sourceHeight';
+    }
+    return '720 x 1280';
+  }
 
   double? getVideoRatio() {
     if (width == null || height == null) return null;
@@ -213,12 +231,6 @@ class MediaInfo {
     }
     return '$dislikeCount';
   }
-
-  @ignore
-  bool get isLive => youtubeId != null && duration == 0;
-
-  @ignore
-  bool get isLocalVideo => localPath != null && youtubeId == null;
 
   bool isUrlAvailable() {
     if (recentGetUrlTime <= 0) return false;

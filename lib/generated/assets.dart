@@ -18,7 +18,6 @@ class Assets {
   static const String imagesWarning = 'images/warning.png';
   static const String svgAddToList = 'assets/svg/add_to_list.svg';
   static const String svgComment = 'assets/svg/comment.svg';
-  static const String svgUserDelete = 'assets/svg/user_delete.svg';
   static const String svgDelete = 'assets/svg/delete.svg';
   static const String svgDeleteHistory = 'assets/svg/delete_history.svg';
   static const String svgDislike = 'assets/svg/dislike.svg';
@@ -50,6 +49,7 @@ class Assets {
   static const String svgShare = 'assets/svg/share.svg';
   static const String svgToastAttention = 'assets/svg/toast_attention.svg';
   static const String svgToastCorrect = 'assets/svg/toast_correct.svg';
+  static const String svgUserDelete = 'assets/svg/user_delete.svg';
   static const String svgVideoEditor = 'assets/svg/video_editor.svg';
   static const String svgWatchLater = 'assets/svg/watch_later.svg';
   static const String svgWatchLaterSolid = 'assets/svg/watch_later_solid.svg';

@@ -17,14 +17,24 @@ const PlaylistWrapperSchema = CollectionSchema(
   name: r'PlaylistWrapper',
   id: 7761086640435427245,
   properties: {
-    r'mediaId': PropertySchema(
+    r'createDate': PropertySchema(
       id: 0,
+      name: r'createDate',
+      type: IsarType.long,
+    ),
+    r'mediaId': PropertySchema(
+      id: 1,
       name: r'mediaId',
       type: IsarType.long,
     ),
     r'playlistId': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'playlistId',
+      type: IsarType.long,
+    ),
+    r'updateDate': PropertySchema(
+      id: 3,
+      name: r'updateDate',
       type: IsarType.long,
     )
   },
@@ -57,8 +67,10 @@ void _playlistWrapperSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.mediaId);
-  writer.writeLong(offsets[1], object.playlistId);
+  writer.writeLong(offsets[0], object.createDate);
+  writer.writeLong(offsets[1], object.mediaId);
+  writer.writeLong(offsets[2], object.playlistId);
+  writer.writeLong(offsets[3], object.updateDate);
 }
 
 PlaylistWrapper _playlistWrapperDeserialize(
@@ -68,9 +80,11 @@ PlaylistWrapper _playlistWrapperDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = PlaylistWrapper();
+  object.createDate = reader.readLong(offsets[0]);
   object.id = id;
-  object.mediaId = reader.readLong(offsets[0]);
-  object.playlistId = reader.readLong(offsets[1]);
+  object.mediaId = reader.readLong(offsets[1]);
+  object.playlistId = reader.readLong(offsets[2]);
+  object.updateDate = reader.readLong(offsets[3]);
   return object;
 }
 
@@ -84,6 +98,10 @@ P _playlistWrapperDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
+      return (reader.readLong(offset)) as P;
+    case 2:
+      return (reader.readLong(offset)) as P;
+    case 3:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -185,6 +203,62 @@ extension PlaylistWrapperQueryWhere
 
 extension PlaylistWrapperQueryFilter
     on QueryBuilder<PlaylistWrapper, PlaylistWrapper, QFilterCondition> {
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
+      createDateEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'createDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
+      createDateGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'createDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
+      createDateLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'createDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
+      createDateBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'createDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
       idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
@@ -352,6 +426,62 @@ extension PlaylistWrapperQueryFilter
       ));
     });
   }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
+      updateDateEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'updateDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
+      updateDateGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'updateDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
+      updateDateLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'updateDate',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterFilterCondition>
+      updateDateBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'updateDate',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension PlaylistWrapperQueryObject
@@ -362,6 +492,20 @@ extension PlaylistWrapperQueryLinks
 
 extension PlaylistWrapperQuerySortBy
     on QueryBuilder<PlaylistWrapper, PlaylistWrapper, QSortBy> {
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy>
+      sortByCreateDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy>
+      sortByCreateDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy> sortByMediaId() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mediaId', Sort.asc);
@@ -388,10 +532,38 @@ extension PlaylistWrapperQuerySortBy
       return query.addSortBy(r'playlistId', Sort.desc);
     });
   }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy>
+      sortByUpdateDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updateDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy>
+      sortByUpdateDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updateDate', Sort.desc);
+    });
+  }
 }
 
 extension PlaylistWrapperQuerySortThenBy
     on QueryBuilder<PlaylistWrapper, PlaylistWrapper, QSortThenBy> {
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy>
+      thenByCreateDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy>
+      thenByCreateDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createDate', Sort.desc);
+    });
+  }
+
   QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -430,10 +602,31 @@ extension PlaylistWrapperQuerySortThenBy
       return query.addSortBy(r'playlistId', Sort.desc);
     });
   }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy>
+      thenByUpdateDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updateDate', Sort.asc);
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QAfterSortBy>
+      thenByUpdateDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updateDate', Sort.desc);
+    });
+  }
 }
 
 extension PlaylistWrapperQueryWhereDistinct
     on QueryBuilder<PlaylistWrapper, PlaylistWrapper, QDistinct> {
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QDistinct>
+      distinctByCreateDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'createDate');
+    });
+  }
+
   QueryBuilder<PlaylistWrapper, PlaylistWrapper, QDistinct>
       distinctByMediaId() {
     return QueryBuilder.apply(this, (query) {
@@ -447,6 +640,13 @@ extension PlaylistWrapperQueryWhereDistinct
       return query.addDistinctBy(r'playlistId');
     });
   }
+
+  QueryBuilder<PlaylistWrapper, PlaylistWrapper, QDistinct>
+      distinctByUpdateDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updateDate');
+    });
+  }
 }
 
 extension PlaylistWrapperQueryProperty
@@ -454,6 +654,12 @@ extension PlaylistWrapperQueryProperty
   QueryBuilder<PlaylistWrapper, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, int, QQueryOperations> createDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'createDate');
     });
   }
 
@@ -466,6 +672,12 @@ extension PlaylistWrapperQueryProperty
   QueryBuilder<PlaylistWrapper, int, QQueryOperations> playlistIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'playlistId');
+    });
+  }
+
+  QueryBuilder<PlaylistWrapper, int, QQueryOperations> updateDateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updateDate');
     });
   }
 }
