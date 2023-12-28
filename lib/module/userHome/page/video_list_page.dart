@@ -49,7 +49,7 @@ class _VideoListPageState extends State<VideoListPage> {
     return Scaffold(
       body: SafeArea(
           child: Column(
-        children: [_appbar(), const Height(12), _contentListView(),_playBottomBar()],
+        children: [_appbar(), const Height(12), _contentListView(), _playBottomBar()],
       )),
     );
   }
