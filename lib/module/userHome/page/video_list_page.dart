@@ -19,6 +19,7 @@ import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/image_view.dart';
+import 'package:free_tube_player/widget/play_bottom_bar.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
@@ -48,8 +49,15 @@ class _VideoListPageState extends State<VideoListPage> {
     return Scaffold(
       body: SafeArea(
           child: Column(
-        children: [_appbar(), const Height(12), _contentListView()],
+        children: [_appbar(), const Height(12), _contentListView(),_playBottomBar()],
       )),
+    );
+  }
+
+  Widget _playBottomBar() {
+    return const Align(
+      alignment: Alignment.bottomCenter,
+      child: PlayBottomBar(),
     );
   }
 
