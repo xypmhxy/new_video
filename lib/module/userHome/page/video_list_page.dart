@@ -10,7 +10,8 @@ import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
-import 'package:free_tube_player/extension/duration_extension.dart';
+import 'package:free_tube_player/bean/play/playlist.dart';
+import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/module/userHome/controller/video_list_page_controller.dart';
@@ -18,13 +19,16 @@ import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/image_view.dart';
+import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
+import 'package:get/get.dart';
 
 class VideoListPage extends StatefulWidget {
   final String title;
   final List<MediaInfo> videos;
+  final Playlist? playlist;
 
-  const VideoListPage({super.key, required this.title, required this.videos});
+  const VideoListPage({super.key, required this.title, required this.videos, this.playlist});
 
   @override
   State<VideoListPage> createState() => _VideoListPageState();
@@ -32,6 +36,12 @@ class VideoListPage extends StatefulWidget {
 
 class _VideoListPageState extends State<VideoListPage> {
   final _controller = VideoListPageController();
+
+  @override
+  void initState() {
+    _controller.videos.value = widget.videos;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +65,20 @@ class _VideoListPageState extends State<VideoListPage> {
             size: 24,
           )),
       title: TextView.primary(widget.title, fontWeight: FontWeight.bold, fontSize: 18),
+      actions: [
+        Container(
+          margin: const EdgeInsets.only(right: 16),
+          child: ImageButton(
+            onPressed: () {
+              _controller.onClickDeleteAll(playlist: widget.playlist);
+            },
+            child: Icon(
+              Icons.delete_forever_rounded,
+              color: AppThemeController.textPrimaryColor(context),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -62,9 +86,9 @@ class _VideoListPageState extends State<VideoListPage> {
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView.separated(
+            child: Obx(() => ListView.separated(
                 itemBuilder: (_, index) {
-                  final mediaInfo = widget.videos[index];
+                  final mediaInfo = _controller.videos[index];
                   return GestureDetector(
                       onTap: () {
                         startUserPlayPage(mediaInfo: mediaInfo);
@@ -134,7 +158,7 @@ class _VideoListPageState extends State<VideoListPage> {
                                         )),
                                         GestureDetector(
                                           onTap: () {
-                                            _controller.showMoreDialog(mediaInfo);
+                                            _controller.showMoreDialog(mediaInfo, playlist: widget.playlist);
                                           },
                                           child: Container(
                                               color: Colors.transparent,
@@ -167,6 +191,6 @@ class _VideoListPageState extends State<VideoListPage> {
                 separatorBuilder: (_, index) {
                   return const Height(8);
                 },
-                itemCount: widget.videos.length)));
+                itemCount: _controller.videos.length))));
   }
 }

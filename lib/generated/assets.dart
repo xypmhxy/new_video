@@ -52,6 +52,7 @@ class Assets {
   static const String svgUserDelete = 'assets/svg/user_delete.svg';
   static const String svgVideoEditor = 'assets/svg/video_editor.svg';
   static const String svgWatchLater = 'assets/svg/watch_later.svg';
+  static const String svgWatchLaterSelected = 'assets/svg/watch_later_selected.svg';
   static const String svgWatchLaterSolid = 'assets/svg/watch_later_solid.svg';
 
 }

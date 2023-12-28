@@ -27,31 +27,36 @@ class VideoActionHelper {
 
   void showActionDialog(
       {required MediaInfo mediaInfo,
-      VoidCallback? onDelete,
+      VoidCallback? onRemove,
       VoidCallback? onDeleteHistory,
       ValueChanged<String>? onRename,
       VoidCallback? onClickVideoEditor,
-      bool isShowHistory = false}) {
-    DialogUtils.showBottomSheet(DialogUserMoreAction(
-      mediaInfo: mediaInfo,
-      isShowHistory: isShowHistory,
-      onClickLike: () async {
-        await _onClickLike(mediaInfo);
-      },
-      onClickDownload: () {
-        _showDownloadDialog(mediaInfo);
-      },
-      onClickShare: () {
-        if (mediaInfo.youtubeId == null) return;
-        ShareUtils.shareText('https://www.youtube.com/watch?v=${mediaInfo.youtubeId}');
-      },
-      onClickWatchLater: () {
-        onClickWatchLater(mediaInfo);
-      },
-      onClickDeleteHistory: () {
-        onClickDeleteHistory(mediaInfo, onDelete: onDeleteHistory);
-      },
-    ),tag: 'user_action_dialog');
+      bool isShowHistory = false,
+      bool isShowRemove = false}) {
+    DialogUtils.showBottomSheet(
+        DialogUserMoreAction(
+          mediaInfo: mediaInfo,
+          isShowHistory: isShowHistory,
+          isShowRemove: isShowRemove,
+          onClickLike: () async {
+            await _onClickLike(mediaInfo);
+          },
+          onClickDownload: () {
+            _showDownloadDialog(mediaInfo);
+          },
+          onClickShare: () {
+            if (mediaInfo.youtubeId == null) return;
+            ShareUtils.shareText('https://www.youtube.com/watch?v=${mediaInfo.youtubeId}');
+          },
+          onClickWatchLater: () async {
+            await onClickWatchLater(mediaInfo);
+          },
+          onClickDeleteHistory: () {
+            onClickDeleteHistory(mediaInfo, onDelete: onDeleteHistory);
+          },
+          onClickRemove: onRemove,
+        ),
+        tag: 'user_action_dialog');
   }
 
   void _showDownloadDialog(MediaInfo mediaInfo, {VoidCallback? onDelete}) {
@@ -97,7 +102,8 @@ class VideoActionHelper {
       ToastUtils.show(result > 0 ? S.current.addWatchLaterSuccess : S.current.addToPlaylistFailed,
           isCorrect: result > 0);
     } else {
-      ToastUtils.show(S.current.addWatchLaterSuccess);
+      final result = await removeFromPlaylist(playlist, mediaInfo);
+      ToastUtils.show(result ? S.current.removePlaylistSuccess : S.current.removePlaylistFailed, isCorrect: result);
     }
   }
 
@@ -112,6 +118,21 @@ class VideoActionHelper {
         DialogUtils.dismiss();
         DialogUtils.dismiss(tag: 'user_action_dialog');
         onDelete?.call();
+      },
+    ));
+  }
+
+  Future<void> onClickRemove(MediaInfo mediaInfo, {VoidCallback? onRemove}) async {
+    DialogUtils.showCenterDialog(DialogConfirm(
+      title: S.current.removeFromListConfirm,
+      onCancel: () {
+        DialogUtils.dismiss();
+      },
+      onConfirm: () async {
+        await MediaInfoHelper.get.clearPlayPosition(mediaInfo);
+        DialogUtils.dismiss();
+        DialogUtils.dismiss(tag: 'user_action_dialog');
+        onRemove?.call();
       },
     ));
   }
@@ -142,6 +163,17 @@ class VideoActionHelper {
     if (mediaInfo == null || mediaInfo.id < 0) return false;
     final playlistDao = PlaylistDao();
     final playlist = await playlistDao.queryByType(PlaylistType.like);
+    if (playlist != null) {
+      final result = await playlistDao.queryExistPlaylistMedia(playlist.id, mediaInfo.id);
+      return result != null;
+    }
+    return false;
+  }
+
+  static Future<bool> queryWatchLaterStatus(MediaInfo? mediaInfo) async {
+    if (mediaInfo == null || mediaInfo.id < 0) return false;
+    final playlistDao = PlaylistDao();
+    final playlist = await playlistDao.queryByType(PlaylistType.watchLater);
     if (playlist != null) {
       final result = await playlistDao.queryExistPlaylistMedia(playlist.id, mediaInfo.id);
       return result != null;

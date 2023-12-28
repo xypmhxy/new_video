@@ -690,20 +690,20 @@ class S {
     );
   }
 
-  /// `Removal successful`
+  /// `Remove successful`
   String get removePlaylistSuccess {
     return Intl.message(
-      'Removal successful',
+      'Remove successful',
       name: 'removePlaylistSuccess',
       desc: '',
       args: [],
     );
   }
 
-  /// `Removal failed`
+  /// `Remove failed`
   String get removePlaylistFailed {
     return Intl.message(
-      'Removal failed',
+      'Remove failed',
       name: 'removePlaylistFailed',
       desc: '',
       args: [],
@@ -755,6 +755,36 @@ class S {
     return Intl.message(
       'Liked Videos',
       name: 'likedVideos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove`
+  String get remove {
+    return Intl.message(
+      'Remove',
+      name: 'remove',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to remove this video?`
+  String get removeFromListConfirm {
+    return Intl.message(
+      'Are you sure you want to remove this video?',
+      name: 'removeFromListConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to remove all videos?`
+  String get removeAllConfirm {
+    return Intl.message(
+      'Are you sure you want to remove all videos?',
+      name: 'removeAllConfirm',
       desc: '',
       args: [],
     );

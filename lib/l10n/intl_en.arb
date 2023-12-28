@@ -63,11 +63,14 @@
   "addToPlaylistSuccess": "Added successfully",
   "addToPlaylistFailed": "Added failed",
   "watchLater": "Watch later",
-  "removePlaylistSuccess": "Removal successful",
-  "removePlaylistFailed": "Removal failed",
+  "removePlaylistSuccess": "Remove successful",
+  "removePlaylistFailed": "Remove failed",
   "addWatchLaterSuccess": "Added to watch later",
   "viewAll": "View All",
   "newPlaylist": "New Playlist",
   "watchLaterCaps": "Watch Later",
-  "likedVideos": "Liked Videos"
+  "likedVideos": "Liked Videos",
+  "remove": "Remove",
+  "removeFromListConfirm": "Are you sure you want to remove this video?",
+  "removeAllConfirm": "Are you sure you want to remove all videos?"
 }

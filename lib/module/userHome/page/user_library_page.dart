@@ -200,8 +200,13 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
           if (index == 0) {
             return Obx(() => GestureDetector(
                 onTap: () {
+                  if (_userLibraryController.watchLaterVideos.isEmpty)return;
                   PageNavigation.startNewPage(
-                    VideoListPage(title: S.current.watchLaterCaps, videos: _userLibraryController.watchLaterVideos),
+                    VideoListPage(
+                      title: S.current.watchLaterCaps,
+                      videos: _userLibraryController.watchLaterVideos,
+                      playlist: _userLibraryController.watchLaterList,
+                    ),
                   );
                 },
                 child: _item(
@@ -211,8 +216,13 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
           } else if (index == 1) {
             return Obx(() => GestureDetector(
                   onTap: () {
+                    if (_userLibraryController.likedVideos.isEmpty)return;
                     PageNavigation.startNewPage(
-                      VideoListPage(title: S.current.likedVideos, videos: _userLibraryController.likedVideos),
+                      VideoListPage(
+                        title: S.current.likedVideos,
+                        videos: _userLibraryController.likedVideos,
+                        playlist: _userLibraryController.likePlaylist,
+                      ),
                     );
                   },
                   child: _item(

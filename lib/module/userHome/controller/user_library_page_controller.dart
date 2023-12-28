@@ -22,6 +22,9 @@ class UserLibraryPageController {
   final watchLaterVideos = <MediaInfo>[].obs;
   final historyViewStatus = ViewStatus.none.obs;
   final _videoActionHelper = VideoActionHelper();
+
+  Playlist? watchLaterList;
+  Playlist? likePlaylist;
   UserHomeTabPageController? _homeTabPageController;
 
   void setup() {
@@ -54,12 +57,14 @@ class UserLibraryPageController {
   Future<void> queryLikedAndLater() async {
     final likePlaylist = await _playlistDao.queryByType(PlaylistType.like);
     if (likePlaylist != null) {
+      this.likePlaylist = likePlaylist;
       likedVideos.clear();
       likedVideos.addAll(likePlaylist.mediaInfoList);
     }
 
     final watchLaterList = await _playlistDao.queryByType(PlaylistType.watchLater);
     if (watchLaterList != null) {
+      this.watchLaterList = watchLaterList;
       watchLaterVideos.clear();
       watchLaterVideos.addAll(watchLaterList.mediaInfoList);
     }

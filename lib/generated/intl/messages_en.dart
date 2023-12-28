@@ -85,12 +85,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "playlist": MessageLookupByLibrary.simpleMessage("Playlist"),
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
         "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
+        "remove": MessageLookupByLibrary.simpleMessage("Remove"),
+        "removeAllConfirm": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to remove all videos?"),
         "removeDownloadConfirmText": MessageLookupByLibrary.simpleMessage(
             "Are you sure to remove the current download"),
+        "removeFromListConfirm": MessageLookupByLibrary.simpleMessage(
+            "Are you sure you want to remove this video?"),
         "removePlaylistFailed":
-            MessageLookupByLibrary.simpleMessage("Removal failed"),
+            MessageLookupByLibrary.simpleMessage("Remove failed"),
         "removePlaylistSuccess":
-            MessageLookupByLibrary.simpleMessage("Removal successful"),
+            MessageLookupByLibrary.simpleMessage("Remove successful"),
         "rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "replies": MessageLookupByLibrary.simpleMessage("Replies"),
         "rewardNotLoad": MessageLookupByLibrary.simpleMessage(

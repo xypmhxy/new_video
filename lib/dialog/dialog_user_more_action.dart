@@ -17,9 +17,11 @@ class DialogUserMoreAction extends StatefulWidget {
   final VoidCallback? onClickShare;
   final VoidCallback? onClickDownload;
   final AsyncCallback? onClickLike;
-  final VoidCallback? onClickWatchLater;
+  final AsyncCallback? onClickWatchLater;
   final VoidCallback? onClickDeleteHistory;
+  final VoidCallback? onClickRemove;
   final bool isShowHistory;
+  final bool isShowRemove;
 
   const DialogUserMoreAction({
     super.key,
@@ -29,7 +31,9 @@ class DialogUserMoreAction extends StatefulWidget {
     this.onClickLike,
     this.onClickWatchLater,
     this.onClickDeleteHistory,
+    this.onClickRemove,
     this.isShowHistory = false,
+    this.isShowRemove = false,
   });
 
   @override
@@ -38,6 +42,7 @@ class DialogUserMoreAction extends StatefulWidget {
 
 class _DialogUserMoreActionState extends State<DialogUserMoreAction> {
   bool isLike = false;
+  bool isWatchLater = false;
 
   @override
   void initState() {
@@ -48,6 +53,8 @@ class _DialogUserMoreActionState extends State<DialogUserMoreAction> {
   Future<void> query() async {
     final like = await VideoActionHelper.queryLikeStatus(widget.mediaInfo);
     isLike = like;
+    final watchLater = await VideoActionHelper.queryWatchLaterStatus(widget.mediaInfo);
+    isWatchLater = watchLater;
     setState(() {});
   }
 
@@ -120,10 +127,27 @@ class _DialogUserMoreActionState extends State<DialogUserMoreAction> {
         // _item(context, svg: Assets.svgAddToList, title: S.current.playlist, onPressed: onClickAddList),
         _item(context, svg: Assets.svgShare, title: S.current.share, onPressed: widget.onClickShare, size: 29),
         _item(context,
-            svg: Assets.svgWatchLater, title: S.current.watchLater, onPressed: widget.onClickWatchLater, size: 27),
+            svg: isWatchLater ? Assets.svgWatchLaterSelected : Assets.svgWatchLater,
+            title: S.current.watchLater,
+            color: isWatchLater ? AppThemeController.primaryThemeColor(context) : null, onPressed: () {
+          widget.onClickWatchLater?.call().then((value) => query());
+        }, size: 27),
         if (widget.isShowHistory)
-          _item(context,
-              svg: Assets.svgUserDelete, title: S.current.clearHistory, onPressed: widget.onClickDeleteHistory, size: 27),
+          _item(
+            context,
+            svg: Assets.svgUserDelete,
+            title: S.current.clearHistory,
+            onPressed: widget.onClickDeleteHistory,
+            size: 27,
+          ),
+        if (widget.isShowRemove)
+          _item(
+            context,
+            svg: Assets.svgUserDelete,
+            title: S.current.remove,
+            onPressed: widget.onClickRemove,
+            size: 27,
+          ),
       ],
     );
   }
