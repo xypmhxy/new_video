@@ -72,5 +72,7 @@
   "likedVideos": "Liked Videos",
   "remove": "Remove",
   "removeFromListConfirm": "Are you sure you want to remove this video?",
-  "removeAllConfirm": "Are you sure you want to remove all videos?"
+  "removeAllConfirm": "Are you sure you want to remove all videos?",
+  "downloading": "Downloading",
+  "downloaded": "Downloaded"
 }

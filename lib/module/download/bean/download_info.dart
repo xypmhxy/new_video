@@ -27,4 +27,10 @@ base class DownloadInfo extends LinkedListEntry<DownloadInfo> {
   bool get isSuccess => videoSource?.isSuccess ?? false;
 
   String get identify => mediaInfo.identify;
+
+  String downloadProgressString(){
+    final downloadLength = videoSource?.downloadLength ?? 0;
+    final totalLength = videoSource?.realTotalLength ?? 0;
+    return 0;
+  }
 }

@@ -276,6 +276,9 @@ class BaseMediaSource {
   BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.audioSource});
 
   @ignore
+  int get realTotalLength => (fileLength ?? 0) + (audioSource?.fileLength ?? 0);
+
+  @ignore
   bool get isDownloading => downloadStatus == DownloadStatus.downloading;
 
   @ignore

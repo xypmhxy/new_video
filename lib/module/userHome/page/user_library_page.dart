@@ -8,6 +8,7 @@ import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/download/page/download_page.dart';
 import 'package:free_tube_player/module/history/page/history_page.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
@@ -76,7 +77,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
               const Height(20),
               _history(),
               _divider(),
-              _item(icon: Assets.imagesLibDownload, title: S.current.download),
+              _download(),
               _divider(),
               _playlistTitle(),
               const Height(16),
@@ -185,6 +186,15 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
     });
   }
 
+  Widget _download() {
+    return GestureDetector(
+      onTap: () {
+        PageNavigation.startNewPage(const DownloadPage());
+      },
+      child: _item(icon: Assets.imagesLibDownload, title: S.current.download),
+    );
+  }
+
   Widget _playlistTitle() {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 14),
@@ -200,7 +210,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
           if (index == 0) {
             return Obx(() => GestureDetector(
                 onTap: () {
-                  if (_userLibraryController.watchLaterVideos.isEmpty)return;
+                  if (_userLibraryController.watchLaterVideos.isEmpty) return;
                   PageNavigation.startNewPage(
                     VideoListPage(
                       title: S.current.watchLaterCaps,
@@ -216,7 +226,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
           } else if (index == 1) {
             return Obx(() => GestureDetector(
                   onTap: () {
-                    if (_userLibraryController.likedVideos.isEmpty)return;
+                    if (_userLibraryController.likedVideos.isEmpty) return;
                     PageNavigation.startNewPage(
                       VideoListPage(
                         title: S.current.likedVideos,

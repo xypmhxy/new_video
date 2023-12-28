@@ -50,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteFailed": MessageLookupByLibrary.simpleMessage("Delete Failed"),
         "dislike": MessageLookupByLibrary.simpleMessage("Dislike"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
+        "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
+        "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "exportCover": MessageLookupByLibrary.simpleMessage("Export cover"),
         "exportVideo": MessageLookupByLibrary.simpleMessage("Export video"),
