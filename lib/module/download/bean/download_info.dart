@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:dio/dio.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/extension/number_extension.dart';
 import 'package:free_tube_player/module/download/downloader.dart';
 
 base class DownloadInfo extends LinkedListEntry<DownloadInfo> {
@@ -28,9 +29,9 @@ base class DownloadInfo extends LinkedListEntry<DownloadInfo> {
 
   String get identify => mediaInfo.identify;
 
-  String downloadProgressString(){
+  String downloadProgressString() {
     final downloadLength = videoSource?.downloadLength ?? 0;
     final totalLength = videoSource?.realTotalLength ?? 0;
-    return 0;
+    return '${downloadLength.parseUnit()} / ${totalLength.parseUnit()}';
   }
 }

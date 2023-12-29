@@ -31,7 +31,7 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
   Widget build(BuildContext context) {
     super.build(context);
     return Obx(() => ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         itemBuilder: (_, index) {
           final downloadInfo = globalDownloadController.downloadList[index];
           return GetBuilder<GlobalDownloadController>(
@@ -49,20 +49,21 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
 
   Widget _item(DownloadInfo downloadInfo) {
     final mediaInfo = downloadInfo.mediaInfo;
-    const itemHeight = 64.0;
+    const itemWidth = 116.0;
+    const itemHeight = 68.0;
     return GestureDetector(
         onTap: () {},
         child: Container(
             color: Colors.transparent,
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Stack(
                   children: [
                     ClipRRect(
                       borderRadius: getBorderRadius(4),
                       child: AutoImageView(
-                        width: itemHeight,
+                        width: itemWidth,
                         height: itemHeight,
                         imageUrl: mediaInfo.thumbnail,
                         imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
@@ -72,35 +73,60 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
                 ),
                 const Width(10),
                 Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextView.primary(
-                      mediaInfo.title,
-                      fontSize: 14,
-                      maxLines: 1,
-                      fontWeight: FontWeight.w500,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [TextView.primary('${downloadInfo.videoSource?.downloadLength?.parseUnit()}')],
-                    )
-                  ],
-                ))
+                    child: SizedBox(
+                  height: itemHeight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextView.primary(
+                        mediaInfo.title,
+                        fontSize: 13,
+                        maxLines: 2,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const Height(4),
+                      Expanded(
+                          child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextView.primary(downloadInfo.downloadProgressString(), fontSize: 12),
+                            const Height(6),
+                            LinearProgressIndicator(
+                              minHeight: 3,
+                              borderRadius: getBorderRadius(2),
+                              value: downloadInfo.videoSource?.downloadProgress() ?? 0.0,
+                            )
+                          ],
+                        ),
+                      ))
+                    ],
+                  ),
+                )),
+                const Width(12),
+                SizedBox(
+                  height: itemHeight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [_button(iconData: Icons.close_rounded), _button(iconData: Icons.pause_rounded)],
+                  ),
+                )
               ],
             )));
   }
 
-  Widget _button() {
+  Widget _button({required IconData iconData, Color? color, Color? iconColor}) {
     return Container(
-      decoration:
-          BoxDecoration(shape: BoxShape.circle, color: AppThemeController.textPrimaryColor(context).withOpacity(.1)),
-      padding: EdgeInsets.all(8),
-      child: SVGView(
-        size: 12,
-        assetName: Assets.svgPause,
-        color: Colors.white,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle, color: color ?? AppThemeController.textPrimaryColor(context).withOpacity(.1)),
+      padding: const EdgeInsets.all(4),
+      child: Icon(
+        iconData,
+        size: 20,
+        color: iconColor ?? Colors.white,
       ),
     );
   }

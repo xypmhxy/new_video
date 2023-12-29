@@ -26,7 +26,6 @@ class GlobalDownloadController extends GetxController {
       removeDownloadInfo(download);
     }
     downloadList.add(downloadInfo);
-    return;
     final mediaInfo = downloadInfo.mediaInfo;
     final videoSource = downloadInfo.videoSource;
     videoSource?.downloadStatus = DownloadStatus.downloading;

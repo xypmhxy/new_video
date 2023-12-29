@@ -39,6 +39,8 @@ class AppThemeController extends GetxController {
         splashColor: primaryColor.withOpacity(.1),
         bottomSheetTheme: BottomSheetThemeData(backgroundColor: bottomSheetBackground),
         dividerColor: isLight ? Colors.black45 : Colors.white30,
+        progressIndicatorTheme:
+            ProgressIndicatorThemeData(color: primaryColor, linearTrackColor: textColor.withOpacity(.1)),
         colorScheme: ColorScheme(
             brightness: brightness,
             primary: primaryColor,
