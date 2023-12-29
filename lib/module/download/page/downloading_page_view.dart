@@ -4,6 +4,7 @@ import 'package:free_tube_player/extension/number_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/download/bean/download_info.dart';
 import 'package:free_tube_player/module/download/controller/global_download_controller.dart';
+import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'dart:typed_data';
 
@@ -60,7 +61,9 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
       icon = Assets.imagesDownloadStart;
     }
     return GestureDetector(
-        onTap: () {},
+        onTap: () {
+          startUserPlayPage(mediaInfo: mediaInfo);
+        },
         child: Container(
             color: Colors.transparent,
             child: Row(
@@ -122,13 +125,13 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
                       _button(
                           image: Assets.imagesDownloadDelete,
                           onTap: () {
-                            globalDownloadController.removeDownloadInfo(downloadInfo);
+                            globalDownloadController.remove(downloadInfo.mediaInfo);
                           }),
                       const Height(16),
                       _button(
                           image: icon,
                           onTap: () {
-                            globalDownloadController.pause(downloadInfo.mediaInfo);
+                            globalDownloadController.clickDownload(downloadInfo.mediaInfo);
                           }),
                     ],
                   ),

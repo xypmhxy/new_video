@@ -59,6 +59,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   Future<void> initOther() async {
     DatabaseManager.get.setup().whenComplete(() {
       PlaylistCreateUtils.createPlaylist();
+      globalDownloadController.queryAllowDownloadInfo();
     });
     AppUtils.queryNetworkInfo();
     BlindnessHelper.instance.requestClock();

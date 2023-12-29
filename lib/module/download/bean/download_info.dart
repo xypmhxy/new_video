@@ -34,4 +34,9 @@ base class DownloadInfo extends LinkedListEntry<DownloadInfo> {
     final totalLength = videoSource?.realTotalLength ?? 0;
     return '${downloadLength.parseUnit()} / ${totalLength.parseUnit()}';
   }
+
+  void pause(){
+    cancelToken.cancel();
+    cancelToken = CancelToken();
+  }
 }

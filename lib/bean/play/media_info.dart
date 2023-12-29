@@ -279,13 +279,16 @@ class BaseMediaSource {
   int get realTotalLength => (fileLength ?? 0) + (audioSource?.fileLength ?? 0);
 
   @ignore
+  bool get isDownloadNone => downloadStatus == DownloadStatus.none;
+
+  @ignore
   bool get isDownloading => downloadStatus == DownloadStatus.downloading;
 
   @ignore
   bool get isWaiting => downloadStatus == DownloadStatus.waiting;
 
   @ignore
-  bool get isInQueue => isWaiting || isDownloading || isPause;
+  bool get isInQueue => isWaiting || isDownloading || isPause || isFailed;
 
   @ignore
   bool get isPause => downloadStatus == DownloadStatus.pause;

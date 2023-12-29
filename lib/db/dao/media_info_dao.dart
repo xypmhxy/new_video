@@ -26,11 +26,30 @@ class MediaInfoDao {
   }
 
   Future<List<MediaInfo>> queryAllPlayHistory({int limit = 150}) async {
-    return _isar.mediaInfos.filter().playHistory((q) => q.playPositionIsNotNull()).sortByRecentPlayDateDesc().limit(limit).findAll();
+    return _isar.mediaInfos
+        .filter()
+        .playHistory((q) => q.playPositionIsNotNull())
+        .sortByRecentPlayDateDesc()
+        .limit(limit)
+        .findAll();
   }
 
   Future<MediaInfo?> queryById(int id) {
     return _isar.mediaInfos.filter().idEqualTo(id).findFirst();
+  }
+
+  Future<List<MediaInfo>> queryAllDownloading() async {
+    return _isar.mediaInfos
+        .filter()
+        .videoSourcesElement((q) => q
+            .downloadStatusEqualTo(DownloadStatus.pause)
+            .or()
+            .downloadStatusEqualTo(DownloadStatus.failed)
+            .or()
+            .downloadStatusEqualTo(DownloadStatus.waiting)
+            .or()
+            .downloadStatusEqualTo(DownloadStatus.downloading))
+        .findAll();
   }
 
   Future<bool> delete(int id) {
