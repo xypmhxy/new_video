@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/dialog/dialog_confirm.dart';
 import 'package:free_tube_player/extension/number_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/download/bean/download_info.dart';
 import 'package:free_tube_player/module/download/controller/global_download_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
+import 'package:free_tube_player/utils/dialog_utils.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'dart:typed_data';
 
@@ -125,7 +127,13 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
                       _button(
                           image: Assets.imagesDownloadDelete,
                           onTap: () {
-                            globalDownloadController.remove(downloadInfo.mediaInfo);
+                            DialogUtils.showCenterDialog(DialogConfirm(
+                              title: S.current.removeDownloadConfirmText,
+                              onConfirm: () {
+                                globalDownloadController.remove(downloadInfo.mediaInfo);
+                                DialogUtils.dismiss();
+                              },
+                            ));
                           }),
                       const Height(16),
                       _button(

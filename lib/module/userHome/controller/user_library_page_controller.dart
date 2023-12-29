@@ -38,6 +38,7 @@ class UserLibraryPageController {
         }
       });
     }
+    globalDownloadController.prepareDownloadingList();
   }
 
   Future<void> queryHistory() async {
