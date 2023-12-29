@@ -8,6 +8,7 @@ import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/download/view/audio_child_tab.dart';
 import 'package:free_tube_player/module/download/view/video_child_tab.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/video_data_helper.dart';
 import 'package:free_tube_player/widget/border_radius_indicator.dart';
 import 'package:free_tube_player/widget/divider.dart';
@@ -153,7 +154,7 @@ class DownloadDialogController {
 
   Future<void> requestVideoSource(MediaInfo mediaInfo) async {
     viewStatus.value = ViewStatus.loading;
-    final media = await VideoDataHelper.get.requestVideoSource(mediaInfo,isNeedRetry: true);
+    final media = await VideoDataHelper.get.requestVideoSource(mediaInfo, isNeedRetry: true);
     if (media == null) {
       viewStatus.value = ViewStatus.failed;
       return;
@@ -161,5 +162,14 @@ class DownloadDialogController {
     mediaInfo = media;
     _mediaDao.insert(mediaInfo);
     viewStatus.value = ViewStatus.success;
+    if (media.videoSources?.isNotEmpty == true) {
+      for (final videoSource in media.videoSources!) {
+        if ((videoSource.byteSize ?? 0) == 0) {
+          videoSource.byteSize = await VideoDataHelper.get.getFileSize(videoSource.url);
+          viewStatus.refresh();
+        }
+      }
+      _mediaDao.insert(mediaInfo);
+    }
   }
 }

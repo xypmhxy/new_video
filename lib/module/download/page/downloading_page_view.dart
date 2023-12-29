@@ -42,15 +42,23 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
               });
         },
         separatorBuilder: (_, index) {
-          return const Height(8);
+          return const Height(12);
         },
         itemCount: globalDownloadController.downloadList.length));
   }
 
   Widget _item(DownloadInfo downloadInfo) {
     final mediaInfo = downloadInfo.mediaInfo;
-    const itemWidth = 116.0;
-    const itemHeight = 68.0;
+    const itemWidth = 120.0;
+    const itemHeight = 82.0;
+    String icon = Assets.imagesDownloadPause;
+    if (downloadInfo.isDownloading || downloadInfo.isWaiting) {
+      icon = Assets.imagesDownloadPause;
+    } else if (downloadInfo.isFailed) {
+      icon = Assets.imagesDownloadError;
+    } else if (downloadInfo.isPause) {
+      icon = Assets.imagesDownloadStart;
+    }
     return GestureDetector(
         onTap: () {},
         child: Container(
@@ -110,24 +118,26 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
                 SizedBox(
                   height: itemHeight,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [_button(iconData: Icons.close_rounded), _button(iconData: Icons.pause_rounded)],
+                    children: [
+                      _button(
+                          image: Assets.imagesDownloadDelete,
+                          onTap: () {
+                            globalDownloadController.removeDownloadInfo(downloadInfo);
+                          }),
+                      const Height(16),
+                      _button(
+                          image: icon,
+                          onTap: () {
+                            globalDownloadController.pause(downloadInfo.mediaInfo);
+                          }),
+                    ],
                   ),
                 )
               ],
             )));
   }
 
-  Widget _button({required IconData iconData, Color? color, Color? iconColor}) {
-    return Container(
-      decoration: BoxDecoration(
-          shape: BoxShape.circle, color: color ?? AppThemeController.textPrimaryColor(context).withOpacity(.1)),
-      padding: const EdgeInsets.all(4),
-      child: Icon(
-        iconData,
-        size: 20,
-        color: iconColor ?? Colors.white,
-      ),
-    );
+  Widget _button({required String image, VoidCallback? onTap}) {
+    return GestureDetector(onTap: onTap, child: ImageView.asset(image, size: 26));
   }
 }

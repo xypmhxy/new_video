@@ -7,6 +7,10 @@ class Assets {
   static const String fontsCabinRegular = 'assets/fonts/Cabin-Regular.ttf';
   static const String fontsCabinSemiBold = 'assets/fonts/Cabin-SemiBold.ttf';
   static const String imagesCorrect = 'images/correct.png';
+  static const String imagesDownloadDelete = 'images/download_delete.png';
+  static const String imagesDownloadError = 'images/download_error.png';
+  static const String imagesDownloadPause = 'images/download_pause.png';
+  static const String imagesDownloadStart = 'images/download_start.png';
   static const String imagesError = 'images/error.png';
   static const String imagesImagePlaceholder360 = 'images/image_placeholder_360.png';
   static const String imagesLibAdd = 'images/lib_add.png';
@@ -17,7 +21,6 @@ class Assets {
   static const String imagesThemeIcon128 = 'images/theme_icon_128.png';
   static const String imagesWarning = 'images/warning.png';
   static const String svgAddToList = 'assets/svg/add_to_list.svg';
-  static const String svgClose = 'assets/svg/close.svg';
   static const String svgComment = 'assets/svg/comment.svg';
   static const String svgDelete = 'assets/svg/delete.svg';
   static const String svgDeleteHistory = 'assets/svg/delete_history.svg';
@@ -54,5 +57,6 @@ class Assets {
   static const String svgVideoEditor = 'assets/svg/video_editor.svg';
   static const String svgWatchLater = 'assets/svg/watch_later.svg';
   static const String svgWatchLaterSelected = 'assets/svg/watch_later_selected.svg';
+  static const String svgWatchLaterSolid = 'assets/svg/watch_later_solid.svg';
 
 }

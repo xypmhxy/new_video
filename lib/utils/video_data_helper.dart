@@ -2,6 +2,7 @@
 * 作者 Ren
 * 时间  2023/8/5 15:50
 */
+import 'package:dio/dio.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class VideoDataHelper {
   VideoDataHelper._();
 
   YoutubeExplode? youtubeExplode;
+  final _dio = Dio();
 
   dispose() {
     youtubeExplode?.close();
@@ -135,5 +137,25 @@ class VideoDataHelper {
     final videoSources = mediaInfo.videoSources?.where((videoSource) => videoSource.getResolution() <= target).toList();
     if (videoSources?.isEmpty ?? true) return null;
     return videoSources!.first;
+  }
+
+  Future<void> checkFileSizeOrRequest(List<BaseMediaSource> sources) async {
+    for (final source in sources) {
+      if (source.byteSize == null || source.byteSize == 0) {
+        source.byteSize = await getFileSize(source.url);
+      }
+    }
+  }
+
+  Future<int?> getFileSize(String url) async {
+    try {
+      final response = await _dio.head(url);
+      final contentLength = response.headers.value('content-length');
+      if (contentLength == null) return null;
+      return int.tryParse(contentLength);
+    } catch (e) {
+      LogUtils.e('获取文件大小异常 $e');
+    }
+    return null;
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/download_view.dart';
+import 'package:free_tube_player/widget/loading_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +14,7 @@ class VideoChildTab extends StatefulWidget {
   final MediaInfo mediaInfo;
   final Function(BaseMediaSource mediaSource)? onClickDownload;
 
-  const  VideoChildTab({super.key, required this.mediaInfo, this.onClickDownload});
+  const VideoChildTab({super.key, required this.mediaInfo, this.onClickDownload});
 
   @override
   State<VideoChildTab> createState() => _VideoChildTabState();
@@ -65,9 +66,24 @@ class _VideoChildTabState extends State<VideoChildTab> with AutomaticKeepAliveCl
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
-                                TextView.accent(
-                                  '${videoSource.resolution}  ·  ${videoSource.formatSize()}',
-                                  fontSize: 14,
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextView.accent(
+                                      '${videoSource.resolution}  ·',
+                                      fontSize: 14,
+                                    ),
+                                    Visibility(
+                                        visible: (videoSource.byteSize ?? 0) != 0,
+                                        replacement: Container(
+                                          margin: const EdgeInsets.only(left: 10),
+                                          child: const LoadingView(size: 15),
+                                        ),
+                                        child: TextView.accent(
+                                          '  ${videoSource.formatSize()}',
+                                          fontSize: 14,
+                                        ))
+                                  ],
                                 )
                               ],
                             ),
