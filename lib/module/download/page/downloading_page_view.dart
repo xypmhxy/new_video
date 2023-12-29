@@ -7,6 +7,7 @@ import 'package:free_tube_player/module/download/bean/download_info.dart';
 import 'package:free_tube_player/module/download/controller/global_download_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
+import 'package:free_tube_player/widget/color_button.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'dart:typed_data';
 
@@ -14,6 +15,7 @@ import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
@@ -33,21 +35,63 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Obx(() => ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemBuilder: (_, index) {
-          final downloadInfo = globalDownloadController.downloadList[index];
-          return GetBuilder<GlobalDownloadController>(
-              id: downloadInfo.mediaInfo.identify,
-              init: globalDownloadController,
-              builder: (_) {
-                return _item(downloadInfo);
-              });
-        },
-        separatorBuilder: (_, index) {
-          return const Height(12);
-        },
-        itemCount: globalDownloadController.downloadList.length));
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ColorButton(
+                onPressed: () {
+                  globalDownloadController.pauseAll();
+                },
+                color: AppThemeController.primaryThemeColor(context),
+                child: Obx(() => Wrap(
+                      spacing: 8,
+                      direction: Axis.horizontal,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        SVGView(
+                          assetName: globalDownloadController.hasDownloadingVideo() ? Assets.svgPause : Assets.svgPlay,
+                          size: 14,
+                        ),
+                        TextView.primary(
+                          S.current.pauseAll,
+                          fontSize: 14,
+                        )
+                      ],
+                    )),
+              ),
+              ImageButton(
+                  onPressed: () {},
+                  child: SVGView(
+                    size: 22,
+                    assetName: Assets.svgUserDelete,
+                    color: AppThemeController.textPrimaryColor(context),
+                  ))
+            ],
+          ),
+        ),
+        const Height(16),
+        Obx(() => Expanded(
+            child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                itemBuilder: (_, index) {
+                  final downloadInfo = globalDownloadController.downloadList[index];
+                  return GetBuilder<GlobalDownloadController>(
+                      id: downloadInfo.mediaInfo.identify,
+                      init: globalDownloadController,
+                      builder: (_) {
+                        return _item(downloadInfo);
+                      });
+                },
+                separatorBuilder: (_, index) {
+                  return const Height(12);
+                },
+                itemCount: globalDownloadController.downloadList.length)))
+      ],
+    );
   }
 
   Widget _item(DownloadInfo downloadInfo) {

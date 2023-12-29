@@ -74,5 +74,7 @@
   "removeFromListConfirm": "Are you sure you want to remove this video?",
   "removeAllConfirm": "Are you sure you want to remove all videos?",
   "downloading": "Downloading",
-  "downloaded": "Downloaded"
+  "downloaded": "Downloaded",
+  "pauseAll": "Pause all",
+  "continueAll": "Continue all"
 }

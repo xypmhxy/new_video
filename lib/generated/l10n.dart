@@ -809,6 +809,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Pause all`
+  String get pauseAll {
+    return Intl.message(
+      'Pause all',
+      name: 'pauseAll',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue all`
+  String get continueAll {
+    return Intl.message(
+      'Continue all',
+      name: 'continueAll',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

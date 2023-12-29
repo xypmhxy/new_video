@@ -18,12 +18,15 @@ class GlobalDownloadController extends GetxController {
   final _mediaDao = MediaInfoDao();
   final downloadList = <DownloadInfo>[].obs;
 
-  void downloadMedia({required MediaInfo mediaInfo, required BaseMediaSource mediaSource, bool needDownload = true}) {
+  bool get isDownloadCountLimit => downloadList.length > maxDownloadCount;
+
+  Future<void> downloadMedia(
+      {required MediaInfo mediaInfo, required BaseMediaSource mediaSource, bool needDownload = true}) async {
     final DownloadInfo downloadInfo = DownloadInfo(mediaInfo, videoSource: mediaSource);
-    addToDownloadList(downloadInfo, needDownload: needDownload);
+    await addToDownloadList(downloadInfo, needDownload: needDownload);
   }
 
-  void addToDownloadList(DownloadInfo downloadInfo, {bool needDownload = true}) {
+  Future<void> addToDownloadList(DownloadInfo downloadInfo, {bool needDownload = true}) async {
     final mediaInfo = downloadInfo.mediaInfo;
     final videoSource = downloadInfo.videoSource;
     DownloadInfo? download = _getDownloadInfoOrNull(downloadInfo);
@@ -31,7 +34,7 @@ class GlobalDownloadController extends GetxController {
       downloadList.add(downloadInfo);
     }
     videoSource?.downloadStatus = isDownloadCountLimit ? DownloadStatus.waiting : DownloadStatus.downloading;
-    _mediaDao.insert(mediaInfo);
+    await _mediaDao.insert(mediaInfo);
     _updateUI(mediaInfo.identify);
     if (isDownloadCountLimit == false) {
       if (needDownload) _doDownload(downloadInfo);
@@ -151,18 +154,24 @@ class GlobalDownloadController extends GetxController {
     return completer.future;
   }
 
-  void pause(MediaInfo mediaInfo) {
+  Future<void> pause(MediaInfo mediaInfo) async {
     final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
     downloadInfo?.pause();
     downloadInfo?.videoSource?.downloadStatus = DownloadStatus.pause;
-    _mediaDao.insert(mediaInfo);
+    await _mediaDao.insert(mediaInfo);
     _updateUI(mediaInfo.identify);
   }
 
-  void continueDownload(MediaInfo mediaInfo) {
+  Future<void> continueDownload(MediaInfo mediaInfo) async {
     final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
     if (downloadInfo == null) return;
-    addToDownloadList(downloadInfo);
+    await addToDownloadList(downloadInfo);
+  }
+
+  Future<void> pauseAll() async {
+    for (final downloadInfo in downloadList) {
+      await pause(downloadInfo.mediaInfo);
+    }
   }
 
   Future<void> remove(MediaInfo mediaInfo, {BaseMediaSource? mediaSource}) async {
@@ -175,7 +184,7 @@ class GlobalDownloadController extends GetxController {
     await _deleteFile(mediaSource);
     mediaSource?.clearDownload();
     mediaSource?.audioSource?.clearDownload();
-    _mediaDao.insert(mediaInfo);
+    await _mediaDao.insert(mediaInfo);
     _updateUI(mediaInfo.identify);
   }
 
@@ -197,8 +206,6 @@ class GlobalDownloadController extends GetxController {
     update([id]);
   }
 
-  bool get isDownloadCountLimit => downloadList.length > maxDownloadCount;
-
   Future<void> _deleteFile(BaseMediaSource? videoSource) async {
     String? downloadPath = videoSource?.downloadPath;
     if (downloadPath != null) {
@@ -213,6 +220,13 @@ class GlobalDownloadController extends GetxController {
       final audioFile = File(audioPath);
       if (audioFile.existsSync()) audioFile.deleteSync();
     }
+  }
+
+  bool hasDownloadingVideo(){
+    for (final downloadInfo in downloadList){
+      if (downloadInfo.isDownloading)return true;
+    }
+    return false;
   }
 
   Future<void> prepareDownloadingList() async {

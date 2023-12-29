@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Are you sure you want to delete this video?"),
         "confirmDeleteHistory": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to delete this video\'s history?"),
+        "continueAll": MessageLookupByLibrary.simpleMessage("Continue all"),
         "cover": MessageLookupByLibrary.simpleMessage("Cover"),
         "darkMode": MessageLookupByLibrary.simpleMessage("Dark Mode"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
@@ -84,6 +85,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Grant permissions to get video files in your phone"),
         "noRecommended": MessageLookupByLibrary.simpleMessage("No recommended"),
         "paramsVideos": m0,
+        "pauseAll": MessageLookupByLibrary.simpleMessage("Pause all"),
         "playlist": MessageLookupByLibrary.simpleMessage("Playlist"),
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
         "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
