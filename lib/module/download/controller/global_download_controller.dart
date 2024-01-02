@@ -64,7 +64,7 @@ class GlobalDownloadController extends GetxController {
       await VideoDataHelper.get.requestVideoSource(mediaInfo);
     }
     final videoSource =
-        mediaInfo.videoSources?.firstWhereOrNull((element) => element.label == downloadInfo.videoSource?.label);
+        mediaInfo.videoSources?.firstWhereOrNull((element) => element.identify == downloadInfo.videoSource?.identify);
     if (videoSource != null) downloadInfo.videoSource = videoSource;
     final videoUrl = downloadInfo.videoSource?.url;
     if (videoUrl == null) return;

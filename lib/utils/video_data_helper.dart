@@ -66,7 +66,7 @@ class VideoDataHelper {
           for (final mux in manifest.videoOnly) {
             final videoSource = parseMuxedVideo(mux);
             if (videoSource.format != 'mp4') continue;
-            final existMuxVideo = videoSources.firstWhereOrNull((element) => element.label == videoSource.label);
+            final existMuxVideo = videoSources.firstWhereOrNull((element) => element.identify == videoSource.identify);
             if (existMuxVideo != null) continue;
             videoSource.audioSource = audioSource.first;
             videoSources.add(videoSource);
@@ -80,7 +80,7 @@ class VideoDataHelper {
 
         List<VideoSource> cloneVideoSources = [];
         for (final videoSource in videoSources) {
-          final existVideoSource = cloneVideoSources.firstWhereOrNull((element) => element.label == videoSource.label);
+          final existVideoSource = cloneVideoSources.firstWhereOrNull((element) => element.identify == videoSource.identify);
           if (existVideoSource != null) continue;
           cloneVideoSources.add(videoSource);
         }

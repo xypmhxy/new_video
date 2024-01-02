@@ -276,6 +276,9 @@ class BaseMediaSource {
   BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.audioSource});
 
   @ignore
+  String get identify => label ?? url;
+
+  @ignore
   int get realTotalLength => (fileLength ?? 0) + (audioSource?.fileLength ?? 0);
 
   @ignore

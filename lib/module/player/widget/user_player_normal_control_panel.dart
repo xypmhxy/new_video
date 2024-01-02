@@ -278,7 +278,7 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
     sources.addAll(videoSources);
     final sourcesReversed = sources.reversed.toList() ?? [];
     for (final videoSource in sourcesReversed) {
-      final existVideoSource = sources.firstWhereOrNull((element) => element.label == videoSource.label);
+      final existVideoSource = sources.firstWhereOrNull((element) => element.identify == videoSource.identify);
       if (existVideoSource != null) continue;
       sources.add(videoSource);
     }
