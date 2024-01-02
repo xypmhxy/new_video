@@ -52,6 +52,13 @@ class MediaInfoDao {
         .findAll();
   }
 
+  Future<List<MediaInfo>> queryDownloadComplete() async {
+    return _isar.mediaInfos
+        .filter()
+        .videoSourcesElement((q) => q.downloadStatusEqualTo(DownloadStatus.success).and().downloadPathIsNotEmpty())
+        .findAll();
+  }
+
   Future<bool> delete(int id) {
     return _isar.mediaInfos.delete(id);
   }

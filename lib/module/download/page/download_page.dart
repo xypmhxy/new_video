@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/download/page/downloaded_page_view.dart';
 import 'package:free_tube_player/module/download/page/downloading_page_view.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
@@ -69,7 +70,7 @@ class _DownloadPageState extends State<DownloadPage> {
     return const Expanded(
         child: TabBarView(children: [
       DownloadingPageView(),
-      DownloadingPageView(),
+      DownloadedPageView(),
     ]));
   }
 }

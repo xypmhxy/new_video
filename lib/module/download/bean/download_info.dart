@@ -10,8 +10,8 @@ base class DownloadInfo extends LinkedListEntry<DownloadInfo> {
   CancelToken cancelToken = CancelToken();
   Downloader downloader = Downloader();
   BaseMediaSource? videoSource;
-  int thisSecondLength = 0;
-  int lastSecondLength = 0;
+  int curSecondLength = 0;
+  int preSecondLength = 0;
 
   DownloadInfo(this.mediaInfo, {this.videoSource});
 
@@ -35,8 +35,16 @@ base class DownloadInfo extends LinkedListEntry<DownloadInfo> {
     return '${downloadLength.parseUnit()} / ${totalLength.parseUnit()}';
   }
 
-  void pause(){
+  void pause() {
     cancelToken.cancel();
     cancelToken = CancelToken();
+    curSecondLength = preSecondLength = 0;
+  }
+
+  String getDownloadSpeed() {
+    if (curSecondLength == 0 || preSecondLength == 0) return '- -';
+    final speedBytes = curSecondLength - preSecondLength;
+    if (speedBytes <= 0) return '0KB';
+    return speedBytes.formatSpeedSize();
   }
 }

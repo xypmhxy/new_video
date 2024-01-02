@@ -21,6 +21,7 @@ class Assets {
   static const String imagesThemeIcon128 = 'images/theme_icon_128.png';
   static const String imagesWarning = 'images/warning.png';
   static const String svgAddToList = 'assets/svg/add_to_list.svg';
+  static const String svgClose = 'assets/svg/close.svg';
   static const String svgComment = 'assets/svg/comment.svg';
   static const String svgDelete = 'assets/svg/delete.svg';
   static const String svgDeleteHistory = 'assets/svg/delete_history.svg';

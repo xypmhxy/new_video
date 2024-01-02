@@ -44,27 +44,43 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
             children: [
               ColorButton(
                 onPressed: () {
-                  globalDownloadController.pauseAll();
+                  if (globalDownloadController.hasDownloadingVideo()) {
+                    globalDownloadController.pauseAll();
+                  } else {
+                    globalDownloadController.continueALL();
+                  }
                 },
                 color: AppThemeController.primaryThemeColor(context),
-                child: Obx(() => Wrap(
-                      spacing: 8,
-                      direction: Axis.horizontal,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        SVGView(
-                          assetName: globalDownloadController.hasDownloadingVideo() ? Assets.svgPause : Assets.svgPlay,
-                          size: 14,
-                        ),
-                        TextView.primary(
-                          S.current.pauseAll,
-                          fontSize: 14,
-                        )
-                      ],
-                    )),
+                child: Obx(() {
+                  final _ = globalDownloadController.changeNotify.value;
+                  return Wrap(
+                    spacing: 8,
+                    direction: Axis.horizontal,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      SVGView(
+                        assetName: globalDownloadController.hasDownloadingVideo() ? Assets.svgPause : Assets.svgPlay,
+                        color: AppThemeController.textPrimaryColor(context),
+                        size: 14,
+                      ),
+                      TextView.primary(
+                        globalDownloadController.hasDownloadingVideo() ? S.current.pauseAll : S.current.continueAll,
+                        fontSize: 14,
+                      )
+                    ],
+                  );
+                }),
               ),
               ImageButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    DialogUtils.showCenterDialog(DialogConfirm(
+                      title: S.current.removeAllConfirm,
+                      onConfirm: () {
+                        DialogUtils.dismiss();
+                        globalDownloadController.removeAll();
+                      },
+                    ));
+                  },
                   child: SVGView(
                     size: 22,
                     assetName: Assets.svgUserDelete,
@@ -115,18 +131,14 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: getBorderRadius(4),
-                      child: AutoImageView(
-                        width: itemWidth,
-                        height: itemHeight,
-                        imageUrl: mediaInfo.thumbnail,
-                        imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
-                      ),
-                    ),
-                  ],
+                ClipRRect(
+                  borderRadius: getBorderRadius(4),
+                  child: AutoImageView(
+                    width: itemWidth,
+                    height: itemHeight,
+                    imageUrl: mediaInfo.thumbnail,
+                    imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
+                  ),
                 ),
                 const Width(10),
                 Expanded(
@@ -150,7 +162,13 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            TextView.primary(downloadInfo.downloadProgressString(), fontSize: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextView.primary(downloadInfo.downloadProgressString(), fontSize: 12),
+                                TextView.accent('${downloadInfo.getDownloadSpeed()}/s', fontSize: 12),
+                              ],
+                            ),
                             const Height(6),
                             LinearProgressIndicator(
                               minHeight: 3,

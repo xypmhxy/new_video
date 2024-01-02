@@ -11,7 +11,7 @@ class Downloader {
   void download(
       {required String url,
       required String savePath,
-      Function({int? errorCode})? downloadFailed,
+      Function({int? errorCode, String? errorMsg})? downloadFailed,
       ProgressCallback? onReceiveProgress,
       CancelToken? cancelToken}) async {
     try {
@@ -19,6 +19,7 @@ class Downloader {
       int startRange = await file.exists() ? await file.length() : 0;
       var response = await _dio.get<ResponseBody>(
         url,
+        cancelToken: cancelToken,
         options: Options(
           responseType: ResponseType.stream,
           headers: {
@@ -43,9 +44,10 @@ class Downloader {
           await raf.close();
         },
         onError: (e) async {
+          await subscription?.cancel();
           await raf.close();
           if (cancelToken?.isCancelled == false) {
-            await downloadFailed?.call(errorCode: -1);
+            await downloadFailed?.call(errorMsg: e.toString());
           }
           LogUtils.e("下载过程出现异常 $e");
         },
@@ -55,9 +57,10 @@ class Downloader {
         await raf.close();
       });
     } catch (e) {
-      LogUtils.e('DownloadHelper 下载异常 $e');
       if (e is DioException) {
-        downloadFailed?.call(errorCode: e.response?.statusCode ?? -2);
+        if (e.type == DioExceptionType.cancel) return;
+        downloadFailed?.call(errorMsg: e.response?.statusMessage ?? 'unknown', errorCode: e.response?.statusCode ?? -2);
+        LogUtils.e('DownloadHelper 下载异常 $e');
       }
     }
   }
