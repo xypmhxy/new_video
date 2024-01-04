@@ -31,8 +31,11 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'player_controller.dart';
 
 Future<void> startUserPlayPage(
-    {required MediaInfo mediaInfo, bool isCloseCurrent = false, BuildContext? context}) async {
-  userPlayerController.playNewSource(mediaInfo);
+    {required MediaInfo mediaInfo,
+    VideoSource? videoSource,
+    bool isCloseCurrent = false,
+    BuildContext? context}) async {
+  userPlayerController.playNewSource(mediaInfo, videoSource: videoSource);
   if (isCloseCurrent) {
     PageNavigation.startNewPageAndClose(const UserPlayerPage(), preventDuplicates: false);
   } else {
@@ -80,7 +83,8 @@ class UserPlayerController {
   final _mediaInfoHelper = MediaInfoHelper.get;
 
   Future<void> playNewSource(MediaInfo mediaInfo, {VideoSource? videoSource}) async {
-    if (mediaInfo.identify == _nowPlayingMedia.value?.identify) return;
+    if (mediaInfo.identify == _nowPlayingMedia.value?.identify &&
+        videoSource?.identify == this.videoSource.value?.identify) return;
     LogUtils.i('播放--开始播放');
     final startPrePlayDate = DateUtil.getNowDateMs();
     int getUrlDate = startPrePlayDate;

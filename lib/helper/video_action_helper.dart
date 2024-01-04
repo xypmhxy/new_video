@@ -31,7 +31,7 @@ class VideoActionHelper {
       VoidCallback? onDeleteHistory,
       ValueChanged<String>? onRename,
       VoidCallback? onClickVideoEditor,
-      bool isShowDownload = false,
+      bool isShowDownload = true,
       bool isShowHistory = false,
       bool isShowRemove = false}) {
     DialogUtils.showBottomSheet(

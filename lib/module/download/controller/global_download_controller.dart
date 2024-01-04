@@ -91,16 +91,16 @@ class GlobalDownloadController extends GetxController {
           LogUtils.e('视频下载失败 $errorCode');
         },
         onReceiveProgress: (count, total) async {
-          videoSource?.fileLength = total;
+          videoSource?.byteSize = total;
           videoSource?.downloadLength = count;
           // LogUtils.printLog('当前视频文件下载进度 ${mediaInfo.title}  $count  $total');
           if (count >= total) {
             final needAudioDownload = videoSource?.isNeedAudioTrack() ?? false;
             if (needAudioDownload) {
               LogUtils.i('视频下载完成开始下载音频 ${mediaInfo.title}');
-              final audioResult = await _doDownloadAudio(downloadInfo, videoSource!.audioSource!);
+              final audioResult = await _doDownloadAudio(downloadInfo);
               if (audioResult) {
-                videoSource.downloadStatus = DownloadStatus.success;
+                videoSource!.downloadStatus = DownloadStatus.success;
                 videoSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
                 _removeDownloadInfo(downloadInfo);
                 LogUtils.i('视频下载完成 ${mediaInfo.title}');
@@ -120,11 +120,13 @@ class GlobalDownloadController extends GetxController {
         });
   }
 
-  Future<bool> _doDownloadAudio(DownloadInfo downloadInfo, AudioSource audioSource) async {
+  Future<bool> _doDownloadAudio(DownloadInfo downloadInfo) async {
+    if (downloadInfo.videoSource.audioSource == null)return false;
     Completer<bool> completer = Completer();
     final downloader = downloadInfo.downloader;
     final mediaInfo = downloadInfo.mediaInfo;
-    final audioUrl = audioSource.url;
+    final audioSource = downloadInfo.videoSource.audioSource;
+    final audioUrl = audioSource!.url;
     final fileName = mediaInfo.youtubeId ?? mediaInfo.title;
     final relativePath = '${fileName.toMd5()}.mp3';
     final audioSavePath = await FileUtils.getDownloadFilePath(relativePath);
@@ -134,6 +136,7 @@ class GlobalDownloadController extends GetxController {
       return false;
     }
     audioSource.downloadPath = relativePath;
+    audioSource.downloadStatus = DownloadStatus.downloading;
     _mediaDao.insert(mediaInfo);
 
     downloader.download(
@@ -148,7 +151,7 @@ class GlobalDownloadController extends GetxController {
           completer.complete(false);
         },
         onReceiveProgress: (count, total) {
-          audioSource.fileLength = total;
+          audioSource.byteSize = total;
           audioSource.downloadLength = count;
           LogUtils.printLog('当前音频文件下载进度 ${mediaInfo.title}  $count  $total');
           if (count >= total) {

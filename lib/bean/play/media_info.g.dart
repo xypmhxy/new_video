@@ -6086,54 +6086,49 @@ const VideoSourceSchema = Schema(
       type: IsarType.byte,
       enumMap: _VideoSourcedownloadStatusEnumValueMap,
     ),
-    r'fileLength': PropertySchema(
-      id: 8,
-      name: r'fileLength',
-      type: IsarType.long,
-    ),
     r'format': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'format',
       type: IsarType.string,
     ),
     r'fps': PropertySchema(
-      id: 10,
+      id: 9,
       name: r'fps',
       type: IsarType.long,
     ),
     r'height': PropertySchema(
-      id: 11,
+      id: 10,
       name: r'height',
       type: IsarType.long,
     ),
     r'isOnlyVideo': PropertySchema(
-      id: 12,
+      id: 11,
       name: r'isOnlyVideo',
       type: IsarType.bool,
     ),
     r'label': PropertySchema(
-      id: 13,
+      id: 12,
       name: r'label',
       type: IsarType.string,
     ),
     r'resolution': PropertySchema(
-      id: 14,
+      id: 13,
       name: r'resolution',
       type: IsarType.string,
     ),
     r'sourceType': PropertySchema(
-      id: 15,
+      id: 14,
       name: r'sourceType',
       type: IsarType.byte,
       enumMap: _VideoSourcesourceTypeEnumValueMap,
     ),
     r'url': PropertySchema(
-      id: 16,
+      id: 15,
       name: r'url',
       type: IsarType.string,
     ),
     r'width': PropertySchema(
-      id: 17,
+      id: 16,
       name: r'width',
       type: IsarType.long,
     )
@@ -6200,16 +6195,15 @@ void _videoSourceSerialize(
   writer.writeString(offsets[5], object.downloadPath);
   writer.writeLong(offsets[6], object.downloadStartDate);
   writer.writeByte(offsets[7], object.downloadStatus.index);
-  writer.writeLong(offsets[8], object.fileLength);
-  writer.writeString(offsets[9], object.format);
-  writer.writeLong(offsets[10], object.fps);
-  writer.writeLong(offsets[11], object.height);
-  writer.writeBool(offsets[12], object.isOnlyVideo);
-  writer.writeString(offsets[13], object.label);
-  writer.writeString(offsets[14], object.resolution);
-  writer.writeByte(offsets[15], object.sourceType.index);
-  writer.writeString(offsets[16], object.url);
-  writer.writeLong(offsets[17], object.width);
+  writer.writeString(offsets[8], object.format);
+  writer.writeLong(offsets[9], object.fps);
+  writer.writeLong(offsets[10], object.height);
+  writer.writeBool(offsets[11], object.isOnlyVideo);
+  writer.writeString(offsets[12], object.label);
+  writer.writeString(offsets[13], object.resolution);
+  writer.writeByte(offsets[14], object.sourceType.index);
+  writer.writeString(offsets[15], object.url);
+  writer.writeLong(offsets[16], object.width);
 }
 
 VideoSource _videoSourceDeserialize(
@@ -6221,13 +6215,13 @@ VideoSource _videoSourceDeserialize(
   final object = VideoSource(
     bitrate: reader.readLongOrNull(offsets[1]),
     byteSize: reader.readLongOrNull(offsets[2]),
-    format: reader.readStringOrNull(offsets[9]),
-    fps: reader.readLongOrNull(offsets[10]),
-    height: reader.readLongOrNull(offsets[11]),
-    isOnlyVideo: reader.readBoolOrNull(offsets[12]) ?? false,
-    label: reader.readStringOrNull(offsets[13]),
-    url: reader.readStringOrNull(offsets[16]) ?? '',
-    width: reader.readLongOrNull(offsets[17]),
+    format: reader.readStringOrNull(offsets[8]),
+    fps: reader.readLongOrNull(offsets[9]),
+    height: reader.readLongOrNull(offsets[10]),
+    isOnlyVideo: reader.readBoolOrNull(offsets[11]) ?? false,
+    label: reader.readStringOrNull(offsets[12]),
+    url: reader.readStringOrNull(offsets[15]) ?? '',
+    width: reader.readLongOrNull(offsets[16]),
   );
   object.audioSource = reader.readObjectOrNull<AudioSource>(
     offsets[0],
@@ -6241,9 +6235,8 @@ VideoSource _videoSourceDeserialize(
   object.downloadStatus = _VideoSourcedownloadStatusValueEnumMap[
           reader.readByteOrNull(offsets[7])] ??
       DownloadStatus.none;
-  object.fileLength = reader.readLongOrNull(offsets[8]);
   object.sourceType =
-      _VideoSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[15])] ??
+      _VideoSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[14])] ??
           SourceType.local;
   return object;
 }
@@ -6278,26 +6271,24 @@ P _videoSourceDeserializeProp<P>(
               reader.readByteOrNull(offset)] ??
           DownloadStatus.none) as P;
     case 8:
-      return (reader.readLongOrNull(offset)) as P;
-    case 9:
       return (reader.readStringOrNull(offset)) as P;
+    case 9:
+      return (reader.readLongOrNull(offset)) as P;
     case 10:
       return (reader.readLongOrNull(offset)) as P;
     case 11:
-      return (reader.readLongOrNull(offset)) as P;
-    case 12:
       return (reader.readBoolOrNull(offset) ?? false) as P;
-    case 13:
+    case 12:
       return (reader.readStringOrNull(offset)) as P;
-    case 14:
+    case 13:
       return (reader.readString(offset)) as P;
-    case 15:
+    case 14:
       return (_VideoSourcesourceTypeValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SourceType.local) as P;
-    case 16:
+    case 15:
       return (reader.readStringOrNull(offset) ?? '') as P;
-    case 17:
+    case 16:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -6920,80 +6911,6 @@ extension VideoSourceQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'downloadStatus',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      fileLengthIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'fileLength',
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      fileLengthIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'fileLength',
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      fileLengthEqualTo(int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'fileLength',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      fileLengthGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'fileLength',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      fileLengthLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'fileLength',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
-      fileLengthBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'fileLength',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -7906,29 +7823,24 @@ const AudioSourceSchema = Schema(
       type: IsarType.byte,
       enumMap: _AudioSourcedownloadStatusEnumValueMap,
     ),
-    r'fileLength': PropertySchema(
-      id: 8,
-      name: r'fileLength',
-      type: IsarType.long,
-    ),
     r'format': PropertySchema(
-      id: 9,
+      id: 8,
       name: r'format',
       type: IsarType.string,
     ),
     r'label': PropertySchema(
-      id: 10,
+      id: 9,
       name: r'label',
       type: IsarType.string,
     ),
     r'sourceType': PropertySchema(
-      id: 11,
+      id: 10,
       name: r'sourceType',
       type: IsarType.byte,
       enumMap: _AudioSourcesourceTypeEnumValueMap,
     ),
     r'url': PropertySchema(
-      id: 12,
+      id: 11,
       name: r'url',
       type: IsarType.string,
     )
@@ -7994,11 +7906,10 @@ void _audioSourceSerialize(
   writer.writeString(offsets[5], object.downloadPath);
   writer.writeLong(offsets[6], object.downloadStartDate);
   writer.writeByte(offsets[7], object.downloadStatus.index);
-  writer.writeLong(offsets[8], object.fileLength);
-  writer.writeString(offsets[9], object.format);
-  writer.writeString(offsets[10], object.label);
-  writer.writeByte(offsets[11], object.sourceType.index);
-  writer.writeString(offsets[12], object.url);
+  writer.writeString(offsets[8], object.format);
+  writer.writeString(offsets[9], object.label);
+  writer.writeByte(offsets[10], object.sourceType.index);
+  writer.writeString(offsets[11], object.url);
 }
 
 AudioSource _audioSourceDeserialize(
@@ -8010,9 +7921,9 @@ AudioSource _audioSourceDeserialize(
   final object = AudioSource(
     bitrate: reader.readLongOrNull(offsets[1]),
     byteSize: reader.readLongOrNull(offsets[2]),
-    format: reader.readStringOrNull(offsets[9]),
-    label: reader.readStringOrNull(offsets[10]),
-    url: reader.readStringOrNull(offsets[12]) ?? '',
+    format: reader.readStringOrNull(offsets[8]),
+    label: reader.readStringOrNull(offsets[9]),
+    url: reader.readStringOrNull(offsets[11]) ?? '',
   );
   object.audioSource = reader.readObjectOrNull<AudioSource>(
     offsets[0],
@@ -8026,9 +7937,8 @@ AudioSource _audioSourceDeserialize(
   object.downloadStatus = _AudioSourcedownloadStatusValueEnumMap[
           reader.readByteOrNull(offsets[7])] ??
       DownloadStatus.none;
-  object.fileLength = reader.readLongOrNull(offsets[8]);
   object.sourceType =
-      _AudioSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[11])] ??
+      _AudioSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[10])] ??
           SourceType.local;
   return object;
 }
@@ -8063,16 +7973,14 @@ P _audioSourceDeserializeProp<P>(
               reader.readByteOrNull(offset)] ??
           DownloadStatus.none) as P;
     case 8:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 9:
       return (reader.readStringOrNull(offset)) as P;
     case 10:
-      return (reader.readStringOrNull(offset)) as P;
-    case 11:
       return (_AudioSourcesourceTypeValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SourceType.local) as P;
-    case 12:
+    case 11:
       return (reader.readStringOrNull(offset) ?? '') as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -8695,80 +8603,6 @@ extension AudioSourceQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'downloadStatus',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      fileLengthIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'fileLength',
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      fileLengthIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'fileLength',
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      fileLengthEqualTo(int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'fileLength',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      fileLengthGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'fileLength',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      fileLengthLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'fileLength',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
-      fileLengthBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'fileLength',
         lower: lower,
         includeLower: includeLower,
         upper: upper,

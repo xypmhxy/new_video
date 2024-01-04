@@ -267,7 +267,7 @@ class BaseMediaSource {
 
   @enumerated
   DownloadStatus downloadStatus = DownloadStatus.none;
-  int? fileLength;
+  // int? fileLength;
   int? downloadLength;
   int? downloadStartDate;
   int? downloadFinishDate;
@@ -279,7 +279,7 @@ class BaseMediaSource {
   String get identify => label ?? url;
 
   @ignore
-  int get realTotalLength => (fileLength ?? 0) + (audioSource?.fileLength ?? 0);
+  int get realTotalLength => (byteSize ?? 0) + (audioSource?.byteSize ?? 0);
 
   @ignore
   bool get isDownloadNone => downloadStatus == DownloadStatus.none;
@@ -303,8 +303,8 @@ class BaseMediaSource {
   bool get isFailed => downloadStatus == DownloadStatus.failed;
 
   double downloadProgress() {
-    if (downloadLength == null || fileLength == null) return 0;
-    final totalLength = fileLength! + (audioSource?.fileLength ?? 0);
+    if (downloadLength == null || byteSize == null) return 0;
+    final totalLength = byteSize! + (audioSource?.byteSize ?? 0);
     final totalDownload = downloadLength! + (audioSource?.downloadLength ?? 0);
     return totalDownload / totalLength;
   }
@@ -318,12 +318,16 @@ class BaseMediaSource {
   @ignore
   bool get isBilibili => sourceType == SourceType.bilibili;
 
+  @ignore
+  String get downloadFinishFormatDate => DateTime.fromMillisecondsSinceEpoch(downloadFinishDate ?? 0).format();
+
   void clearDownload() {
     downloadStartDate = null;
     downloadFinishDate = null;
     downloadPath = null;
     downloadLength = null;
     downloadStatus = DownloadStatus.none;
+    audioSource?.clearDownload();
   }
 }
 

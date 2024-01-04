@@ -36,7 +36,8 @@ class DownloadedPageController {
     repeatMap.clear();
     downloadGroupList.clear();
 
-    final downloadList = await _mediaDao.queryDownloadComplete();
+    var downloadList = await _mediaDao.queryDownloadComplete();
+    downloadList = downloadList.reversed.toList();
     for (final mediaInfo in downloadList) {
       if (mediaInfo.videoSources == null) continue;
       for (final videoSource in mediaInfo.videoSources!) {
