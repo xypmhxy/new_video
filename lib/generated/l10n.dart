@@ -829,6 +829,16 @@ class S {
       args: [],
     );
   }
+
+  /// `downloading: {params}  - complete: {params1}`
+  String libDownloadCount(Object params, Object params1) {
+    return Intl.message(
+      'downloading: $params  - complete: $params1',
+      name: 'libDownloadCount',
+      desc: '',
+      args: [params, params1],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

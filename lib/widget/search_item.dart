@@ -10,11 +10,8 @@ import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/generated/l10n.dart';
-import 'package:free_tube_player/module/download/bean/download_info.dart';
-import 'package:free_tube_player/module/download/controller/global_download_controller.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'text_view.dart';
 
@@ -26,9 +23,12 @@ class SearchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [_thumbImage(), const Width(12), _info(context)],
+    return Container(
+      color: Colors.transparent,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [_thumbImage(), const Width(12), _info(context)],
+      ),
     );
   }
 

@@ -36,7 +36,7 @@ class GlobalDownloadController extends GetxController {
       downloadList.add(downloadInfo);
     }
     if (needDownload) {
-      videoSource?.downloadStatus = isDownloadCountLimit ? DownloadStatus.waiting : DownloadStatus.downloading;
+      videoSource.downloadStatus = isDownloadCountLimit ? DownloadStatus.waiting : DownloadStatus.downloading;
       await _mediaDao.insert(mediaInfo);
     }
     _updateUI(mediaInfo.identify);
@@ -64,10 +64,10 @@ class GlobalDownloadController extends GetxController {
       await VideoDataHelper.get.requestVideoSource(mediaInfo);
     }
     final videoSource =
-        mediaInfo.videoSources?.firstWhereOrNull((element) => element.identify == downloadInfo.videoSource?.identify);
+        mediaInfo.videoSources?.firstWhereOrNull((element) => element.identify == downloadInfo.videoSource.identify);
     if (videoSource != null) downloadInfo.videoSource = videoSource;
-    final videoUrl = downloadInfo.videoSource?.url;
-    if (videoUrl == null) return;
+    final videoUrl = downloadInfo.videoSource.url;
+    if (videoUrl.isEmpty) return;
     final fileName = mediaInfo.youtubeId ?? mediaInfo.title;
     final label = videoSource?.label ?? '${videoSource?.bitrate}';
     final relativePath = '${fileName.toMd5()}-$label.mp4';
@@ -166,18 +166,18 @@ class GlobalDownloadController extends GetxController {
     return completer.future;
   }
 
-  Future<void> pause(MediaInfo mediaInfo) async {
-    final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
+  Future<void> pause(MediaInfo mediaInfo, BaseMediaSource mediaSource) async {
+    final downloadInfo = _getDownloadInfoOrNullByMedia(mediaInfo, mediaSource);
     downloadInfo?.pause();
-    downloadInfo?.videoSource?.downloadStatus = DownloadStatus.pause;
+    downloadInfo?.videoSource.downloadStatus = DownloadStatus.pause;
     _updateUI(mediaInfo.identify);
     if (hasDownloadingVideo() == false) _cancelDownloadTimer();
     changeNotify.refresh();
     await _mediaDao.insert(mediaInfo);
   }
 
-  Future<void> continueDownload(MediaInfo mediaInfo) async {
-    final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
+  Future<void> continueDownload(MediaInfo mediaInfo, BaseMediaSource mediaSource) async {
+    final downloadInfo = _getDownloadInfoOrNullByMedia(mediaInfo, mediaSource);
     if (downloadInfo == null) return;
     await addToDownloadList(downloadInfo);
     changeNotify.refresh();
@@ -185,7 +185,7 @@ class GlobalDownloadController extends GetxController {
 
   Future<void> pauseAll() async {
     for (final downloadInfo in downloadList) {
-      pause(downloadInfo.mediaInfo);
+      pause(downloadInfo.mediaInfo, downloadInfo.videoSource);
     }
     changeNotify.refresh();
   }
@@ -196,23 +196,23 @@ class GlobalDownloadController extends GetxController {
     }
   }
 
-  Future<void> remove(MediaInfo mediaInfo, {BaseMediaSource? mediaSource, bool isAllowRemoveList = true}) async {
-    final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
+  Future<void> remove(MediaInfo mediaInfo,
+      {required BaseMediaSource mediaSource, bool isAllowRemoveList = true}) async {
+    final downloadInfo = _getDownloadInfoOrNullByMedia(mediaInfo, mediaSource);
     if (downloadInfo != null) {
       downloadInfo.pause();
       if (isAllowRemoveList) _removeDownloadInfo(downloadInfo);
     }
-    mediaSource ??= downloadInfo?.videoSource;
     await _deleteFile(mediaSource);
-    mediaSource?.clearDownload();
-    mediaSource?.audioSource?.clearDownload();
+    mediaSource.clearDownload();
+    mediaSource.audioSource?.clearDownload();
     await _mediaDao.insert(mediaInfo);
     _updateUI(mediaInfo.identify);
   }
 
   Future<void> removeAll() async {
     for (final downloadInfo in downloadList) {
-      await remove(downloadInfo.mediaInfo, isAllowRemoveList: false);
+      await remove(downloadInfo.mediaInfo, mediaSource: downloadInfo.videoSource, isAllowRemoveList: false);
     }
     downloadList.clear();
   }
@@ -230,7 +230,7 @@ class GlobalDownloadController extends GetxController {
       for (final downloadInfo in downloadList) {
         if (downloadInfo.isDownloading == false) continue;
         downloadInfo.preSecondLength = downloadInfo.curSecondLength;
-        downloadInfo.curSecondLength = downloadInfo.videoSource?.downloadLength ?? 0;
+        downloadInfo.curSecondLength = downloadInfo.videoSource.downloadLength ?? 0;
       }
     });
   }
@@ -247,16 +247,15 @@ class GlobalDownloadController extends GetxController {
     return null;
   }
 
-  DownloadInfo? _queryDownloadInfoOrNull(MediaInfo mediaInfo) {
-    try {
-      return downloadList.firstWhere((element) => element.identify == mediaInfo.identify);
-    } catch (_) {}
-    return null;
+  DownloadInfo? _getDownloadInfoOrNullByMedia(MediaInfo mediaInfo, BaseMediaSource mediaSource) {
+    return _getDownloadInfoOrNull(DownloadInfo(mediaInfo, videoSource: mediaSource));
   }
 
   DownloadInfo? _getDownloadInfoOrNull(DownloadInfo downloadInfo) {
     try {
-      return downloadList.firstWhere((element) => element.identify == downloadInfo.identify);
+      return downloadList.firstWhere((element) =>
+          element.identify == downloadInfo.identify &&
+          element.videoSource.identify == downloadInfo.videoSource.identify);
     } catch (_) {}
     return null;
   }
@@ -307,21 +306,21 @@ class GlobalDownloadController extends GetxController {
     }
   }
 
-  void clickDownload(MediaInfo mediaInfo, {BaseMediaSource? mediaSource}) {
-    final downloadInfo = _queryDownloadInfoOrNull(mediaInfo);
-    if (downloadInfo == null && mediaSource != null) {
+  void clickDownload(MediaInfo mediaInfo, {required BaseMediaSource mediaSource}) {
+    final downloadInfo = _getDownloadInfoOrNullByMedia(mediaInfo, mediaSource);
+    if (downloadInfo == null) {
       downloadMedia(mediaInfo: mediaInfo, mediaSource: mediaSource);
       return;
     }
-    if (downloadInfo?.isDownloading == true || downloadInfo?.isWaiting == true) {
-      pause(mediaInfo);
-    } else if (downloadInfo?.isPause == true || downloadInfo?.isFailed == true) {
-      continueDownload(mediaInfo);
-    } else if (downloadInfo?.isSuccess == true) {
+    if (downloadInfo.isDownloading == true || downloadInfo.isWaiting == true) {
+      pause(mediaInfo, mediaSource);
+    } else if (downloadInfo.isPause == true || downloadInfo.isFailed == true) {
+      continueDownload(mediaInfo, mediaSource);
+    } else if (downloadInfo.isSuccess == true) {
       DialogUtils.showCenterDialog(DialogConfirm(
         title: S.current.removeDownloadConfirmText,
         onConfirm: () {
-          pause(mediaInfo);
+          pause(mediaInfo, mediaSource);
           DialogUtils.dismiss();
         },
       ));

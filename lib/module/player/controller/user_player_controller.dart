@@ -80,6 +80,7 @@ class UserPlayerController {
   final _mediaInfoHelper = MediaInfoHelper.get;
 
   Future<void> playNewSource(MediaInfo mediaInfo, {VideoSource? videoSource}) async {
+    if (mediaInfo.identify == _nowPlayingMedia.value?.identify) return;
     LogUtils.i('播放--开始播放');
     final startPrePlayDate = DateUtil.getNowDateMs();
     int getUrlDate = startPrePlayDate;

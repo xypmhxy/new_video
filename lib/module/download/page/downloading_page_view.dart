@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/dialog/dialog_confirm.dart';
-import 'package:free_tube_player/extension/number_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/download/bean/download_info.dart';
+import 'package:free_tube_player/module/download/controller/downloading_page_controller.dart';
 import 'package:free_tube_player/module/download/controller/global_download_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
@@ -20,6 +20,7 @@ import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
+import 'package:free_tube_player/widget/my_expansion_panel.dart' as my_expansion;
 
 class DownloadingPageView extends StatefulWidget {
   const DownloadingPageView({Key? key}) : super(key: key);
@@ -29,6 +30,20 @@ class DownloadingPageView extends StatefulWidget {
 }
 
 class _DownloadingPageViewState extends State<DownloadingPageView> with AutomaticKeepAliveClientMixin {
+  final _controller = DownloadingPageController();
+
+  @override
+  void initState() {
+    _controller.queryDownload();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -60,12 +75,13 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
                     children: [
                       SVGView(
                         assetName: globalDownloadController.hasDownloadingVideo() ? Assets.svgPause : Assets.svgPlay,
-                        color: AppThemeController.textPrimaryColor(context),
+                        color: ColorRes.textPrimaryColor,
                         size: 14,
                       ),
                       TextView.primary(
                         globalDownloadController.hasDownloadingVideo() ? S.current.pauseAll : S.current.continueAll,
                         fontSize: 14,
+                        color: ColorRes.textPrimaryColor,
                       )
                     ],
                   );
@@ -90,23 +106,86 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
           ),
         ),
         const Height(16),
-        Obx(() => Expanded(
-            child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                itemBuilder: (_, index) {
-                  final downloadInfo = globalDownloadController.downloadList[index];
-                  return GetBuilder<GlobalDownloadController>(
-                      id: downloadInfo.mediaInfo.identify,
-                      init: globalDownloadController,
-                      builder: (_) {
-                        return _item(downloadInfo);
-                      });
+        Expanded(
+            child: SingleChildScrollView(
+          child: Obx(() => my_expansion.ExpansionPanelList(
+                dividerColor: Colors.transparent,
+                materialGapSize: 8,
+                expandedHeaderPadding: EdgeInsets.zero,
+                elevation: 0,
+                expandIconColor: AppThemeController.textPrimaryColor(context).withOpacity(.2),
+                expansionCallback: (index, expand) {
+                  _controller.togglePanelExpand(_controller.downloadGroupList[index].first);
                 },
-                separatorBuilder: (_, index) {
-                  return const Height(12);
-                },
-                itemCount: globalDownloadController.downloadList.length)))
+                children: _controller.downloadGroupList
+                    .map((e) => my_expansion.ExpansionPanel(
+                        canTapOnHeader: true,
+                        isExpanded: _controller.expandMap[e.first.mediaInfo.identify] ?? false,
+                        backgroundColor: Colors.transparent,
+                        headerBuilder: (_, expand) {
+                          final downloadInfo = e.first;
+                          return _itemHeader(downloadInfo, e.length);
+                        },
+                        body: ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (_, index) {
+                              final downloadInfo = e[index];
+                              return GetBuilder<GlobalDownloadController>(
+                                  init: globalDownloadController,
+                                  id: downloadInfo.mediaInfo.identify,
+                                  builder: (_) {
+                                    return _item(downloadInfo);
+                                  });
+                            },
+                            separatorBuilder: (_, __) {
+                              return const Height(12);
+                            },
+                            itemCount: e.length)))
+                    .toList(),
+              )),
+        ))
       ],
+    );
+  }
+
+  Widget _itemHeader(DownloadInfo downloadInfo, int count) {
+    final mediaInfo = downloadInfo.mediaInfo;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: getBorderRadius(4),
+            child: AutoImageView(
+              imageUrl: mediaInfo.thumbnail ?? '',
+              width: 60,
+              height: 60,
+            ),
+          ),
+          const Width(12),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextView.primary(
+                mediaInfo.title,
+                fontSize: 14,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const Height(4),
+              TextView.accent(
+                S.current.paramsVideos(count),
+                fontSize: 13,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              )
+            ],
+          ))
+        ],
+      ),
     );
   }
 
@@ -114,32 +193,50 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
     final mediaInfo = downloadInfo.mediaInfo;
     const itemWidth = 120.0;
     const itemHeight = 82.0;
-    String icon = Assets.imagesDownloadPause;
-    if (downloadInfo.isDownloading || downloadInfo.isWaiting) {
-      icon = Assets.imagesDownloadPause;
-    } else if (downloadInfo.isFailed) {
-      icon = Assets.imagesDownloadError;
-    } else if (downloadInfo.isPause) {
-      icon = Assets.imagesDownloadStart;
-    }
+
     return GestureDetector(
         onTap: () {
           startUserPlayPage(mediaInfo: mediaInfo);
         },
         child: Container(
-            color: Colors.transparent,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            color: AppThemeController.textPrimaryColor(context).withOpacity(.05),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius: getBorderRadius(4),
-                  child: AutoImageView(
-                    width: itemWidth,
-                    height: itemHeight,
-                    imageUrl: mediaInfo.thumbnail,
-                    imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
-                  ),
-                ),
+                GestureDetector(
+                    onTap: () {
+                      globalDownloadController.clickDownload(downloadInfo.mediaInfo,
+                          mediaSource: downloadInfo.videoSource!);
+                    },
+                    child: SizedBox(
+                        width: itemWidth,
+                        height: itemHeight,
+                        child: ClipRRect(
+                          borderRadius: getBorderRadius(4),
+                          child: Stack(
+                            children: [
+                              AutoImageView(
+                                width: itemWidth,
+                                height: itemHeight,
+                                imageUrl: mediaInfo.thumbnail,
+                                imageData: Uint8List.fromList(mediaInfo.localBytesThumbnail ?? []),
+                              ),
+                              Positioned(
+                                  bottom: 2,
+                                  right: 2,
+                                  child: Container(
+                                    decoration: allRadiusDecoration(8, color: ColorRes.backgroundColor),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                    child: TextView.primary(downloadInfo.videoSource?.label ?? '',
+                                        color: Colors.white, fontSize: 12, fontWeight: FontWeight.normal),
+                                  )),
+                              Center(
+                                child: _pauseButton(downloadInfo: downloadInfo),
+                              )
+                            ],
+                          ),
+                        ))),
                 const Width(10),
                 Expanded(
                     child: SizedBox(
@@ -182,35 +279,48 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
                   ),
                 )),
                 const Width(12),
-                SizedBox(
-                  height: itemHeight,
-                  child: Column(
-                    children: [
-                      _button(
-                          image: Assets.imagesDownloadDelete,
-                          onTap: () {
-                            DialogUtils.showCenterDialog(DialogConfirm(
-                              title: S.current.removeDownloadConfirmText,
-                              onConfirm: () {
-                                globalDownloadController.remove(downloadInfo.mediaInfo);
-                                DialogUtils.dismiss();
-                              },
-                            ));
-                          }),
-                      const Height(16),
-                      _button(
-                          image: icon,
-                          onTap: () {
-                            globalDownloadController.clickDownload(downloadInfo.mediaInfo);
-                          }),
-                    ],
-                  ),
-                )
+                _button(
+                    iconData: Icons.close_rounded,
+                    onTap: () {
+                      DialogUtils.showCenterDialog(DialogConfirm(
+                        title: S.current.removeDownloadConfirmText,
+                        onConfirm: () {
+                          globalDownloadController.remove(downloadInfo.mediaInfo,
+                              mediaSource: downloadInfo.videoSource!);
+                          DialogUtils.dismiss();
+                        },
+                      ));
+                    }),
               ],
             )));
   }
 
-  Widget _button({required String image, VoidCallback? onTap}) {
-    return GestureDetector(onTap: onTap, child: ImageView.asset(image, size: 26));
+  Widget _pauseButton({required DownloadInfo downloadInfo, VoidCallback? onTap}) {
+    IconData icon = Icons.pause_rounded;
+    if (downloadInfo.isDownloading || downloadInfo.isWaiting) {
+      icon = Icons.pause_rounded;
+    } else if (downloadInfo.isFailed) {
+      icon = Icons.running_with_errors_rounded;
+    } else if (downloadInfo.isPause) {
+      icon = Icons.arrow_downward_rounded;
+    }
+    return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black38),
+          padding: const EdgeInsets.all(6),
+          child: Icon(icon,
+              color: downloadInfo.isFailed ? AppThemeController.primaryThemeColor(context) : Colors.white, size: 32),
+        ));
+  }
+
+  Widget _button({required IconData iconData, VoidCallback? onTap, double size = 18}) {
+    return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black38),
+          padding: const EdgeInsets.all(6),
+          child: Icon(iconData, color: Colors.white, size: size),
+        ));
   }
 }

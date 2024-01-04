@@ -20,7 +20,10 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(params) => "${params} videos";
+  static String m0(params, params1) =>
+      "downloading: ${params}  - complete: ${params1}";
+
+  static String m1(params) => "${params} videos";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -63,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Failed to obtain playback information"),
         "history": MessageLookupByLibrary.simpleMessage("History"),
         "home": MessageLookupByLibrary.simpleMessage("Home"),
+        "libDownloadCount": m0,
         "library": MessageLookupByLibrary.simpleMessage("Library"),
         "like": MessageLookupByLibrary.simpleMessage("Like"),
         "likedVideos": MessageLookupByLibrary.simpleMessage("Liked Videos"),
@@ -84,7 +88,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "noPermissionToast": MessageLookupByLibrary.simpleMessage(
             "Grant permissions to get video files in your phone"),
         "noRecommended": MessageLookupByLibrary.simpleMessage("No recommended"),
-        "paramsVideos": m0,
+        "paramsVideos": m1,
         "pauseAll": MessageLookupByLibrary.simpleMessage("Pause all"),
         "playlist": MessageLookupByLibrary.simpleMessage("Playlist"),
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),

@@ -59,7 +59,7 @@ class _DownloadPageState extends State<DownloadPage> {
       indicatorColor: AppThemeController.primaryThemeColor(context),
       indicatorWeight: 3,
       labelPadding: const EdgeInsets.only(bottom: 12),
-      unselectedLabelColor: Colors.white,
+      unselectedLabelColor: AppThemeController.textPrimaryColor(context),
       labelColor: AppThemeController.primaryThemeColor(context),
       labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       unselectedLabelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),

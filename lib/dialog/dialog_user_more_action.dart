@@ -21,6 +21,7 @@ class DialogUserMoreAction extends StatefulWidget {
   final VoidCallback? onClickDeleteHistory;
   final VoidCallback? onClickRemove;
   final bool isShowHistory;
+  final bool isShowDownload;
   final bool isShowRemove;
 
   const DialogUserMoreAction({
@@ -34,6 +35,7 @@ class DialogUserMoreAction extends StatefulWidget {
     this.onClickRemove,
     this.isShowHistory = false,
     this.isShowRemove = false,
+    this.isShowDownload = true,
   });
 
   @override
@@ -123,7 +125,8 @@ class _DialogUserMoreActionState extends State<DialogUserMoreAction> {
             color: isLike ? AppThemeController.primaryThemeColor(context) : null, onPressed: () async {
           widget.onClickLike?.call().then((value) => query());
         }),
-        _item(context, svg: Assets.svgDownload, title: S.current.download, onPressed: widget.onClickDownload),
+        if (widget.isShowDownload)
+          _item(context, svg: Assets.svgDownload, title: S.current.download, onPressed: widget.onClickDownload),
         // _item(context, svg: Assets.svgAddToList, title: S.current.playlist, onPressed: onClickAddList),
         _item(context, svg: Assets.svgShare, title: S.current.share, onPressed: widget.onClickShare, size: 29),
         _item(context,

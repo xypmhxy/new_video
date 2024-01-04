@@ -41,6 +41,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
   void initState() {
     _userLibraryController.queryHistory();
     _userLibraryController.queryLikedAndLater();
+    _userLibraryController.queryDownloadComplete();
     _userLibraryController.setup();
     super.initState();
   }
@@ -52,6 +53,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
       Future.delayed(const Duration(milliseconds: 500)).then((_) {
         _userLibraryController.queryHistory();
         _userLibraryController.queryLikedAndLater();
+        _userLibraryController.queryDownloadComplete();
       });
     }
     isFirstIn = false;
@@ -191,7 +193,11 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
       onTap: () {
         PageNavigation.startNewPage(const DownloadPage());
       },
-      child: _item(icon: Assets.imagesLibDownload, title: S.current.download),
+      child: Obx(() => _item(
+          icon: Assets.imagesLibDownload,
+          title: S.current.download,
+          subTitle: S.current.libDownloadCount(
+              globalDownloadController.downloadList.length, _userLibraryController.downloadedVideos.length))),
     );
   }
 

@@ -76,5 +76,6 @@
   "downloading": "Downloading",
   "downloaded": "Downloaded",
   "pauseAll": "Pause all",
-  "continueAll": "Continue all"
+  "continueAll": "Continue all",
+  "libDownloadCount": "downloading: {params}  - complete: {params1}"
 }
