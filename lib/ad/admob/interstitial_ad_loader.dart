@@ -9,7 +9,7 @@ class InterstitialADLoader extends BaseADLoader {
 
   @override
   Future<void> load(String adId, {ADLoadCallback? loadCallback}) async {
-    await ADManager.instance.admobInitCompleter.future;
+    await ADManager.instance.admobInitFuture.future;
     await InterstitialAd.load(
         adUnitId: adId,
         request: const AdRequest(),

@@ -6,6 +6,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/ad/helper/ad_manager.dart';
 import 'package:free_tube_player/app/app_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
@@ -74,12 +75,12 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   }
 
   Future<void> startLoadAD() async {
-    final openADFuture = ADManager.instance.loadOpenAD();
-    ADManager.instance.loadPlayAD();
-    ADManager.instance.loadSettingRewardAD();
+    final openADFuture = ADUtils.instance.loadOpenAd(needLoadHighest: false);
+    ADUtils.instance.loadPlayAD();
+    ADUtils.instance.loadCutAD();
     await Future.any([openADFuture, Future.delayed(const Duration(seconds: 8))]);
     await _animationController.animateTo(1.0, duration: const Duration(milliseconds: 500));
-    await ADManager.instance.tryShowOpenAD();
+    await ADUtils.instance.showOpenAD();
     PageNavigation.startNewPageAndCloseAll(isUserMode ? const UserHomeTabPage() : const HomePage());
   }
 

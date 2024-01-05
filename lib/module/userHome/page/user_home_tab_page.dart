@@ -7,6 +7,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
+import 'package:free_tube_player/ad/helper/ad_manager.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/generated/assets.dart';
@@ -36,6 +38,9 @@ class _UserModePageState extends State<UserHomeTabPage> {
   void initState() {
     backgroundSubscription = FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) async {
       pageController.onAppLifecycleChange(isBackground);
+      if (isBackground == false){
+        ADUtils.instance.showOpenAD();
+      }
     });
     super.initState();
   }

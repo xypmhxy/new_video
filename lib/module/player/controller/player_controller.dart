@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/ad/helper/ad_manager.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
@@ -376,9 +377,9 @@ class PlayerController extends GetxController {
   }
 
   Future<void> _showAD() async {
-    ADManager.instance.loadPlayAD();
+    ADUtils.instance.loadPlayAD();
     _adShowCompleter = Completer();
-    await ADManager.instance.tryShowPlayAD();
+    await ADUtils.instance.showPlayAD();
     _adShowCompleter?.complete(true);
   }
 }

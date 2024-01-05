@@ -28,21 +28,21 @@ class ADManager {
   ADWrapper? _openAD;
   ADWrapper? _playInterAD;
   ADWrapper? _otherAD;
-  ADWrapper? _settingReward;
+  ADWrapper? _cutReward;
 
   bool isHighestLoading = false;
   bool isSplashLoading = false;
   bool isPlayLoading = false;
   bool isOtherLoading = false;
-  bool isSettingRewardLoading = false;
+  bool isCutRewardLoading = false;
 
   String highestRequestPosition = 'all';
 
   ADSituation? lastADSituation;
   Map<ADSituationType, int> adCloseTimeMap = {};
 
-  Completer<bool> maxInitCompleter = Completer();
-  Completer<bool> admobInitCompleter = Completer();
+  // Completer<bool> maxInitCompleter = Completer();
+  Completer<bool> admobInitFuture = Completer();
 
   bool hasADShowing = false;
 
@@ -86,15 +86,15 @@ class ADManager {
   }
 
   void initADMob() {
-    Future.delayed(const Duration(seconds: 10)).then((value) {
-      if (!admobInitCompleter.isCompleted) {
-        admobInitCompleter.complete(false);
+    Future.delayed(const Duration(seconds: 8)).then((value) {
+      if (!admobInitFuture.isCompleted) {
+        admobInitFuture.complete(false);
         LogUtils.e('ADMob初始化超时 -- ${DateUtil.getNowDateMs()}', tag: 'ADHelper', useLogcat: true);
       }
     });
     MobileAds.instance.initialize().then((value) {
-      if (!admobInitCompleter.isCompleted) {
-        admobInitCompleter.complete(true);
+      if (!admobInitFuture.isCompleted) {
+        admobInitFuture.complete(true);
       }
       updateConfig();
       Map<String, AdapterStatus> map = value.adapterStatuses;
@@ -107,7 +107,7 @@ class ADManager {
 
   void updateConfig() {
     String aDConfigBase64 = DefaultADConfig.defaultADConfig;
-    String remoteConfig = isDebug ? '' : FirebaseRemoteConfig.instance.getString(isIOS ? 'ad_config' : 'ad_config');
+    String remoteConfig = isDebug ? '' : FirebaseRemoteConfig.instance.getString('ad_config');
     // if (AndroidInstallReferrerHelper.instance.isBuyUser()) {
     //   final userRemoteConfig = FirebaseRemoteConfig.instance.getString('ad_config_user');
     //   if (userRemoteConfig.isNotEmpty) {
@@ -141,8 +141,8 @@ class ADManager {
       final otherADWrapperList = _getADWrapper(configJson, 'other');
       adMap['other'] = otherADWrapperList;
 
-      final settingReward = _getADWrapper(configJson, 'setting');
-      adMap['setting'] = settingReward;
+      final settingReward = _getADWrapper(configJson, 'cut');
+      adMap['cut'] = settingReward;
     } catch (e) {
       LogUtils.e('解析广告参数出现异常 $e}', tag: 'ADHelper', useLogcat: true);
     }
@@ -426,13 +426,13 @@ class ADManager {
     return _showAD(ADSituation(_otherAD, ADSituationType.search), adLoader: loadOtherAD);
   }
 
-  ///设置激励视频
+  ///剪切激励视频
   Future<bool> loadSettingRewardAD() async {
-    if (isSettingRewardLoading) {
+    if (isCutRewardLoading) {
       LogUtils.i('设置激励请求中不请求', tag: 'ADHelper', useLogcat: true);
       return false;
     }
-    if (_settingReward?.isCacheAvailable() ?? false) {
+    if (_cutReward?.isCacheAvailable() ?? false) {
       LogUtils.i('设置激励缓存可用不重复请求', tag: 'ADHelper', useLogcat: true);
       return false;
     }
@@ -441,18 +441,18 @@ class ADManager {
     if (playADList == null) {
       return false;
     }
-    isSettingRewardLoading = true;
-    _settingReward = await _handleLoadAD(playADList, allowRetryCount: 0);
-    isSettingRewardLoading = false;
-    if (_settingReward != null) {
-      LogUtils.i('设置激励加载成功 ${_settingReward?.adType} - ${_settingReward?.adId}', tag: 'ADHelper', useLogcat: true);
+    isCutRewardLoading = true;
+    _cutReward = await _handleLoadAD(playADList, allowRetryCount: 0);
+    isCutRewardLoading = false;
+    if (_cutReward != null) {
+      LogUtils.i('设置激励加载成功 ${_cutReward?.adType} - ${_cutReward?.adId}', tag: 'ADHelper', useLogcat: true);
     }
-    return _settingReward != null;
+    return _cutReward != null;
   }
 
   Future<bool> tryShowSettingReward({ValueChanged<bool>? onReward}) async {
-    if (_settingReward == null || _settingReward?.isAvailable() == false) return false;
-    await _settingReward?.showAD(callBack: ADShowCallback(onReward: (isComplete) {
+    if (_cutReward == null || _cutReward?.isAvailable() == false) return false;
+    await _cutReward?.showAD(callBack: ADShowCallback(onReward: (isComplete) {
       onReward?.call(isComplete);
     }));
     return true;

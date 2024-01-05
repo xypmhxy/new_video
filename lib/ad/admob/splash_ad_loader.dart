@@ -9,7 +9,7 @@ class OpenADLoader extends BaseADLoader {
 
   @override
   Future<void> load(String adId, {ADLoadCallback? loadCallback}) async {
-    await ADManager.instance.admobInitCompleter.future;
+    await ADManager.instance.admobInitFuture.future;
     await AppOpenAd.load(
       adUnitId: adId,
       orientation: AppOpenAd.orientationPortrait,
