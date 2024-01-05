@@ -13,6 +13,7 @@ import 'package:free_tube_player/db/dao/playlist_dao.dart';
 import 'package:free_tube_player/dialog/dialog_confirm.dart';
 import 'package:free_tube_player/dialog/dialog_download.dart';
 import 'package:free_tube_player/dialog/dialog_user_more_action.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
 import 'package:free_tube_player/utils/share_utils.dart';
@@ -27,6 +28,7 @@ class VideoActionHelper {
 
   void showActionDialog(
       {required MediaInfo mediaInfo,
+      required String from,
       VoidCallback? onRemove,
       VoidCallback? onDeleteHistory,
       ValueChanged<String>? onRename,
@@ -42,9 +44,10 @@ class VideoActionHelper {
           isShowDownload: isShowDownload,
           onClickLike: () async {
             await _onClickLike(mediaInfo);
+            FirebaseEvent.instance.logEvent('like_click', params: {'value': mediaInfo.youtubeId ?? 'none'});
           },
           onClickDownload: () {
-            _showDownloadDialog(mediaInfo);
+            _showDownloadDialog(mediaInfo, from: from);
           },
           onClickShare: () {
             if (mediaInfo.youtubeId == null) return;
@@ -52,6 +55,7 @@ class VideoActionHelper {
           },
           onClickWatchLater: () async {
             await onClickWatchLater(mediaInfo);
+            FirebaseEvent.instance.logEvent('watch_later_click', params: {'value': mediaInfo.youtubeId ?? 'none'});
           },
           onClickDeleteHistory: () {
             onClickDeleteHistory(mediaInfo, onDelete: onDeleteHistory);
@@ -61,13 +65,17 @@ class VideoActionHelper {
         tag: 'user_action_dialog');
   }
 
-  void _showDownloadDialog(MediaInfo mediaInfo, {VoidCallback? onDelete}) {
+  void _showDownloadDialog(MediaInfo mediaInfo, {required String from}) {
     DialogUtils.showBottomSheet(DialogDownload(
       mediaInfo: mediaInfo,
       onClickDownload: (mediaSource) {
         onClickDownloadButton(mediaInfo, mediaSource);
+        FirebaseEvent.instance
+            .logEvent('click_download', params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': from});
       },
     ));
+    FirebaseEvent.instance
+        .logEvent('download_dialog_expose', params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': from});
   }
 
   Future<void> _onClickLike(MediaInfo mediaInfo) async {

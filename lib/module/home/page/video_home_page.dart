@@ -4,6 +4,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/module/home/controller/android_home_page_controller.dart';
 import 'package:free_tube_player/module/home/controller/home_file_page_controller.dart';
 import 'package:free_tube_player/module/home/controller/home_folder_page_controller.dart';
@@ -21,6 +22,12 @@ class _VideoHomePageState extends State<VideoHomePage> with AutomaticKeepAliveCl
   final _ = Get.put(AndroidHomePageController());
   final __ = Get.put(HomeFilePageController());
   final ___ = Get.put(HomeFolderPageController());
+
+  @override
+  void initState() {
+    FirebaseEvent.instance.logEvent('video_home_page_expose');
+    super.initState();
+  }
 
   @override
   bool get wantKeepAlive => true;

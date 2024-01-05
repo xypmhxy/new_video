@@ -64,6 +64,7 @@ class DownloadedPageController {
   void showMoreDialog(DownloadedMediaInfo downloadedMediaInfo,
       {required List<DownloadedMediaInfo> downloadMediaInfoList}) {
     _videoHelper.showActionDialog(
+        from: 'download_complete_finish',
         isShowDownload: false,
         isShowRemove: true,
         mediaInfo: downloadedMediaInfo.mediaInfo,

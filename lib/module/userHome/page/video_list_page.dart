@@ -93,7 +93,7 @@ class _VideoListPageState extends State<VideoListPage> {
                   return VideoSmallItem(
                     mediaInfo: mediaInfo,
                     onClickItem: () {
-                      startUserPlayPage(mediaInfo: mediaInfo);
+                      startUserPlayPage(mediaInfo: mediaInfo, from: 'video_list_page');
                     },
                     onClickMore: () {
                       _controller.showMoreDialog(mediaInfo, playlist: widget.playlist);

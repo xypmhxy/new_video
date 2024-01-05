@@ -5,6 +5,7 @@ import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
 import 'package:free_tube_player/dialog/dialog_confirm.dart';
 import 'package:free_tube_player/extension/string_extension.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/download/bean/download_info.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
@@ -77,6 +78,8 @@ class GlobalDownloadController extends GetxController {
     _mediaDao.insert(mediaInfo);
 
     _startDownloadSpeedTimer();
+    FirebaseEvent.instance.logEvent('download_start',
+        params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': videoSource?.label ?? 'none'});
     downloader.download(
         url: videoUrl,
         savePath: videoSavePath,
@@ -89,6 +92,8 @@ class GlobalDownloadController extends GetxController {
             _deleteFile(videoSource);
           }
           LogUtils.e('视频下载失败 $errorCode');
+          FirebaseEvent.instance
+              .logEvent('download_error', params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': errorMsg});
         },
         onReceiveProgress: (count, total) async {
           videoSource?.byteSize = total;
@@ -104,6 +109,8 @@ class GlobalDownloadController extends GetxController {
                 videoSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
                 _removeDownloadInfo(downloadInfo);
                 LogUtils.i('视频下载完成 ${mediaInfo.title}');
+                FirebaseEvent.instance.logEvent('download_success',
+                    params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': videoSource.label ?? 'none'});
                 downloadNext();
               }
             } else {
@@ -111,6 +118,8 @@ class GlobalDownloadController extends GetxController {
               videoSource?.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
               _removeDownloadInfo(downloadInfo);
               LogUtils.i('视频下载完成 ${mediaInfo.title}');
+              FirebaseEvent.instance.logEvent('download_success',
+                  params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': videoSource?.label ?? 'none'});
               downloadNext();
             }
           }
@@ -121,7 +130,7 @@ class GlobalDownloadController extends GetxController {
   }
 
   Future<bool> _doDownloadAudio(DownloadInfo downloadInfo) async {
-    if (downloadInfo.videoSource.audioSource == null)return false;
+    if (downloadInfo.videoSource.audioSource == null) return false;
     Completer<bool> completer = Completer();
     final downloader = downloadInfo.downloader;
     final mediaInfo = downloadInfo.mediaInfo;

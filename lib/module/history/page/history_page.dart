@@ -57,7 +57,7 @@ class _HistoryPageState extends State<HistoryPage> implements HistoryPageCallbac
     if (mediaInfo.isLocalVideo) {
       playMediaInfo(mediaInfo: mediaInfo);
     } else {
-      startUserPlayPage(mediaInfo: mediaInfo);
+      startUserPlayPage(mediaInfo: mediaInfo, from: 'history');
     }
   }
 
@@ -80,6 +80,7 @@ class _HistoryPageState extends State<HistoryPage> implements HistoryPageCallbac
     } else {
       _videoActionHelper.showActionDialog(
           mediaInfo: mediaInfo,
+          from: 'history',
           isShowHistory: true,
           onDeleteHistory: () {
             _historyPageController.deleteHistory(mediaInfo, videoGroup);

@@ -78,6 +78,6 @@ class UserYoutubeChildController extends BaseController {
   }
 
   Future<void> showMoreActionDialog(MediaInfo mediaInfo) async {
-    _videoActionHelper.showActionDialog(mediaInfo: mediaInfo);
+    _videoActionHelper.showActionDialog(mediaInfo: mediaInfo,from: 'youtube_home');
   }
 }

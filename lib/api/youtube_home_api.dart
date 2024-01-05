@@ -10,6 +10,7 @@ import 'package:free_tube_player/api/api.dart';
 import 'package:free_tube_player/api/base_dio.dart';
 import 'package:free_tube_player/bean/home/youtube_home_tab.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/youtube_parse_utils.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ import 'package:get/get.dart';
 class YoutubeHomeApi extends BaseDio {
   Future<List<YoutubeHomeTab>> requestTabs() async {
     try {
+      FirebaseEvent.instance.logEvent('request_tabs');
       final commonParams = API.getWebCommonParams();
       final params = {...commonParams, 'browseId': API.homeBrowseId};
       final paramsJson = json.encode(params);
@@ -42,7 +44,9 @@ class YoutubeHomeApi extends BaseDio {
       }
     } catch (e) {
       LogUtils.e('requestHomeTab error $e');
-      //需要事件
+      FirebaseEvent.instance.logEvent('request_tabs_error', params: {
+        'value': {e.toString()}
+      });
     }
     return [];
   }
@@ -71,6 +75,7 @@ class YoutubeHomeApi extends BaseDio {
   Future<List<MediaInfo>> requestHomeChildVideos(
       {required String token, String? clickParams, ValueChanged<String?>? onContinuation}) async {
     try {
+      FirebaseEvent.instance.logEvent('request_home_child_videos');
       final commonParams = API.getWebCommonParams(visitorData: API.visitorData);
       final params = {
         ...commonParams,
@@ -104,6 +109,9 @@ class YoutubeHomeApi extends BaseDio {
       return [];
     } catch (e) {
       LogUtils.e(e.toString());
+      FirebaseEvent.instance.logEvent('request_home_child_videos_error', params: {
+        'value': {e.toString()}
+      });
       return [];
     }
   }

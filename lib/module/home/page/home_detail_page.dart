@@ -56,7 +56,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> implements HomeDetailPa
     if (mediaInfo.isLocalVideo) {
       playMediaInfo(mediaInfo: mediaInfo);
     } else {
-      startUserPlayPage(mediaInfo: mediaInfo);
+      startUserPlayPage(mediaInfo: mediaInfo, from: 'home_details');
     }
   }
 
@@ -79,6 +79,7 @@ class _HomeDetailPageState extends State<HomeDetailPage> implements HomeDetailPa
     } else {
       _videoActionHelper.showActionDialog(
           mediaInfo: mediaInfo,
+          from: 'home_details',
           isShowHistory: true,
           onDeleteHistory: () {
             delete(mediaInfo, videoGroup);

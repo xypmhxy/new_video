@@ -9,6 +9,7 @@ import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/search/search_history_info.dart';
 import 'package:free_tube_player/db/dao/search_history_info_dao.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/utils/date_utils.dart';
 import 'package:get/get.dart';
@@ -62,6 +63,7 @@ class SearchPageController extends BaseController {
   }
 
   Future<void> search(String keyword) async {
+    FirebaseEvent.instance.logEvent('search_click');
     textInputController.text = keyword;
     inputText.value = keyword;
     _updateSearchHistory(keyword);
@@ -83,6 +85,7 @@ class SearchPageController extends BaseController {
     } else {
       searchLoadState.value = ViewStatus.success;
     }
+    FirebaseEvent.instance.logEvent('search_complete');
   }
 
   Future<void> searchMore() async {
@@ -114,6 +117,6 @@ class SearchPageController extends BaseController {
   }
 
   Future<void> showMoreActionDialog(MediaInfo mediaInfo) async {
-    _videoActionHelper.showActionDialog(mediaInfo: mediaInfo);
+    _videoActionHelper.showActionDialog(mediaInfo: mediaInfo,from: 'search');
   }
 }

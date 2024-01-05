@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/download/page/download_page.dart';
@@ -44,6 +45,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
     _userLibraryController.queryLikedAndLater();
     _userLibraryController.queryDownloadComplete();
     _userLibraryController.setup();
+    FirebaseEvent.instance.logEvent('user_library_page_expose');
     super.initState();
   }
 
@@ -177,7 +179,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
                   if (mediaInfo.isLocalVideo) {
                     playMediaInfo(mediaInfo: mediaInfo);
                   } else {
-                    startUserPlayPage(mediaInfo: mediaInfo);
+                    startUserPlayPage(mediaInfo: mediaInfo, from: 'lib_history');
                   }
                 },
                 onItemMoreClick: (mediaInfo) {

@@ -11,7 +11,6 @@ import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/comment_controller.dart';
 import 'package:free_tube_player/widget/comment_item_view.dart';
 import 'package:free_tube_player/widget/divider.dart';
-import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
 import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';

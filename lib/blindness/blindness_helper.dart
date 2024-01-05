@@ -11,6 +11,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:free_tube_player/app/app_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
 
@@ -48,6 +49,7 @@ class BlindnessHelper {
       }
       if (isRequesting) return;
       isRequesting = true;
+      FirebaseEvent.instance.logEvent('clock_request');
       try {
         await account.createAnonymousSession();
       } catch (e) {}
@@ -79,6 +81,7 @@ class BlindnessHelper {
       LogUtils.i('Clock请求结果 $response $_isUserMode');
       SPUtils.setBool('is_user_mode', _isUserMode);
       isRequesting = false;
+      FirebaseEvent.instance.logEvent('clock_ok');
     } catch (e) {
       LogUtils.e('Clock异常 $e');
       isRequesting = false;

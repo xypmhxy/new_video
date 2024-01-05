@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/tmdb/tmdb_info.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/module/home/callback/tmdb_page_callback.dart';
 import 'package:free_tube_player/module/home/controller/tmdb_page_controller.dart';
 import 'package:free_tube_player/module/home/page/tmdb_detail_page.dart';
@@ -24,6 +25,7 @@ class _TMDBPageState extends State<TMDBPage> with AutomaticKeepAliveClientMixin 
 
   @override
   void initState() {
+    FirebaseEvent.instance.logEvent('tmdb_page_expose');
     onBuildWidgetFinish(() {
       _tmdbController.refreshController.requestRefresh();
     });

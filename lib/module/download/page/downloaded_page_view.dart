@@ -138,7 +138,11 @@ class _DownloadedPageViewState extends State<DownloadedPageView> with AutomaticK
     final mediaInfo = downloadedMediaInfo.mediaInfo;
     return GestureDetector(
         onTap: () {
-          startUserPlayPage(mediaInfo: mediaInfo,videoSource: downloadedMediaInfo.mediaSource as VideoSource);
+          startUserPlayPage(
+            mediaInfo: mediaInfo,
+            videoSource: downloadedMediaInfo.mediaSource as VideoSource,
+            from: 'download_complete',
+          );
         },
         child: Container(
             color: Colors.transparent,

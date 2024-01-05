@@ -87,6 +87,7 @@ class UserLibraryPageController {
   Future<void> showMoreDialog(MediaInfo mediaInfo) async {
     _videoActionHelper.showActionDialog(
         mediaInfo: mediaInfo,
+        from: 'lib_history',
         isShowHistory: true,
         onDeleteHistory: () {
           historyVideos.removeWhere((element) => element.identify == mediaInfo.identify);

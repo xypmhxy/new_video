@@ -4,6 +4,7 @@
 */
 import 'package:dio/dio.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:get/get.dart';
 import 'package:photo_gallery/photo_gallery.dart';
@@ -80,7 +81,8 @@ class VideoDataHelper {
 
         List<VideoSource> cloneVideoSources = [];
         for (final videoSource in videoSources) {
-          final existVideoSource = cloneVideoSources.firstWhereOrNull((element) => element.identify == videoSource.identify);
+          final existVideoSource =
+              cloneVideoSources.firstWhereOrNull((element) => element.identify == videoSource.identify);
           if (existVideoSource != null) continue;
           cloneVideoSources.add(videoSource);
         }
@@ -95,6 +97,8 @@ class VideoDataHelper {
         if (isNeedRetry) {
           await requestVideoSource(mediaInfo, isNeedRetry: false);
         }
+        FirebaseEvent.instance
+            .logEvent('get_play_url_error', params: {'value': mediaInfo.youtubeId, 'value1': e.toString()});
         return null;
       }
     }

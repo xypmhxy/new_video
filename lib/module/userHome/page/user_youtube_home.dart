@@ -8,6 +8,7 @@ import 'package:free_tube_player/app/app_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/search/page/search_page.dart';
@@ -37,6 +38,7 @@ class _UserYoutubeHomeState extends State<UserYoutubeHome> with AutomaticKeepAli
   @override
   void initState() {
     youtubeController.requestTabs();
+    FirebaseEvent.instance.logEvent('youtube_home_expose');
     super.initState();
   }
 

@@ -8,6 +8,7 @@ import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/extension/comment_extension.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/comment_controller.dart';
@@ -61,6 +62,9 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
       maxHeight: screenHeight * .71,
       color: Colors.transparent,
       controller: _userPlayerPageController.panelController,
+      onPanelOpened: (){
+        FirebaseEvent.instance.logEvent('comment_expose');
+      },
       panelBuilder: (scrollController) {
         return DialogComment(
           commentController: _commentController,
@@ -279,6 +283,12 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
                 mediaInfo: userPlayerController.nowPlayingMedia,
                 videoSource: userPlayerController.videoSource.value,
                 iconSize: 24,
+                onTap: () {
+                  FirebaseEvent.instance.logEvent('click_download', params: {
+                    'value': userPlayerController.nowPlayingMedia?.youtubeId ?? 'none',
+                    'value1': 'play_page'
+                  });
+                },
               ),
               TextView.primary(text, fontSize: 12)
             ],

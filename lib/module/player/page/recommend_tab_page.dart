@@ -60,7 +60,7 @@ class _RecommendTabPageState extends State<RecommendTabPage> with AutomaticKeepA
           final mediaInfo = _recommendController.recommendVideos[index];
           return GestureDetector(
               onTap: () {
-                startUserPlayPage(mediaInfo: mediaInfo, isCloseCurrent: true,context: context);
+                startUserPlayPage(mediaInfo: mediaInfo, isCloseCurrent: true,context: context, from: 'recomment');
               },
               child: VideoItemView(mediaInfo: mediaInfo));
         },

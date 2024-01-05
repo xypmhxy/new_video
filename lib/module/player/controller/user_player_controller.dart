@@ -11,6 +11,7 @@ import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/helper/media_info_helper.dart';
 import 'package:free_tube_player/module/player/interface/chewie_player_impl.dart';
@@ -32,6 +33,7 @@ import 'player_controller.dart';
 
 Future<void> startUserPlayPage(
     {required MediaInfo mediaInfo,
+    required String from,
     VideoSource? videoSource,
     bool isCloseCurrent = false,
     BuildContext? context}) async {
@@ -41,6 +43,7 @@ Future<void> startUserPlayPage(
   } else {
     PageNavigation.startNewPage(const UserPlayerPage());
   }
+  FirebaseEvent.instance.logEvent('play_click', params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': from});
 }
 
 class UserPlayerController {
@@ -86,6 +89,7 @@ class UserPlayerController {
     if (mediaInfo.identify == _nowPlayingMedia.value?.identify &&
         videoSource?.identify == this.videoSource.value?.identify) return;
     LogUtils.i('播放--开始播放');
+    FirebaseEvent.instance.logEvent('play_video', params: {'value': mediaInfo.youtubeId});
     final startPrePlayDate = DateUtil.getNowDateMs();
     int getUrlDate = startPrePlayDate;
     fetchPlayInfoProgress.value = 0.0;
@@ -115,6 +119,7 @@ class UserPlayerController {
         playStatus.value = PlayStatus.none;
         fetchPlayInfoProgress.value = 0.0;
         ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
+        FirebaseEvent.instance.logEvent('play_resolution_error', params: {'value': mediaInfo.youtubeId});
         return;
       }
       videoUrl = videoSource.url;
@@ -146,6 +151,7 @@ class UserPlayerController {
       } else {
         ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
       }
+      FirebaseEvent.instance.logEvent('play_video_error', params: {'value': mediaInfo.youtubeId, 'value1': errorMsg});
     }
     final playSuccessDate = DateUtil.getNowDateMs();
     LogUtils.i('播放--初始化耗时 ${playSuccessDate - getUrlDate}');
@@ -250,10 +256,14 @@ class UserPlayerController {
     _chewiePlayerImpl.setLoop(isLoop);
     this.isLoop.value = isLoop;
     SPUtils.setBool('play_loop', isLoop);
+    FirebaseEvent.instance
+        .logEvent('set_loop', params: {'value': nowPlayingMedia?.youtubeId ?? 'none', 'value1': '$isLoop'});
   }
 
   void toggleBackgroundPlayback() {
     isBackgroundPlayback.toggle();
+    FirebaseEvent.instance.logEvent('click_background_play',
+        params: {'value': nowPlayingMedia?.youtubeId ?? 'none', 'value1': '${isBackgroundPlayback.value}'});
   }
 
   Future<void> saveHistoryPosition() async {
@@ -341,6 +351,8 @@ class UserPlayerController {
     if (isFullScreen.value) {
       await exitFullScreen();
     }
+    FirebaseEvent.instance
+        .logEvent('change_quality', params: {'value': nowPlayingMedia?.youtubeId ?? 'none', 'value1': label});
     playNewSource(nowPlayingMedia!, videoSource: videoSource);
   }
 

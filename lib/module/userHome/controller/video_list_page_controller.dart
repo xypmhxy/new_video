@@ -14,6 +14,7 @@ class VideoListPageController {
     _videoHelper.showActionDialog(
         isShowRemove: playlist != null,
         mediaInfo: mediaInfo,
+        from: 'video_list',
         onRemove: () {
           DialogUtils.showCenterDialog(DialogConfirm(
             title: S.current.removeFromListConfirm,

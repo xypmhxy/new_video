@@ -7,6 +7,7 @@ import 'package:free_tube_player/bean/play/author_info.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/playlist.dart';
 import 'package:free_tube_player/db/dao/playlist_dao.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/module/channel/api/channel_api.dart';
@@ -92,7 +93,7 @@ class UserPlayerPageController extends BaseController {
       ToastUtils.show(result > 0 ? S.current.addToPlaylistSuccess : S.current.addToPlaylistFailed,
           isCorrect: result > 0);
     }
-
+    FirebaseEvent.instance.logEvent('like_click', params: {'value': mediaInfo.youtubeId ?? 'none'});
     queryLikeStatus();
   }
 }

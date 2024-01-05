@@ -196,7 +196,7 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
 
     return GestureDetector(
         onTap: () {
-          startUserPlayPage(mediaInfo: mediaInfo);
+          startUserPlayPage(mediaInfo: mediaInfo, from: 'download_process');
         },
         child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),

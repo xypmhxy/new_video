@@ -18,11 +18,13 @@ class DownloadCustomView extends StatelessWidget {
   final double iconSize;
   final double progressSize;
   final _videoActionHelper = VideoActionHelper();
+  final VoidCallback? onTap;
 
   DownloadCustomView({
     super.key,
     required this.mediaInfo,
     required this.videoSource,
+    this.onTap,
     this.iconSize = 26.0,
     this.progressSize = 24.0,
   });
@@ -55,6 +57,7 @@ class DownloadCustomView extends StatelessWidget {
               onTap: () {
                 if (mediaInfo == null || videoSource == null) return;
                 _videoActionHelper.onClickDownloadButton(mediaInfo!, videoSource!);
+                onTap?.call();
               },
               child: SizedBox(
                 width: iconSize,

@@ -54,7 +54,7 @@ class _UserYoutubeChildPageState extends State<UserYoutubeChildPage> with Automa
               final mediaInfo = youtubeController.mediaInfos[index];
               return GestureDetector(
                   onTap: () {
-                    startUserPlayPage(mediaInfo: mediaInfo);
+                    startUserPlayPage(mediaInfo: mediaInfo, from: 'youtube_home');
                   },
                   child: VideoItemView(
                     mediaInfo: mediaInfo,

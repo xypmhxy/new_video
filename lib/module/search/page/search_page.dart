@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
@@ -36,6 +37,7 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     _searchPageController.focusNode.requestFocus();
     _searchPageController.getSearchHistoryList();
+    FirebaseEvent.instance.logEvent('search_page_expose');
     super.initState();
   }
 
@@ -266,7 +268,7 @@ class _SearchPageState extends State<SearchPage> {
                   final mediaInfo = _searchPageController.searchResultList[index];
                   return GestureDetector(
                       onTap: () {
-                        startUserPlayPage(mediaInfo: mediaInfo);
+                        startUserPlayPage(mediaInfo: mediaInfo, from: 'search_page');
                       },
                       child: SearchItem(
                         mediaInfo: mediaInfo,
