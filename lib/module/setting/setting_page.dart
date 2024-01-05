@@ -92,7 +92,10 @@ class _SettingPageState extends State<SettingPage> {
                 child: Align(
               alignment: Alignment.centerRight,
               child: IgnorePointer(
-                  child: CupertinoSwitch(value: AppThemeController.isDark(context), onChanged: (value) {})),
+                  child: CupertinoSwitch(
+                      value: AppThemeController.isDark(context),
+                      activeColor: AppThemeController.primaryThemeColor(context),
+                      onChanged: (value) {})),
             ))
           ])),
     );

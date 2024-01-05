@@ -12,6 +12,7 @@ import 'package:free_tube_player/module/download/page/download_page.dart';
 import 'package:free_tube_player/module/history/page/history_page.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
+import 'package:free_tube_player/module/setting/setting_page.dart';
 import 'package:free_tube_player/module/userHome/controller/user_library_page_controller.dart';
 import 'package:free_tube_player/module/userHome/page/video_list_page.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
@@ -110,7 +111,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
                 children: [
                   ImageButton(
                     onPressed: () {
-                      _userLibraryController.queryLikedAndLater();
+                      PageNavigation.startNewPage(const SettingPage());
                     },
                     splashRadius: 24,
                     size: 27.5,
