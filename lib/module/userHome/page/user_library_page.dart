@@ -196,8 +196,8 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
       child: Obx(() => _item(
           icon: Assets.imagesLibDownload,
           title: S.current.download,
-          subTitle: S.current.libDownloadCount(
-              globalDownloadController.downloadList.length, _userLibraryController.downloadedVideos.length))),
+          subTitle: S.current
+              .libDownloadCount(globalDownloadController.downloadList.length, _userLibraryController.downloadedCount))),
     );
   }
 

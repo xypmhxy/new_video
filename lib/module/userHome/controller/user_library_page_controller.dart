@@ -20,7 +20,7 @@ class UserLibraryPageController {
   final historyVideos = <MediaInfo>[].obs;
   final likedVideos = <MediaInfo>[].obs;
   final watchLaterVideos = <MediaInfo>[].obs;
-  final downloadedVideos = <MediaInfo>[].obs;
+  final downloadedCount = 0.obs;
   final historyViewStatus = ViewStatus.none.obs;
   final _videoActionHelper = VideoActionHelper();
 
@@ -74,8 +74,14 @@ class UserLibraryPageController {
 
   Future<void> queryDownloadComplete() async {
     final downloadList = await _mediaDao.queryDownloadComplete();
-    downloadedVideos.clear();
-    downloadedVideos.addAll(downloadList);
+    downloadedCount.value = 0;
+    for (final download in downloadList) {
+      final videoSources = download.videoSources;
+      if (videoSources == null) continue;
+      for (final videoSource in videoSources) {
+        if (videoSource.isDownloadAvailable) downloadedCount.value++;
+      }
+    }
   }
 
   Future<void> showMoreDialog(MediaInfo mediaInfo) async {

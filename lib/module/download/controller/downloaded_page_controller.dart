@@ -4,6 +4,7 @@
 */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
@@ -12,6 +13,8 @@ import 'package:free_tube_player/dialog/dialog_confirm.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
+import 'package:free_tube_player/utils/file_utils.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:get/get.dart';
 
 class DownloadedPageController {
@@ -33,10 +36,10 @@ class DownloadedPageController {
   }
 
   Future<void> queryDownloadCompleteVideos() async {
+    var downloadList = await _mediaDao.queryDownloadComplete();
     repeatMap.clear();
     downloadGroupList.clear();
 
-    var downloadList = await _mediaDao.queryDownloadComplete();
     downloadList = downloadList.reversed.toList();
     for (final mediaInfo in downloadList) {
       if (mediaInfo.videoSources == null) continue;
@@ -73,6 +76,7 @@ class DownloadedPageController {
             onConfirm: () async {
               DialogUtils.dismiss();
               DialogUtils.dismiss();
+              await removeMedia(downloadedMediaInfo);
               downloadMediaInfoList.remove(downloadedMediaInfo);
               if (downloadMediaInfoList.isEmpty) {
                 downloadGroupList.remove(downloadMediaInfoList);
@@ -87,7 +91,7 @@ class DownloadedPageController {
   void showDeleteAllDialog(MediaInfo mediaInfo) {
     final downloadedMediaInfoList =
         downloadGroupList.firstWhereOrNull((element) => element.first.mediaInfo.identify == mediaInfo.identify);
-    if (downloadedMediaInfoList == null)return;
+    if (downloadedMediaInfoList == null) return;
     DialogUtils.showCenterDialog(DialogConfirm(
       title: S.current.removeAllConfirm,
       onCancel: () {
@@ -96,12 +100,40 @@ class DownloadedPageController {
       onConfirm: () async {
         DialogUtils.dismiss();
         DialogUtils.dismiss();
+        for (final downloadedMediaInfo in downloadedMediaInfoList) {
+          await removeMedia(downloadedMediaInfo);
+        }
         downloadGroupList.remove(downloadedMediaInfoList);
       },
     ));
   }
 
-  Future<void> removeMedia(MediaInfo mediaInfo) async {}
+  Future<void> removeMedia(DownloadedMediaInfo downloadedMediaInfo) async {
+    final mediaInfo = downloadedMediaInfo.mediaInfo;
+    final videoSource = downloadedMediaInfo.mediaSource;
+    final videoSourcePath = videoSource.downloadPath;
+    if (videoSourcePath == null) {
+      videoSource.clearDownload();
+      return;
+    }
+    final filePath = await FileUtils.getDownloadFilePath(videoSourcePath);
+    final file = File(filePath);
+    if (file.existsSync()) {
+      file.deleteSync();
+    }
+
+    final audioSourcePath = videoSource.audioSource?.downloadPath;
+    if (audioSourcePath != null) {
+      final audioFilePath = await FileUtils.getDownloadFilePath(audioSourcePath);
+      final audioFile = File(audioFilePath);
+      if (audioFile.existsSync()) {
+        audioFile.deleteSync();
+      }
+    }
+
+    videoSource.clearDownload();
+    await _mediaDao.insert(mediaInfo);
+  }
 }
 
 class DownloadedMediaInfo {

@@ -139,7 +139,7 @@ class UserPlayerController {
     saveHistoryPosition();
     fetchPlayInfoProgress.value = 0.5;
     setupStreams();
-    final errorMsg = await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
+    final errorMsg = await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: null);
     if (errorMsg != null) {
       if (isDebug) {
         ToastUtils.show('播放失败 $errorMsg', isCorrect: false);
