@@ -58,6 +58,12 @@ class MediaInfo {
   int? likeCount;
   int? dislikeCount;
 
+  //short video
+  String? params;
+  String? playParams;
+  String? sequenceContinuation;
+
+
   MediaInfo();
 
   MediaInfo.create({
@@ -107,6 +113,9 @@ class MediaInfo {
     description = map['description'];
     publishedTime = map['publishedTime'];
     viewCountText = map['viewCountText'];
+    params = map['params'];
+    playParams = map['playParams'];
+    sequenceContinuation = map['sequenceContinuation'];
     likeCount = map['likeCount'];
     dislikeCount = map['dislikeCount'];
   }
@@ -139,6 +148,9 @@ class MediaInfo {
       'viewCountText': viewCountText,
       'likeCount': likeCount,
       'dislikeCount': dislikeCount,
+      'params': params,
+      'playParams': playParams,
+      'sequenceContinuation': sequenceContinuation,
     };
   }
 

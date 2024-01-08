@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/generated/l10n.dart';
@@ -17,6 +18,13 @@ class DownloadPage extends StatefulWidget {
 }
 
 class _DownloadPageState extends State<DownloadPage> {
+
+  @override
+  void initState() {
+    ADUtils.instance.loadOtherAd();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

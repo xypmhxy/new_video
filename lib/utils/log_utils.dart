@@ -61,18 +61,22 @@ class LoggerChannel {
   MethodChannel loggerChannel = const MethodChannel('free.tuber.log.plugin');
 
   void i(String? msg, {String? tag}) {
-    loggerChannel.invokeMethod('logI', {'msg': msg, 'tag': tag ?? 'FreeTuberLog'});
+    if (isRelease)return;
+    loggerChannel.invokeMethod('logI', {'msg': msg, 'tag': tag ?? 'MeTubeLog'});
   }
 
   void d(String? msg, {String? tag}) {
-    loggerChannel.invokeMethod('logD', {'msg': msg, 'tag': tag ?? 'FreeTuberLog'});
+    if (isRelease)return;
+    loggerChannel.invokeMethod('logD', {'msg': msg, 'tag': tag ?? 'MeTubeLog'});
   }
 
   void w(String? msg, {String? tag}) {
-    loggerChannel.invokeMethod('logW', {'msg': msg, 'tag': tag ?? 'FreeTuberLog'});
+    if (isRelease)return;
+    loggerChannel.invokeMethod('logW', {'msg': msg, 'tag': tag ?? 'MeTubeLog'});
   }
 
   void e(String? msg, {String? tag}) {
-    loggerChannel.invokeMethod('logE', {'msg': msg, 'tag': tag ?? 'FreeTuberLog'});
+    if (isRelease)return;
+    loggerChannel.invokeMethod('logE', {'msg': msg, 'tag': tag ?? 'MeTubeLog'});
   }
 }

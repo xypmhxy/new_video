@@ -7,7 +7,7 @@ class FirebaseEvent {
   FirebaseEvent._();
 
   Future<void> logEvent(String event, {Map<String, dynamic>? params}) async {
+    await FirebaseAnalytics.instance.logEvent(name: event, parameters: params);
     LogUtils.i('事件上报 $event - $params');
-    // await FirebaseAnalytics.instance.logEvent(name: event, parameters: params);
   }
 }

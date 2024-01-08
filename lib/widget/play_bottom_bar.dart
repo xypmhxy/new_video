@@ -5,6 +5,7 @@
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/generated/assets.dart';
@@ -32,14 +33,15 @@ class _PlayBottomBarState extends State<PlayBottomBar> {
     return Obx(() => Visibility(
         visible: userPlayerController.nowPlayingMedia != null,
         child: GestureDetector(
-            onTap: () {
+            onTap: () async {
+              await _showAD();
               PageNavigation.startNewPage(const UserPlayerPage());
             },
             child: Container(
                 color: Colors.transparent,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [const Height(2),_progress(), _info()],
+                  children: [const Height(2), _progress(), _info()],
                 )))));
   }
 
@@ -59,13 +61,15 @@ class _PlayBottomBarState extends State<PlayBottomBar> {
         Obx(() {
           if (userPlayerController.isPlayerLoading || userPlayerController.isPlayerNone) {
             return GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  await _showAD();
                   PageNavigation.startNewPage(const UserPlayerPage());
                 },
                 child: _placeHolder());
           }
           return GestureDetector(
-            onTap: () {
+            onTap: () async {
+              await _showAD();
               PageNavigation.startNewPage(const UserPlayerPage());
             },
             child: SizedBox(
@@ -135,5 +139,15 @@ class _PlayBottomBarState extends State<PlayBottomBar> {
         ],
       ),
     );
+  }
+
+  Future<void> _showAD() async {
+    if (userPlayerController.isPlaying) {
+      userPlayerController.pause();
+      await ADUtils.instance.showPlayAD();
+      userPlayerController.play();
+    } else {
+      await ADUtils.instance.showPlayAD();
+    }
   }
 }

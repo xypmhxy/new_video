@@ -30,7 +30,7 @@ class ADUtils {
     waitPlayADShow?.complete(result);
   }
 
-  Future<void> loadDownloadAd({bool needLoadHighest = true}) async {
+  Future<void> loadOtherAd({bool needLoadHighest = true}) async {
     await ADManager.instance.loadOtherAD(
       needLoadHighest: needLoadHighest,
     );
@@ -49,6 +49,6 @@ class ADUtils {
   }
 
   Future<void> showCutAD({ValueChanged<bool>? onReward}) async {
-    await ADManager.instance.tryShowSettingReward(onReward: onReward);
+    await ADManager.instance.tryShowCutReward(onReward: onReward);
   }
 }

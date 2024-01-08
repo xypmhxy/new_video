@@ -4,6 +4,7 @@
 */
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
@@ -45,6 +46,7 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
         .then((value) => _commentController.requestComment(_userPlayerPageController.video.value));
     _userPlayerPageController.requestAuthorInfo(userPlayerController.nowPlayingMedia?.authorId ?? '');
     _userPlayerPageController.setup();
+    ADUtils.instance.loadPlayAD();
     super.initState();
   }
 

@@ -3,6 +3,7 @@
 * 时间  2023/10/14 22:06
 */
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
@@ -38,6 +39,7 @@ class _SearchPageState extends State<SearchPage> {
     _searchPageController.focusNode.requestFocus();
     _searchPageController.getSearchHistoryList();
     FirebaseEvent.instance.logEvent('search_page_expose');
+    ADUtils.instance.loadOtherAd();
     super.initState();
   }
 

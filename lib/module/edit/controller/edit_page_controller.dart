@@ -140,7 +140,7 @@ class EditPageController extends BaseController {
   Future<bool> showReward() async {
     ADManager.instance.loadSettingRewardAD();
     Completer<bool> completer = Completer();
-    final result = await ADManager.instance.tryShowSettingReward(onReward: (_) {
+    final result = await ADManager.instance.tryShowCutReward(onReward: (_) {
       completer.complete(true);
     });
     if (result == false) {

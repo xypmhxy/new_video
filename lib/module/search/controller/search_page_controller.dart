@@ -3,6 +3,7 @@
 * 时间  2023/10/14 22:53
 */
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/api/search_api.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/base/base_controller.dart';
@@ -63,6 +64,7 @@ class SearchPageController extends BaseController {
   }
 
   Future<void> search(String keyword) async {
+    ADUtils.instance.showPlaylistAD();
     FirebaseEvent.instance.logEvent('search_click');
     textInputController.text = keyword;
     inputText.value = keyword;

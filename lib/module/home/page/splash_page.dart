@@ -76,8 +76,10 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   Future<void> startLoadAD() async {
     final openADFuture = ADUtils.instance.loadOpenAd(needLoadHighest: false);
-    ADUtils.instance.loadPlayAD();
-    ADUtils.instance.loadCutAD();
+    ADManager.instance.loadHighest();
+    ADUtils.instance.loadPlayAD(needLoadHighest: false);
+    ADUtils.instance.loadOtherAd(needLoadHighest: false);
+    ADUtils.instance.loadCutAD(needLoadHighest: false);
     await Future.any([openADFuture, Future.delayed(const Duration(seconds: 8))]);
     await _animationController.animateTo(1.0, duration: const Duration(milliseconds: 500));
     await ADUtils.instance.showOpenAD();

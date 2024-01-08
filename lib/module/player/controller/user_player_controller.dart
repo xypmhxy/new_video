@@ -8,6 +8,7 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
@@ -37,6 +38,7 @@ Future<void> startUserPlayPage(
     VideoSource? videoSource,
     bool isCloseCurrent = false,
     BuildContext? context}) async {
+  ADUtils.instance.showPlayAD();
   userPlayerController.playNewSource(mediaInfo, videoSource: videoSource);
   if (isCloseCurrent) {
     PageNavigation.startNewPageAndClose(const UserPlayerPage(), preventDuplicates: false);
@@ -144,7 +146,7 @@ class UserPlayerController {
     saveHistoryPosition();
     fetchPlayInfoProgress.value = 0.5;
     setupStreams();
-    final errorMsg = await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: null);
+    final errorMsg = await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
     if (errorMsg != null) {
       if (isDebug) {
         ToastUtils.show('播放失败 $errorMsg', isCorrect: false);
@@ -243,6 +245,10 @@ class UserPlayerController {
   }
 
   Future<void> togglePlay() async {
+    ADUtils.instance.loadPlayAD();
+    if (isPlaying == false) {
+      await ADUtils.instance.showPlayAD();
+    }
     startDelayCloseControlPanel();
     chewieController.togglePause();
     saveHistoryPosition();
@@ -387,11 +393,14 @@ class UserPlayerController {
       }
     });
 
-    _playStatusSubs = _chewiePlayerImpl.watchPlayState.listen((status) {
+    _playStatusSubs = _chewiePlayerImpl.watchPlayState.listen((status) async {
       playStatus.value = status;
       if (playStatus.value == PlayStatus.initialized) {
         startPositionRecordTimer();
-        if (isRelease) play();
+        // if (isRelease) {
+        await ADUtils.instance.waitPlayADShow?.future;
+        play();
+        // }
       }
     });
 

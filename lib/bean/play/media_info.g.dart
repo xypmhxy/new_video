@@ -133,70 +133,85 @@ const MediaInfoSchema = CollectionSchema(
       name: r'localPath',
       type: IsarType.string,
     ),
-    r'playHistory': PropertySchema(
+    r'params': PropertySchema(
       id: 23,
+      name: r'params',
+      type: IsarType.string,
+    ),
+    r'playHistory': PropertySchema(
+      id: 24,
       name: r'playHistory',
       type: IsarType.object,
       target: r'PlayHistory',
     ),
+    r'playParams': PropertySchema(
+      id: 25,
+      name: r'playParams',
+      type: IsarType.string,
+    ),
     r'publishedTime': PropertySchema(
-      id: 24,
+      id: 26,
       name: r'publishedTime',
       type: IsarType.string,
     ),
     r'recentGetUrlTime': PropertySchema(
-      id: 25,
+      id: 27,
       name: r'recentGetUrlTime',
       type: IsarType.long,
     ),
     r'recentPlayDate': PropertySchema(
-      id: 26,
+      id: 28,
       name: r'recentPlayDate',
       type: IsarType.long,
     ),
+    r'sequenceContinuation': PropertySchema(
+      id: 29,
+      name: r'sequenceContinuation',
+      type: IsarType.string,
+    ),
     r'suffix': PropertySchema(
-      id: 27,
+      id: 30,
       name: r'suffix',
       type: IsarType.string,
     ),
     r'thumbnail': PropertySchema(
-      id: 28,
+      id: 31,
       name: r'thumbnail',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 29,
+      id: 32,
       name: r'title',
       type: IsarType.string,
     ),
     r'updateDate': PropertySchema(
-      id: 30,
+      id: 33,
       name: r'updateDate',
       type: IsarType.long,
     ),
     r'updateDateFormat': PropertySchema(
-      id: 31,
+      id: 34,
       name: r'updateDateFormat',
       type: IsarType.string,
     ),
     r'videoSources': PropertySchema(
-      id: 32,
+      id: 35,
       name: r'videoSources',
       type: IsarType.objectList,
       target: r'VideoSource',
     ),
     r'viewCountText': PropertySchema(
-      id: 33,
+      id: 36,
       name: r'viewCountText',
       type: IsarType.string,
     ),
     r'width': PropertySchema(
-      id: 34,
+      id: 37,
       name: r'width',
       type: IsarType.long,
     ),
     r'youtubeId': PropertySchema(
-      id: 35,
+      id: 38,
       name: r'youtubeId',
       type: IsarType.string,
     )
@@ -286,6 +301,12 @@ int _mediaInfoEstimateSize(
     }
   }
   {
+    final value = object.params;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.playHistory;
     if (value != null) {
       bytesCount += 3 +
@@ -294,7 +315,19 @@ int _mediaInfoEstimateSize(
     }
   }
   {
+    final value = object.playParams;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.publishedTime;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.sequenceContinuation;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -371,29 +404,32 @@ void _mediaInfoSerialize(
   writer.writeLong(offsets[20], object.likeCount);
   writer.writeByteList(offsets[21], object.localBytesThumbnail);
   writer.writeString(offsets[22], object.localPath);
+  writer.writeString(offsets[23], object.params);
   writer.writeObject<PlayHistory>(
-    offsets[23],
+    offsets[24],
     allOffsets,
     PlayHistorySchema.serialize,
     object.playHistory,
   );
-  writer.writeString(offsets[24], object.publishedTime);
-  writer.writeLong(offsets[25], object.recentGetUrlTime);
-  writer.writeLong(offsets[26], object.recentPlayDate);
-  writer.writeString(offsets[27], object.suffix);
-  writer.writeString(offsets[28], object.thumbnail);
-  writer.writeString(offsets[29], object.title);
-  writer.writeLong(offsets[30], object.updateDate);
-  writer.writeString(offsets[31], object.updateDateFormat);
+  writer.writeString(offsets[25], object.playParams);
+  writer.writeString(offsets[26], object.publishedTime);
+  writer.writeLong(offsets[27], object.recentGetUrlTime);
+  writer.writeLong(offsets[28], object.recentPlayDate);
+  writer.writeString(offsets[29], object.sequenceContinuation);
+  writer.writeString(offsets[30], object.suffix);
+  writer.writeString(offsets[31], object.thumbnail);
+  writer.writeString(offsets[32], object.title);
+  writer.writeLong(offsets[33], object.updateDate);
+  writer.writeString(offsets[34], object.updateDateFormat);
   writer.writeObjectList<VideoSource>(
-    offsets[32],
+    offsets[35],
     allOffsets,
     VideoSourceSchema.serialize,
     object.videoSources,
   );
-  writer.writeString(offsets[33], object.viewCountText);
-  writer.writeLong(offsets[34], object.width);
-  writer.writeString(offsets[35], object.youtubeId);
+  writer.writeString(offsets[36], object.viewCountText);
+  writer.writeLong(offsets[37], object.width);
+  writer.writeString(offsets[38], object.youtubeId);
 }
 
 MediaInfo _mediaInfoDeserialize(
@@ -427,26 +463,29 @@ MediaInfo _mediaInfoDeserialize(
   object.likeCount = reader.readLongOrNull(offsets[20]);
   object.localBytesThumbnail = reader.readByteList(offsets[21]);
   object.localPath = reader.readStringOrNull(offsets[22]);
+  object.params = reader.readStringOrNull(offsets[23]);
   object.playHistory = reader.readObjectOrNull<PlayHistory>(
-    offsets[23],
+    offsets[24],
     PlayHistorySchema.deserialize,
     allOffsets,
   );
-  object.publishedTime = reader.readStringOrNull(offsets[24]);
-  object.recentGetUrlTime = reader.readLong(offsets[25]);
-  object.suffix = reader.readString(offsets[27]);
-  object.thumbnail = reader.readStringOrNull(offsets[28]);
-  object.title = reader.readString(offsets[29]);
-  object.updateDate = reader.readLong(offsets[30]);
+  object.playParams = reader.readStringOrNull(offsets[25]);
+  object.publishedTime = reader.readStringOrNull(offsets[26]);
+  object.recentGetUrlTime = reader.readLong(offsets[27]);
+  object.sequenceContinuation = reader.readStringOrNull(offsets[29]);
+  object.suffix = reader.readString(offsets[30]);
+  object.thumbnail = reader.readStringOrNull(offsets[31]);
+  object.title = reader.readString(offsets[32]);
+  object.updateDate = reader.readLong(offsets[33]);
   object.videoSources = reader.readObjectList<VideoSource>(
-    offsets[32],
+    offsets[35],
     VideoSourceSchema.deserialize,
     allOffsets,
     VideoSource(),
   );
-  object.viewCountText = reader.readStringOrNull(offsets[33]);
-  object.width = reader.readLongOrNull(offsets[34]);
-  object.youtubeId = reader.readStringOrNull(offsets[35]);
+  object.viewCountText = reader.readStringOrNull(offsets[36]);
+  object.width = reader.readLongOrNull(offsets[37]);
+  object.youtubeId = reader.readStringOrNull(offsets[38]);
   return object;
 }
 
@@ -509,39 +548,45 @@ P _mediaInfoDeserializeProp<P>(
     case 22:
       return (reader.readStringOrNull(offset)) as P;
     case 23:
+      return (reader.readStringOrNull(offset)) as P;
+    case 24:
       return (reader.readObjectOrNull<PlayHistory>(
         offset,
         PlayHistorySchema.deserialize,
         allOffsets,
       )) as P;
-    case 24:
-      return (reader.readStringOrNull(offset)) as P;
     case 25:
-      return (reader.readLong(offset)) as P;
-    case 26:
-      return (reader.readLong(offset)) as P;
-    case 27:
-      return (reader.readString(offset)) as P;
-    case 28:
       return (reader.readStringOrNull(offset)) as P;
-    case 29:
-      return (reader.readString(offset)) as P;
-    case 30:
+    case 26:
+      return (reader.readStringOrNull(offset)) as P;
+    case 27:
       return (reader.readLong(offset)) as P;
-    case 31:
+    case 28:
+      return (reader.readLong(offset)) as P;
+    case 29:
+      return (reader.readStringOrNull(offset)) as P;
+    case 30:
       return (reader.readString(offset)) as P;
+    case 31:
+      return (reader.readStringOrNull(offset)) as P;
     case 32:
+      return (reader.readString(offset)) as P;
+    case 33:
+      return (reader.readLong(offset)) as P;
+    case 34:
+      return (reader.readString(offset)) as P;
+    case 35:
       return (reader.readObjectList<VideoSource>(
         offset,
         VideoSourceSchema.deserialize,
         allOffsets,
         VideoSource(),
       )) as P;
-    case 33:
+    case 36:
       return (reader.readStringOrNull(offset)) as P;
-    case 34:
+    case 37:
       return (reader.readLongOrNull(offset)) as P;
-    case 35:
+    case 38:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3086,6 +3131,152 @@ extension MediaInfoQueryFilter
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'params',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'params',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'params',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'params',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'params',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'params',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'params',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'params',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'params',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'params',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'params',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> paramsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'params',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
       playHistoryIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -3100,6 +3291,157 @@ extension MediaInfoQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'playHistory',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> playParamsIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'playParams',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      playParamsIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'playParams',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> playParamsEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'playParams',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      playParamsGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'playParams',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> playParamsLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'playParams',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> playParamsBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'playParams',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      playParamsStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'playParams',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> playParamsEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'playParams',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> playParamsContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'playParams',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition> playParamsMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'playParams',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      playParamsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'playParams',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      playParamsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'playParams',
+        value: '',
       ));
     });
   }
@@ -3366,6 +3708,160 @@ extension MediaInfoQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'sequenceContinuation',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'sequenceContinuation',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sequenceContinuation',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'sequenceContinuation',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'sequenceContinuation',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'sequenceContinuation',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'sequenceContinuation',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'sequenceContinuation',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'sequenceContinuation',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'sequenceContinuation',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sequenceContinuation',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterFilterCondition>
+      sequenceContinuationIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'sequenceContinuation',
+        value: '',
       ));
     });
   }
@@ -4731,6 +5227,30 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByParams() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'params', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByParamsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'params', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByPlayParams() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'playParams', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByPlayParamsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'playParams', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByPublishedTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'publishedTime', Sort.asc);
@@ -4765,6 +5285,20 @@ extension MediaInfoQuerySortBy on QueryBuilder<MediaInfo, MediaInfo, QSortBy> {
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> sortByRecentPlayDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recentPlayDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      sortBySequenceContinuation() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sequenceContinuation', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      sortBySequenceContinuationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sequenceContinuation', Sort.desc);
     });
   }
 
@@ -5134,6 +5668,30 @@ extension MediaInfoQuerySortThenBy
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByParams() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'params', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByParamsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'params', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByPlayParams() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'playParams', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByPlayParamsDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'playParams', Sort.desc);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByPublishedTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'publishedTime', Sort.asc);
@@ -5168,6 +5726,20 @@ extension MediaInfoQuerySortThenBy
   QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy> thenByRecentPlayDateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recentPlayDate', Sort.desc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      thenBySequenceContinuation() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sequenceContinuation', Sort.asc);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QAfterSortBy>
+      thenBySequenceContinuationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sequenceContinuation', Sort.desc);
     });
   }
 
@@ -5418,6 +5990,20 @@ extension MediaInfoQueryWhereDistinct
     });
   }
 
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByParams(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'params', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByPlayParams(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'playParams', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByPublishedTime(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -5435,6 +6021,14 @@ extension MediaInfoQueryWhereDistinct
   QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctByRecentPlayDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'recentPlayDate');
+    });
+  }
+
+  QueryBuilder<MediaInfo, MediaInfo, QDistinct> distinctBySequenceContinuation(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'sequenceContinuation',
+          caseSensitive: caseSensitive);
     });
   }
 
@@ -5643,10 +6237,22 @@ extension MediaInfoQueryProperty
     });
   }
 
+  QueryBuilder<MediaInfo, String?, QQueryOperations> paramsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'params');
+    });
+  }
+
   QueryBuilder<MediaInfo, PlayHistory?, QQueryOperations>
       playHistoryProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'playHistory');
+    });
+  }
+
+  QueryBuilder<MediaInfo, String?, QQueryOperations> playParamsProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'playParams');
     });
   }
 
@@ -5665,6 +6271,13 @@ extension MediaInfoQueryProperty
   QueryBuilder<MediaInfo, int, QQueryOperations> recentPlayDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'recentPlayDate');
+    });
+  }
+
+  QueryBuilder<MediaInfo, String?, QQueryOperations>
+      sequenceContinuationProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'sequenceContinuation');
     });
   }
 

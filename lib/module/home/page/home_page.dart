@@ -3,6 +3,7 @@
 * 时间  2023/8/5 10:07
 */
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/module/home/callback/home_page_callback.dart';
 import 'package:free_tube_player/module/home/controller/home_page_controller.dart';
 import 'package:free_tube_player/module/home/view/home_page_view.dart';
@@ -21,6 +22,7 @@ class _HomePageState extends State<HomePage> implements HomePageCallback {
 
   @override
   void initState() {
+    ADUtils.instance.loadCutAD();
     super.initState();
   }
 

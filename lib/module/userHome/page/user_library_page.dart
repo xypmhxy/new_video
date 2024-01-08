@@ -4,6 +4,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/firebase/firebase_event.dart';
@@ -150,6 +151,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
                   child: GestureDetector(
                       onTap: () {
                         if (_userLibraryController.historyVideos.isEmpty) return;
+                        ADUtils.instance.showPlaylistAD();
                         PageNavigation.startNewPage(const HistoryPage());
                       },
                       child: Container(
@@ -194,6 +196,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
   Widget _download() {
     return GestureDetector(
       onTap: () {
+        ADUtils.instance.showPlaylistAD();
         PageNavigation.startNewPage(const DownloadPage());
       },
       child: Obx(() => _item(
@@ -220,6 +223,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
             return Obx(() => GestureDetector(
                 onTap: () {
                   if (_userLibraryController.watchLaterVideos.isEmpty) return;
+                  ADUtils.instance.showPlaylistAD();
                   PageNavigation.startNewPage(
                     VideoListPage(
                       title: S.current.watchLaterCaps,
@@ -236,6 +240,7 @@ class _UserLibraryPageState extends State<UserLibraryPage> with AutomaticKeepAli
             return Obx(() => GestureDetector(
                   onTap: () {
                     if (_userLibraryController.likedVideos.isEmpty) return;
+                    ADUtils.instance.showPlaylistAD();
                     PageNavigation.startNewPage(
                       VideoListPage(
                         title: S.current.likedVideos,

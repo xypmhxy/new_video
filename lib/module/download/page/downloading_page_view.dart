@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/dialog/dialog_confirm.dart';
 import 'package:free_tube_player/generated/assets.dart';
@@ -59,6 +60,7 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
             children: [
               ColorButton(
                 onPressed: () {
+                  if (_controller.downloadGroupList.isEmpty)return;
                   if (globalDownloadController.hasDownloadingVideo()) {
                     globalDownloadController.pauseAll();
                   } else {
@@ -89,6 +91,7 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
               ),
               ImageButton(
                   onPressed: () {
+                    if (_controller.downloadGroupList.isEmpty)return;
                     DialogUtils.showCenterDialog(DialogConfirm(
                       title: S.current.removeAllConfirm,
                       onConfirm: () {
@@ -207,7 +210,8 @@ class _DownloadingPageViewState extends State<DownloadingPageView> with Automati
                 GestureDetector(
                     onTap: () {
                       globalDownloadController.clickDownload(downloadInfo.mediaInfo,
-                          mediaSource: downloadInfo.videoSource!);
+                          mediaSource: downloadInfo.videoSource);
+                      ADUtils.instance.showDownloadAD();
                     },
                     child: SizedBox(
                         width: itemWidth,

@@ -3,6 +3,7 @@
 * 时间  2023/8/31 07:21
 */
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/tmdb/tmdb_info.dart';
 import 'package:free_tube_player/firebase/firebase_event.dart';
@@ -53,6 +54,7 @@ class _TMDBPageState extends State<TMDBPage> with AutomaticKeepAliveClientMixin 
 
   @override
   void onClickItem(TMDBInfo tmdbInfo) {
+    ADUtils.instance.showPlaylistAD();
     PageNavigation.startNewPage(TMDBDetailPage(
       tmdbInfo: tmdbInfo,
     ));

@@ -12,6 +12,8 @@ class API {
   static const String homeUrl = "$v1Host/browse";
   static const String nextUrl = "$v1Host/next";
   static const String searchUrl = "$v1Host/search";
+  static const String shortVideoParams = "$v1Host/reel/reel_item_watch";
+  static const String shortVideoSequence = "$v1Host/reel/reel_watch_sequence";
 
   // static const String searchSuggestion = 'https://music.youtube.com/youtubei/v1/music/get_search_suggestions';
   static const String searchSuggestion =

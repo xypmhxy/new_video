@@ -4,6 +4,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/playlist.dart';
@@ -33,6 +34,7 @@ class _VideoListPageState extends State<VideoListPage> {
 
   @override
   void initState() {
+    ADUtils.instance.loadOtherAd();
     _controller.videos.value = widget.videos;
     super.initState();
   }

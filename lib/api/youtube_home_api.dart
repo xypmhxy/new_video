@@ -106,6 +106,7 @@ class YoutubeHomeApi extends BaseDio {
         onContinuation?.call(continuation);
         if (mediaList.isNotEmpty) return mediaList;
       }
+      FirebaseEvent.instance.logEvent('request_home_child_videos_error', params: {'value': 'empty'});
       return [];
     } catch (e) {
       LogUtils.e(e.toString());

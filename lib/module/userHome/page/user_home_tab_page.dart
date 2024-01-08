@@ -21,6 +21,7 @@ import 'package:free_tube_player/widget/play_bottom_bar.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:get/get.dart';
 
+import 'short_video_page.dart';
 import 'user_library_page.dart';
 
 class UserHomeTabPage extends StatefulWidget {
@@ -38,7 +39,8 @@ class _UserModePageState extends State<UserHomeTabPage> {
   void initState() {
     backgroundSubscription = FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) async {
       pageController.onAppLifecycleChange(isBackground);
-      if (isBackground == false){
+      if (isBackground == false) {
+        ADUtils.instance.loadOpenAd();
         ADUtils.instance.showOpenAD();
       }
     });
@@ -63,6 +65,7 @@ class _UserModePageState extends State<UserHomeTabPage> {
                   controller: pageController.pageController,
                   children: const [
                 UserYoutubeHome(),
+                ShortVideoPage(),
                 TMDBPage(),
                 VideoHomePage(),
                 UserLibraryPage(),
@@ -87,30 +90,30 @@ class _UserModePageState extends State<UserHomeTabPage> {
                 pageController.onTapBottomNavigationBar(index);
               },
               items: [
-                // _bottomItem(
-                //   pageController.isSelect(0) ? Assets.svgHomeShortVideoSelect : Assets.svgHomeShortVideoNormal,
-                //   S.current.shorts,
-                //   color: pageController.isSelect(0) ? ColorRes.themeColor : ColorRes.accentTextColor,
-                // ),
                 _bottomItem(
                   pageController.isSelect(0) ? Assets.svgHomeSelect : Assets.svgHomeNormal,
                   S.current.home,
                   color: pageController.isSelect(0) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
-                  pageController.isSelect(1) ? Assets.svgHomeMovieSelect : Assets.svgHomeMovieNormal,
-                  S.current.movie,
+                  pageController.isSelect(1) ? Assets.svgHomeShortVideoSelect : Assets.svgHomeShortVideoNormal,
+                  S.current.shorts,
                   color: pageController.isSelect(1) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
-                  pageController.isSelect(2) ? Assets.svgHomeLocalFileSelect : Assets.svgHomeLocalFileNormal,
-                  S.current.file,
+                  pageController.isSelect(2) ? Assets.svgHomeMovieSelect : Assets.svgHomeMovieNormal,
+                  S.current.movie,
                   color: pageController.isSelect(2) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
-                  pageController.isSelect(3) ? Assets.svgHomeLibrarySelect : Assets.svgHomeLibraryNormal,
-                  S.current.library,
+                  pageController.isSelect(3) ? Assets.svgHomeLocalFileSelect : Assets.svgHomeLocalFileNormal,
+                  S.current.file,
                   color: pageController.isSelect(3) ? ColorRes.themeColor : ColorRes.accentTextColor,
+                ),
+                _bottomItem(
+                  pageController.isSelect(4) ? Assets.svgHomeLibrarySelect : Assets.svgHomeLibraryNormal,
+                  S.current.library,
+                  color: pageController.isSelect(4) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
               ]),
         ));

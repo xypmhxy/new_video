@@ -108,13 +108,6 @@ class ADManager {
   void updateConfig() {
     String aDConfigBase64 = DefaultADConfig.defaultADConfig;
     String remoteConfig = isDebug ? '' : FirebaseRemoteConfig.instance.getString('ad_config');
-    // if (AndroidInstallReferrerHelper.instance.isBuyUser()) {
-    //   final userRemoteConfig = FirebaseRemoteConfig.instance.getString('ad_config_user');
-    //   if (userRemoteConfig.isNotEmpty) {
-    //     remoteConfig = userRemoteConfig;
-    //   }
-    //   LogUtils.i('买量用户.....');
-    // }
     if (remoteConfig.isNotEmpty) {
       aDConfigBase64 = remoteConfig;
     }
@@ -436,13 +429,13 @@ class ADManager {
       LogUtils.i('设置激励缓存可用不重复请求', tag: 'ADHelper', useLogcat: true);
       return false;
     }
-    final playADList = adMap['setting'];
-    LogUtils.i('设置激励开始加载 ${playADList?.length}', tag: 'ADHelper', useLogcat: true);
-    if (playADList == null) {
+    final cutADList = adMap['cut'];
+    LogUtils.i('设置激励开始加载 ${cutADList?.length}', tag: 'ADHelper', useLogcat: true);
+    if (cutADList == null) {
       return false;
     }
     isCutRewardLoading = true;
-    _cutReward = await _handleLoadAD(playADList, allowRetryCount: 0);
+    _cutReward = await _handleLoadAD(cutADList, allowRetryCount: 0);
     isCutRewardLoading = false;
     if (_cutReward != null) {
       LogUtils.i('设置激励加载成功 ${_cutReward?.adType} - ${_cutReward?.adId}', tag: 'ADHelper', useLogcat: true);
@@ -450,7 +443,7 @@ class ADManager {
     return _cutReward != null;
   }
 
-  Future<bool> tryShowSettingReward({ValueChanged<bool>? onReward}) async {
+  Future<bool> tryShowCutReward({ValueChanged<bool>? onReward}) async {
     if (_cutReward == null || _cutReward?.isAvailable() == false) return false;
     await _cutReward?.showAD(callBack: ADShowCallback(onReward: (isComplete) {
       onReward?.call(isComplete);

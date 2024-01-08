@@ -4,6 +4,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/playlist.dart';
@@ -100,6 +101,7 @@ class VideoActionHelper {
       ));
     } else {
       globalDownloadController.downloadMedia(mediaInfo: mediaInfo, mediaSource: mediaSource);
+      ADUtils.instance.showDownloadAD();
     }
   }
 
