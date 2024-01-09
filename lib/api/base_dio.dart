@@ -6,6 +6,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:free_tube_player/api/api.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 
 class BaseDio {
@@ -41,6 +42,6 @@ class BaseDio {
   }
 
   Map<String, dynamic> getHeader() {
-    return {'Content-Type': 'application/json'};
+    return {'Content-Type': 'application/json','X-Goog-Visitor-Id': API.visitorData};
   }
 }

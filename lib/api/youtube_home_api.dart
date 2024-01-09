@@ -27,7 +27,7 @@ class YoutubeHomeApi extends BaseDio {
       final responseData = response.data;
       final newVisitorData = responseData['responseContext']?['visitorData'] as String?;
       if (newVisitorData != null && newVisitorData.isNotEmpty) {
-        API.visitorData = newVisitorData;
+        API.setCacheVisitorData(newVisitorData);
       }
       final tabs = (responseData['contents']?['twoColumnBrowseResultsRenderer']?['tabs'] as List?) ?? [];
       if (tabs.isNotEmpty) {

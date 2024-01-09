@@ -4,6 +4,8 @@
 */
 
 import 'package:free_tube_player/app/app_utils.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
+import 'package:free_tube_player/utils/sp_utils.dart';
 
 class API {
   static const String rootHost = "https://www.youtube.com";
@@ -15,12 +17,11 @@ class API {
   static const String shortVideoParams = "$v1Host/reel/reel_item_watch";
   static const String shortVideoSequence = "$v1Host/reel/reel_watch_sequence";
 
-  // static const String searchSuggestion = 'https://music.youtube.com/youtubei/v1/music/get_search_suggestions';
-  static const String searchSuggestion =
-      'https://suggestqueries-clients6.youtube.com/complete/search?client=youtube&hl=en';
   static const String homeBrowseId = "FEwhat_to_watch";
   static const String webVersion = "2.20230831.09.00";
-  static String visitorData = 'CgtxX01fTDF5US1WZyiVtfunBjIICgJISxICGgA%3D';
+  static String _visitorData = getCacheVisitorData();
+
+  static String get visitorData => _visitorData;
 
   static Map<String, dynamic> getWebCommonParams({Map? hlgl, String? visitorData}) {
     hlgl ??= {'hl': AppUtils.language};
@@ -30,9 +31,21 @@ class API {
           ...hlgl,
           'clientName': 'WEB',
           'clientVersion': webVersion,
-          ...(visitorData != null ? {'visitorData': visitorData} : {}),
+          'visitorData': API.visitorData,
         }
       }
     };
+  }
+
+  static void setCacheVisitorData(String visitorData) {
+    if (visitorData.isNotEmpty) {
+      _visitorData = visitorData;
+    }
+    LogUtils.i('更新visitorData $visitorData');
+    SPUtils.setString('cache_visitor_data', visitorData);
+  }
+
+  static String getCacheVisitorData() {
+    return SPUtils.getString('cache_visitor_data') ?? '';
   }
 }

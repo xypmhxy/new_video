@@ -43,7 +43,7 @@ class VideoController {
     return WatchPage.get(httpClient, videoId.value);
   }
 
-  Future<PlayerResponse> getPlayerResponse(VideoId videoId) async {
+  Future<PlayerResponse> getPlayerResponse(VideoId videoId, {String? visitorData}) async {
     /// From https://github.com/Tyrrrz/YoutubeExplode:
     /// The most optimal client to impersonate is the Android client, because
     /// it doesn't require signature deciphering (for both normal and n-parameter signatures).
@@ -52,15 +52,32 @@ class VideoController {
     /// As a workaround, we're using ANDROID_TESTSUITE which appears to offer the same
     /// functionality, but doesn't impose the aforementioned limitation.
     /// https://github.com/Tyrrrz/YoutubeExplode/issues/705
+    ///
+    Map clientMap = {
+      'context': {
+        'client': {
+          'clientName': 'ANDROID_TESTSUITE',
+          'clientVersion': '1.9',
+          'androidSdkVersion': 30,
+          'hl': 'en',
+          'gl': 'US',
+          'utcOffsetMinutes': 0,
+          if (visitorData != null) 'visitorData': visitorData
+        },
+      },
+    };
+    // if (visitorData != null) {
+    //   clientMap['context']?['client']?['visitorData'] = visitorData;
+    // }
     final content = await httpClient.postString(
       'https://www.youtube.com/youtubei/v1/player?key=AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w&prettyPrint=false',
       body: {
-        ..._androidSuiteClient,
+        ...clientMap,
         'videoId': videoId.value,
       },
       headers: {
-        'User-Agent':
-            'com.google.android.youtube/17.36.4 (Linux; U; Android 12; GB) gzip',
+        'User-Agent': 'com.google.android.youtube/17.36.4 (Linux; U; Android 12; GB) gzip',
+        if (visitorData != null) 'X-Goog-Visitor-Id': visitorData
       },
     );
     return PlayerResponse.parse(content);

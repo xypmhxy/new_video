@@ -134,9 +134,6 @@ class ShortVideoApi extends BaseDio {
       if (response?.data == null) return mediaInfoList;
       final responseData = response?.data;
 
-      //刷新visitorData
-      final visitorData = responseData?['responseContext']?['visitorData'];
-      API.visitorData = visitorData ?? API.visitorData;
       //获取continuation
       final continuationCommand = responseData?['continuationEndpoint']?['continuationCommand']?['token'];
       final clickTrackingParams = responseData?['continuationEndpoint']?['clickTrackingParams'];

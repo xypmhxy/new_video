@@ -130,8 +130,8 @@ class StreamClient {
     }
   }
 
-  Stream<StreamInfo> _getStreams(VideoId videoId) async* {
-    var playerResponse = await _controller.getPlayerResponse(videoId);
+  Stream<StreamInfo> _getStreams(VideoId videoId,{String? visitorData}) async* {
+    var playerResponse = await _controller.getPlayerResponse(videoId,visitorData: visitorData);
     if (!playerResponse.previewVideoId.isNullOrWhiteSpace) {
       throw VideoRequiresPurchaseException.preview(
         videoId,
@@ -168,12 +168,12 @@ class StreamClient {
 
   /// Gets the manifest that contains information
   /// about available streams in the specified video.
-  Future<StreamManifest> getManifest(dynamic videoId) {
+  Future<StreamManifest> getManifest(dynamic videoId,{String? visitorData}) {
     videoId = VideoId.fromString(videoId);
     var startDate = DateTime.now().millisecondsSinceEpoch;
     print('请求--开始 $startDate');
     return retry(_httpClient, () async {
-      final streams = await _getStreams(videoId).toList();
+      final streams = await _getStreams(videoId,visitorData: visitorData).toList();
       print('请求--结束111 ${DateTime.now().millisecondsSinceEpoch - startDate}');
       if (streams.isEmpty) {
         throw VideoUnavailableException(
