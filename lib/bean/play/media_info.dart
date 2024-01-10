@@ -288,7 +288,7 @@ class BaseMediaSource {
   BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.audioSource});
 
   @ignore
-  String get identify => label ?? url;
+  String get identify => isAudio ? url : label ?? url;
 
   @ignore
   int get realTotalLength => (byteSize ?? 0) + (audioSource?.byteSize ?? 0);
@@ -320,6 +320,9 @@ class BaseMediaSource {
     final totalDownload = downloadLength! + (audioSource?.downloadLength ?? 0);
     return totalDownload / totalLength;
   }
+
+  @ignore
+  bool get isAudio => format == 'mp3';
 
   @ignore
   bool get isDownloadAvailable => isSuccess && downloadPath != null;

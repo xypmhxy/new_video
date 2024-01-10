@@ -7,19 +7,21 @@ import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/widget/divider.dart';
+import 'package:free_tube_player/widget/download_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
 
 class AudioChildTab extends StatefulWidget {
   final MediaInfo mediaInfo;
+  final Function(BaseMediaSource mediaSource)? onClickDownload;
 
-  const AudioChildTab({super.key, required this.mediaInfo});
+  const AudioChildTab({super.key, required this.mediaInfo, this.onClickDownload});
 
   @override
   State<AudioChildTab> createState() => _AudioChildTabState();
 }
 
-class _AudioChildTabState extends State<AudioChildTab>  with AutomaticKeepAliveClientMixin{
+class _AudioChildTabState extends State<AudioChildTab> with AutomaticKeepAliveClientMixin {
   List<AudioSource> audioSources = [];
   AudioSource? selectedAudioSource;
 
@@ -55,21 +57,6 @@ class _AudioChildTabState extends State<AudioChildTab>  with AutomaticKeepAliveC
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 22,
-                      height: 22,
-                      child: Radio(
-                        value: selectedAudioSource?.bitrate ?? '',
-                        groupValue: videoSource.bitrate ?? '',
-                        onChanged: (value) {
-                          selectedAudioSource = videoSource;
-                          setState(() {});
-                        },
-                        activeColor: AppThemeController.primaryThemeColor(context),
-                        fillColor: MaterialStateProperty.all(AppThemeController.primaryThemeColor(context)),
-                      ),
-                    ),
-                    const Width(12),
                     Wrap(
                       direction: Axis.vertical,
                       spacing: 6,
@@ -84,10 +71,24 @@ class _AudioChildTabState extends State<AudioChildTab>  with AutomaticKeepAliveC
                               fontWeight: FontWeight.bold,
                             )),
                         TextView.accent(
-                          '${videoSource.formatBitrate()}  ·  ${videoSource.formatSize()}',
+                          '${videoSource.formatBitrate()}  ·  ${videoSource.formatSize()}  ·  ${videoSource.format}',
                           fontSize: 14,
                         )
                       ],
+                    ),
+                    const Width(12),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        margin: const EdgeInsets.only(right: 10),
+                        child: DownloadView(
+                          mediaInfo: mediaInfo,
+                          baseMediaSource: videoSource,
+                          onClickDownload: () {
+                            widget.onClickDownload?.call(videoSource);
+                          },
+                        ),
+                      ),
                     )
                   ],
                 ),

@@ -22,19 +22,18 @@ extension NumberExtension on num {
 
   String formatSpeedSize({int fractionDigits = 1}) {
     final size = this;
-    if (size == 0) return '0KB';
+    if (size == 0) return '0K';
     final sizeKB = size / 1024;
     if (sizeKB < 1024) {
-      return '${sizeKB.toStringAsFixed(fractionDigits)}KB';
+      return '${sizeKB.toStringAsFixed(fractionDigits)}K';
     }
 
     final sizeMB = sizeKB / 1024;
     if (sizeMB < 1024) {
-      return '${sizeMB.toStringAsFixed(fractionDigits)}MB';
+      return '${sizeMB.toStringAsFixed(fractionDigits)}M';
     }
 
     final sizeGB = sizeMB / 1024;
     return '${sizeGB.toStringAsFixed(fractionDigits)}G';
   }
-
 }
