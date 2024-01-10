@@ -32,7 +32,7 @@ base class DownloadInfo extends LinkedListEntry<DownloadInfo> {
   String downloadProgressString() {
     final downloadLength = videoSource.downloadLength ?? 0;
     final totalLength = videoSource.realTotalLength;
-    return '${downloadLength.parseUnit()} / ${totalLength.parseUnit()}';
+    return '${downloadLength.formatSpeedSize()} / ${totalLength.formatSpeedSize()}';
   }
 
   void pause() {

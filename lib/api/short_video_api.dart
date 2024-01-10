@@ -9,9 +9,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:free_tube_player/api/api.dart';
 import 'package:free_tube_player/api/base_dio.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/extension/number_extension.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 
 class ShortVideoApi extends BaseDio {
+  Future<List<MediaInfo>> requestShortVideos(
+      {ValueChanged<ContinueInfo>? onContinueCallback, ContinueInfo? continueInfo}) async {
+    try {
+      final mediaInfoList = <MediaInfo>[];
+      if (continueInfo == null) {
+        final firstMediaInfo = await requestShortVideoItem();
+        if (firstMediaInfo == null || firstMediaInfo.sequenceContinuation == null) return [];
+        //请求列表
+        mediaInfoList.add(firstMediaInfo);
+        final sequenceMediaInfoList = await requestShortVideoSequence(
+            sequenceContinuation: firstMediaInfo.sequenceContinuation, onContinueCallback: onContinueCallback);
+        mediaInfoList.addAll(sequenceMediaInfoList);
+      } else {
+        final sequenceMediaInfoList =
+            await requestShortVideoSequence(continueInfo: continueInfo, onContinueCallback: onContinueCallback);
+        mediaInfoList.addAll(sequenceMediaInfoList);
+      }
+      return mediaInfoList;
+    } catch (e) {
+      LogUtils.e('请求短视频播放列表出错 $e');
+    }
+    return [];
+  }
+
   Future<MediaInfo?> requestShortVideoItem({String? videoParams, String? playParams, String? videoId}) async {
     try {
       final commonParams = API.getWebCommonParams();
@@ -45,9 +70,10 @@ class ShortVideoApi extends BaseDio {
       if (thumbnails.isNotEmpty) {
         thumbnail = thumbnails.last['url'];
       }
-      final viewCount = videoDetails['viewCount'] ?? 0;
+      final viewCountStr = playerResponse['microformat']?['playerMicroformatRenderer']?['viewCount'] ?? '0';
+      final viewCount = int.tryParse(viewCountStr) ?? 0;
       final author = videoDetails['author'];
-      List formats = responseData['streamingData']?['formats'] ?? [];
+      List formats = playerResponse['streamingData']?['formats'] ?? [];
       VideoSource? videoSource;
       int duration = 0;
       if (formats.isNotEmpty) {
@@ -56,7 +82,7 @@ class ShortVideoApi extends BaseDio {
         final width = format['width'] ?? 1080;
         final height = format['height'] ?? 1920;
         final label = format['qualityLabel'] ?? '720p';
-        duration = format['approxDurationMs'] ?? 0;
+        duration = int.tryParse(format['approxDurationMs'] ?? '0') ?? 0;
         videoSource = VideoSource();
         videoSource.url = url;
         videoSource.width = width;
@@ -80,9 +106,9 @@ class ShortVideoApi extends BaseDio {
       mediaInfo.author = author;
       mediaInfo.authorId = authorId;
       mediaInfo.thumbnail = thumbnail;
-      mediaInfo.viewCountText = viewCount;
+      mediaInfo.viewCountText = viewCount.parseUnit();
       mediaInfo.duration = duration;
-      if (videoSource != null) {
+      if (videoSource != null && videoSource.url.isNotEmpty) {
         mediaInfo.videoSources = [videoSource];
       }
       mediaInfo.authorThumbnail = channelThumb;
@@ -91,22 +117,6 @@ class ShortVideoApi extends BaseDio {
       LogUtils.e('请求短视频播首个视频出错 $e');
     }
     return null;
-  }
-
-  Future<List<MediaInfo>> requestShortVideos({ValueChanged<ContinueInfo>? onContinueCallback}) async {
-    try {
-      final firstMediaInfo = await requestShortVideoItem();
-      if (firstMediaInfo == null || firstMediaInfo.sequenceContinuation == null) return [];
-      //请求列表
-      final mediaInfoList = <MediaInfo>[firstMediaInfo];
-      final sequenceMediaInfoList = await requestShortVideoSequence(
-          sequenceContinuation: firstMediaInfo.sequenceContinuation, onContinueCallback: onContinueCallback);
-      mediaInfoList.addAll(sequenceMediaInfoList);
-      return mediaInfoList;
-    } catch (e) {
-      LogUtils.e('请求短视频播放列表出错 $e');
-    }
-    return [];
   }
 
   Future<List<MediaInfo>> requestShortVideoSequence(

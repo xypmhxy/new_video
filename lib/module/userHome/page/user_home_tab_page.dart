@@ -8,20 +8,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
 import 'package:free_tube_player/ad/ad_utils.dart';
-import 'package:free_tube_player/ad/helper/ad_manager.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/home/page/tmdb_page.dart';
 import 'package:free_tube_player/module/home/page/video_home_page.dart';
+import 'package:free_tube_player/module/short/page/short_video_page.dart';
 import 'package:free_tube_player/module/userHome/controller/user_home_tab_page_controller.dart';
 import 'package:free_tube_player/module/userHome/page/user_youtube_home.dart';
 import 'package:free_tube_player/widget/play_bottom_bar.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:get/get.dart';
 
-import 'short_video_page.dart';
 import 'user_library_page.dart';
 
 class UserHomeTabPage extends StatefulWidget {
@@ -65,7 +64,6 @@ class _UserModePageState extends State<UserHomeTabPage> {
                   controller: pageController.pageController,
                   children: const [
                 UserYoutubeHome(),
-                ShortVideoPage(),
                 TMDBPage(),
                 VideoHomePage(),
                 UserLibraryPage(),
@@ -96,24 +94,19 @@ class _UserModePageState extends State<UserHomeTabPage> {
                   color: pageController.isSelect(0) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
-                  pageController.isSelect(1) ? Assets.svgHomeShortVideoSelect : Assets.svgHomeShortVideoNormal,
-                  S.current.shorts,
+                  pageController.isSelect(1) ? Assets.svgHomeMovieSelect : Assets.svgHomeMovieNormal,
+                  S.current.movie,
                   color: pageController.isSelect(1) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
-                  pageController.isSelect(2) ? Assets.svgHomeMovieSelect : Assets.svgHomeMovieNormal,
-                  S.current.movie,
+                  pageController.isSelect(2) ? Assets.svgHomeLocalFileSelect : Assets.svgHomeLocalFileNormal,
+                  S.current.file,
                   color: pageController.isSelect(2) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
                 _bottomItem(
-                  pageController.isSelect(3) ? Assets.svgHomeLocalFileSelect : Assets.svgHomeLocalFileNormal,
-                  S.current.file,
-                  color: pageController.isSelect(3) ? ColorRes.themeColor : ColorRes.accentTextColor,
-                ),
-                _bottomItem(
-                  pageController.isSelect(4) ? Assets.svgHomeLibrarySelect : Assets.svgHomeLibraryNormal,
+                  pageController.isSelect(3) ? Assets.svgHomeLibrarySelect : Assets.svgHomeLibraryNormal,
                   S.current.library,
-                  color: pageController.isSelect(4) ? ColorRes.themeColor : ColorRes.accentTextColor,
+                  color: pageController.isSelect(3) ? ColorRes.themeColor : ColorRes.accentTextColor,
                 ),
               ]),
         ));
