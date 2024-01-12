@@ -34,7 +34,6 @@ class _PlayBottomBarState extends State<PlayBottomBar> {
         visible: userPlayerController.nowPlayingMedia != null,
         child: GestureDetector(
             onTap: () async {
-              await _showAD();
               PageNavigation.startNewPage(const UserPlayerPage());
             },
             child: Container(
@@ -62,14 +61,12 @@ class _PlayBottomBarState extends State<PlayBottomBar> {
           if (userPlayerController.isPlayerLoading || userPlayerController.isPlayerNone) {
             return GestureDetector(
                 onTap: () async {
-                  await _showAD();
                   PageNavigation.startNewPage(const UserPlayerPage());
                 },
                 child: _placeHolder());
           }
           return GestureDetector(
             onTap: () async {
-              await _showAD();
               PageNavigation.startNewPage(const UserPlayerPage());
             },
             child: SizedBox(
