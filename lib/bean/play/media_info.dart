@@ -250,6 +250,14 @@ class MediaInfo {
     return intervalTime <= DateUtil.MIN * 90;
   }
 
+  VideoSource? getDownloadedSource() {
+    if (videoSources?.isEmpty ?? true) return null;
+    for (final source in videoSources!) {
+      if (source.isDownloadAvailable) return source;
+    }
+    return null;
+  }
+
   @override
   String toString() {
     return 'title= $title author= $author id= $id youtubeId= $youtubeId createDate= $createDate '
@@ -286,7 +294,8 @@ class BaseMediaSource {
   int? downloadFinishDate;
   String? downloadPath;
 
-  BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.audioSource,this.mimeType});
+  BaseMediaSource(
+      {this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.audioSource, this.mimeType});
 
   @ignore
   String get identify => isAudio ? url : label ?? url;
@@ -389,7 +398,7 @@ class VideoSource extends BaseMediaSource {
 
 @embedded
 class AudioSource extends BaseMediaSource {
-  AudioSource({super.url = '', super.label, super.format, super.bitrate, super.byteSize,super.mimeType});
+  AudioSource({super.url = '', super.label, super.format, super.bitrate, super.byteSize, super.mimeType});
 
   String formatSize() {
     if (byteSize == null || byteSize == 0) return '0MB';

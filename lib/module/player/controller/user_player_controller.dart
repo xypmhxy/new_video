@@ -97,8 +97,11 @@ class UserPlayerController {
     playStatus.value = PlayStatus.loading;
     await stop();
     if (videoSource == null) {
-      const targetResolution = defaultResolution;
-      videoSource = VideoDataHelper.get.getTargetVideoUrl(targetResolution, mediaInfo);
+      videoSource = mediaInfo.getDownloadedSource();
+      if(videoSource == null){
+        const targetResolution = defaultResolution;
+        videoSource = VideoDataHelper.get.getTargetVideoUrl(targetResolution, mediaInfo);
+      }
     }
     String? videoUrl;
     String? audioUrl;

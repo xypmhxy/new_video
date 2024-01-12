@@ -139,10 +139,18 @@ class GlobalDownloadController extends GetxController {
     final fileName = mediaInfo.youtubeId ?? mediaInfo.title;
     final relativePath = '${fileName.toMd5()}.mp3';
     final audioSavePath = await FileUtils.getDownloadFilePath(relativePath);
-    if (File(audioSavePath).existsSync()) {
+    final audioFile = File(audioSavePath);
+    if (audioFile.existsSync()) {
+      audioSource.downloadStatus = DownloadStatus.success;
+      audioSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
+      audioSource.downloadPath = relativePath;
+      audioSource.byteSize = audioFile.lengthSync();
+      audioSource.downloadLength = audioFile.lengthSync();
       _mediaDao.insert(mediaInfo);
       _updateUI(mediaInfo.identify);
-      return false;
+      completer.complete(true);
+      LogUtils.i('音频下载完成 ${mediaInfo.title}');
+      return true;
     }
     audioSource.downloadPath = relativePath;
     audioSource.downloadStatus = DownloadStatus.downloading;
