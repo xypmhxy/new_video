@@ -63,7 +63,6 @@ class MediaInfo {
   String? playParams;
   String? sequenceContinuation;
 
-
   MediaInfo();
 
   MediaInfo.create({
@@ -273,19 +272,21 @@ class BaseMediaSource {
   String? format;
   int? byteSize;
   int? bitrate;
+  String? mimeType;
   @enumerated
   SourceType sourceType = SourceType.local;
   AudioSource? audioSource;
 
   @enumerated
   DownloadStatus downloadStatus = DownloadStatus.none;
+
   // int? fileLength;
   int? downloadLength;
   int? downloadStartDate;
   int? downloadFinishDate;
   String? downloadPath;
 
-  BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.audioSource});
+  BaseMediaSource({this.url = '', this.label, this.format, this.bitrate, this.byteSize, this.audioSource,this.mimeType});
 
   @ignore
   String get identify => isAudio ? url : label ?? url;
@@ -322,7 +323,7 @@ class BaseMediaSource {
   }
 
   @ignore
-  bool get isAudio => format == 'mp3';
+  bool get isAudio => mimeType?.startsWith('audio') ?? false;
 
   @ignore
   bool get isDownloadAvailable => isSuccess && downloadPath != null;
@@ -388,7 +389,7 @@ class VideoSource extends BaseMediaSource {
 
 @embedded
 class AudioSource extends BaseMediaSource {
-  AudioSource({super.url = '', super.label, super.format, super.bitrate, super.byteSize});
+  AudioSource({super.url = '', super.label, super.format, super.bitrate, super.byteSize,super.mimeType});
 
   String formatSize() {
     if (byteSize == null || byteSize == 0) return '0MB';

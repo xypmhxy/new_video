@@ -24,11 +24,9 @@ import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
 import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:free_tube_player/utils/video_data_helper.dart';
-import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:get/get.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:screen_brightness/screen_brightness.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'player_controller.dart';
 
@@ -49,7 +47,6 @@ Future<void> startUserPlayPage(
 }
 
 class UserPlayerController {
-  final _youtubeExplode = YoutubeExplode();
   final _mediaDao = MediaInfoDao();
   final _chewiePlayerImpl = ChewiePlayerImpl();
   final _nativeDeviceOrientation = NativeDeviceOrientationCommunicator();
@@ -417,39 +414,6 @@ class UserPlayerController {
     _bufferSubs = _chewiePlayerImpl.watchBuffer.listen((buff) {
       buffered.value = buff;
     });
-  }
-
-  Future<void> requestPlaySource(MediaInfo mediaInfo) async {
-    try {
-      if (mediaInfo.youtubeId == null) return;
-      List<VideoSource> videoSources = [];
-      List<AudioSource> audioSource = [];
-      if (isLive) {
-        final liveUrl = await _youtubeExplode.videos.streams.getHttpLiveStreamUrl(VideoId(mediaInfo.youtubeId!));
-        videoSources.add(VideoSource(url: liveUrl));
-      } else {
-        final manifest = await _youtubeExplode.videos.streams.getManifest(mediaInfo.youtubeId!);
-        for (final mux in manifest.video) {
-          videoSources.add(VideoDataHelper.get.parseMuxedVideo(mux));
-        }
-        videoSources.sort((a, b) {
-          if (a.width == null || b.width == null) return 0;
-          return a.width! > b.width! ? 1 : 0;
-        });
-
-        for (final audioInfo in manifest.audio) {
-          audioSource.add(VideoDataHelper.get.parseAudio(audioInfo));
-        }
-        audioSource.sort((a, b) {
-          if (a.bitrate == null || b.bitrate == null) return 0;
-          return a.bitrate! > b.bitrate! ? 1 : 0;
-        });
-      }
-      mediaInfo.videoSources = videoSources;
-      mediaInfo.audioSources = audioSource;
-    } catch (e) {
-      LogUtils.e('获取播放链接错误 ${e.toString()}');
-    }
   }
 
   void refreshMediaInfo() {

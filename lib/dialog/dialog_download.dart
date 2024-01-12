@@ -43,7 +43,7 @@ class _DialogDownloadState extends State<DialogDownload> {
       decoration: allRadiusDecoration(16, color: AppThemeController.backgroundColor(context)),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
-        children: [const Height(4), _closeButton(), const Height(12), _title(), const Height(8), _content()],
+        children: [const Height(4), _closeButton(), const Height(12), _title(), const Height(20), _content()],
       ),
     );
   }
@@ -92,11 +92,10 @@ class _DialogDownloadState extends State<DialogDownload> {
     return Obx(() {
       if (_controller.viewStatus.value == ViewStatus.success) {
         return Expanded(
-          child: DefaultTabController(
-              length: 2,
-              child: Column(
-                children: [_tabBar(), _tabBarView()],
-              )),
+          child: VideoChildTab(
+            mediaInfo: mediaInfo,
+            onClickDownload: widget.onClickDownload,
+          ),
         );
       } else if (_controller.viewStatus.value == ViewStatus.failed) {
         return Container(
@@ -112,9 +111,7 @@ class _DialogDownloadState extends State<DialogDownload> {
       }
       return const Expanded(
           child: Center(
-        child: LoadingView(
-          size: 40,
-        ),
+        child: LoadingView(size: 35),
       ));
     });
   }
@@ -140,8 +137,8 @@ class _DialogDownloadState extends State<DialogDownload> {
   Widget _tabBarView() {
     return Expanded(
         child: TabBarView(children: [
-      VideoChildTab(mediaInfo: mediaInfo, onClickDownload: widget.onClickDownload),
-      AudioChildTab(mediaInfo: mediaInfo, onClickDownload: widget.onClickDownload),
+      VideoChildTab(mediaInfo: mediaInfo),
+      AudioChildTab(mediaInfo: mediaInfo),
     ]));
   }
 

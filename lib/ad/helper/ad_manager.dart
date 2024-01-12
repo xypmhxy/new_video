@@ -421,26 +421,7 @@ class ADManager {
 
   ///剪切激励视频
   Future<bool> loadSettingRewardAD() async {
-    if (isCutRewardLoading) {
-      LogUtils.i('设置激励请求中不请求', tag: 'ADHelper', useLogcat: true);
-      return false;
-    }
-    if (_cutReward?.isCacheAvailable() ?? false) {
-      LogUtils.i('设置激励缓存可用不重复请求', tag: 'ADHelper', useLogcat: true);
-      return false;
-    }
-    final cutADList = adMap['cut'];
-    LogUtils.i('设置激励开始加载 ${cutADList?.length}', tag: 'ADHelper', useLogcat: true);
-    if (cutADList == null) {
-      return false;
-    }
-    isCutRewardLoading = true;
-    _cutReward = await _handleLoadAD(cutADList, allowRetryCount: 0);
-    isCutRewardLoading = false;
-    if (_cutReward != null) {
-      LogUtils.i('设置激励加载成功 ${_cutReward?.adType} - ${_cutReward?.adId}', tag: 'ADHelper', useLogcat: true);
-    }
-    return _cutReward != null;
+   return false;
   }
 
   Future<bool> tryShowCutReward({ValueChanged<bool>? onReward}) async {

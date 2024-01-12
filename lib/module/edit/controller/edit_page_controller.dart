@@ -138,15 +138,6 @@ class EditPageController extends BaseController {
   }
 
   Future<bool> showReward() async {
-    ADManager.instance.loadSettingRewardAD();
-    Completer<bool> completer = Completer();
-    final result = await ADManager.instance.tryShowCutReward(onReward: (_) {
-      completer.complete(true);
-    });
-    if (result == false) {
-      ToastUtils.show(S.current.rewardNotLoad,isCorrect: false);
-      return false;
-    }
-    return completer.future;
+   return true;
   }
 }

@@ -61,6 +61,7 @@ class ChewiePlayerImpl implements PlayerInterface {
         showControlsOnInitialize: true,
         showControls: true,
         useRootNavigator: false,
+        allowedScreenSleep: false,
         deviceOrientationsOnEnterFullScreen: [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
         deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
         customControls: UserPlayerControlPanel(

@@ -17,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class UserPlayerPageController extends BaseController {
   final _channelApi = ChannelApi();
@@ -40,6 +41,7 @@ class UserPlayerPageController extends BaseController {
     _fetchPlayInfoSubs?.cancel();
     fetchPlayInfoStatus.value = 0.0;
     ScreenBrightness().setScreenBrightness(brightness);
+    WakelockPlus.disable();
     super.dispose();
   }
 
@@ -50,6 +52,8 @@ class UserPlayerPageController extends BaseController {
     Future.delayed(const Duration(seconds: 6)).then((value) => fetchPlayInfoStatus.value = 0.5);
 
     brightness = await ScreenBrightness().current;
+
+    WakelockPlus.enable();
   }
 
   Future<void> queryLikeStatus() async {

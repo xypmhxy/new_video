@@ -5,7 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 class LoadingView extends StatelessWidget {
   final double size;
 
-  const LoadingView({Key? key, this.size = 48.0}) : super(key: key);
+  const LoadingView({Key? key, this.size = 38.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

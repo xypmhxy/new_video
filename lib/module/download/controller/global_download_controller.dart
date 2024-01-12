@@ -64,67 +64,62 @@ class GlobalDownloadController extends GetxController {
     if (mediaInfo.isUrlAvailable() == false) {
       await VideoDataHelper.get.requestVideoSource(mediaInfo);
     }
-    BaseMediaSource? mediaSource =
-        mediaInfo.videoSources?.firstWhereOrNull((element) => element.identify == downloadInfo.videoSource.identify);
-    if (downloadInfo.videoSource.isAudio) {
-      mediaSource =
-          mediaInfo.audioSources?.firstWhereOrNull((element) => element.identify == downloadInfo.videoSource.identify);
-    }
-    if (mediaSource != null) downloadInfo.videoSource = mediaSource;
+    final videoSource =
+    mediaInfo.videoSources?.firstWhereOrNull((element) => element.identify == downloadInfo.videoSource.identify);
+    if (videoSource != null) downloadInfo.videoSource = videoSource;
     final videoUrl = downloadInfo.videoSource.url;
     if (videoUrl.isEmpty) return;
     final fileName = mediaInfo.youtubeId ?? mediaInfo.title;
-    final label = mediaSource?.label ?? '${mediaSource?.bitrate}';
+    final label = videoSource?.label ?? '${videoSource?.bitrate}';
     final relativePath = '${fileName.toMd5()}-$label.mp4';
     final videoSavePath = await FileUtils.getDownloadFilePath(relativePath);
-    mediaSource?.downloadPath = relativePath;
-    mediaSource?.downloadStatus = DownloadStatus.downloading;
+    videoSource?.downloadPath = relativePath;
+    videoSource?.downloadStatus = DownloadStatus.downloading;
     _mediaDao.insert(mediaInfo);
 
     _startDownloadSpeedTimer();
     FirebaseEvent.instance.logEvent('download_start',
-        params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': mediaSource?.label ?? 'none'});
+        params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': videoSource?.label ?? 'none'});
     downloader.download(
         url: videoUrl,
         savePath: videoSavePath,
         cancelToken: downloadInfo.cancelToken,
         downloadFailed: ({errorCode, errorMsg}) {
-          mediaSource?.downloadStatus = DownloadStatus.failed;
+          videoSource?.downloadStatus = DownloadStatus.failed;
           _mediaDao.insert(mediaInfo);
           _updateUI(mediaInfo.identify);
           if (errorCode == 416) {
-            _deleteFile(mediaSource);
+            _deleteFile(videoSource);
           }
           LogUtils.e('视频下载失败 $errorCode');
           FirebaseEvent.instance
               .logEvent('download_error', params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': errorMsg});
         },
         onReceiveProgress: (count, total) async {
-          mediaSource?.byteSize = total;
-          mediaSource?.downloadLength = count;
-          LogUtils.printLog('当前视频文件下载进度 ${mediaSource?.format}${mediaInfo.title}  $count  $total');
+          videoSource?.byteSize = total;
+          videoSource?.downloadLength = count;
+          // LogUtils.printLog('当前视频文件下载进度 ${mediaInfo.title}  $count  $total');
           if (count >= total) {
-            final needAudioDownload = (mediaSource as VideoSource?)?.isNeedAudioTrack() ?? false;
+            final needAudioDownload = videoSource?.isNeedAudioTrack() ?? false;
             if (needAudioDownload) {
               LogUtils.i('视频下载完成开始下载音频 ${mediaInfo.title}');
               final audioResult = await _doDownloadAudio(downloadInfo);
               if (audioResult) {
-                mediaSource!.downloadStatus = DownloadStatus.success;
-                mediaSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
+                videoSource!.downloadStatus = DownloadStatus.success;
+                videoSource.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
                 _removeDownloadInfo(downloadInfo);
                 LogUtils.i('视频下载完成 ${mediaInfo.title}');
                 FirebaseEvent.instance.logEvent('download_success',
-                    params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': mediaSource.label ?? 'none'});
+                    params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': videoSource.label ?? 'none'});
                 downloadNext();
-
               }
             } else {
-              mediaSource?.downloadStatus = DownloadStatus.success;
-              mediaSource?.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
+              videoSource?.downloadStatus = DownloadStatus.success;
+              videoSource?.downloadFinishDate = DateTime.now().millisecondsSinceEpoch;
               _removeDownloadInfo(downloadInfo);
               LogUtils.i('视频下载完成 ${mediaInfo.title}');
               FirebaseEvent.instance.logEvent('download_success',
-                  params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': mediaSource?.label ?? 'none'});
+                  params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': videoSource?.label ?? 'none'});
               downloadNext();
             }
           }
@@ -271,7 +266,7 @@ class GlobalDownloadController extends GetxController {
   DownloadInfo? _getDownloadInfoOrNull(DownloadInfo downloadInfo) {
     try {
       return downloadList.firstWhere((element) =>
-          element.identify == downloadInfo.identify &&
+      element.identify == downloadInfo.identify &&
           element.videoSource.identify == downloadInfo.videoSource.identify);
     } catch (_) {}
     return null;

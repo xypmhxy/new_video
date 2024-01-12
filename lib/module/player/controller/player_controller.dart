@@ -131,9 +131,6 @@ class PlayerController extends GetxController {
   }
 
   Future<void> clickPlay() async {
-    if (isPlaying == false) {
-      _showAD();
-    }
     chewieController?.togglePause();
     saveHistoryPosition();
     checkControlPanelStatus();

@@ -6724,24 +6724,29 @@ const VideoSourceSchema = Schema(
       name: r'label',
       type: IsarType.string,
     ),
-    r'resolution': PropertySchema(
+    r'mimeType': PropertySchema(
       id: 13,
+      name: r'mimeType',
+      type: IsarType.string,
+    ),
+    r'resolution': PropertySchema(
+      id: 14,
       name: r'resolution',
       type: IsarType.string,
     ),
     r'sourceType': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'sourceType',
       type: IsarType.byte,
       enumMap: _VideoSourcesourceTypeEnumValueMap,
     ),
     r'url': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'url',
       type: IsarType.string,
     ),
     r'width': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'width',
       type: IsarType.long,
     )
@@ -6784,6 +6789,12 @@ int _videoSourceEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.mimeType;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.resolution.length * 3;
   bytesCount += 3 + object.url.length * 3;
   return bytesCount;
@@ -6813,10 +6824,11 @@ void _videoSourceSerialize(
   writer.writeLong(offsets[10], object.height);
   writer.writeBool(offsets[11], object.isOnlyVideo);
   writer.writeString(offsets[12], object.label);
-  writer.writeString(offsets[13], object.resolution);
-  writer.writeByte(offsets[14], object.sourceType.index);
-  writer.writeString(offsets[15], object.url);
-  writer.writeLong(offsets[16], object.width);
+  writer.writeString(offsets[13], object.mimeType);
+  writer.writeString(offsets[14], object.resolution);
+  writer.writeByte(offsets[15], object.sourceType.index);
+  writer.writeString(offsets[16], object.url);
+  writer.writeLong(offsets[17], object.width);
 }
 
 VideoSource _videoSourceDeserialize(
@@ -6833,8 +6845,8 @@ VideoSource _videoSourceDeserialize(
     height: reader.readLongOrNull(offsets[10]),
     isOnlyVideo: reader.readBoolOrNull(offsets[11]) ?? false,
     label: reader.readStringOrNull(offsets[12]),
-    url: reader.readStringOrNull(offsets[15]) ?? '',
-    width: reader.readLongOrNull(offsets[16]),
+    url: reader.readStringOrNull(offsets[16]) ?? '',
+    width: reader.readLongOrNull(offsets[17]),
   );
   object.audioSource = reader.readObjectOrNull<AudioSource>(
     offsets[0],
@@ -6848,8 +6860,9 @@ VideoSource _videoSourceDeserialize(
   object.downloadStatus = _VideoSourcedownloadStatusValueEnumMap[
           reader.readByteOrNull(offsets[7])] ??
       DownloadStatus.none;
+  object.mimeType = reader.readStringOrNull(offsets[13]);
   object.sourceType =
-      _VideoSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[14])] ??
+      _VideoSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[15])] ??
           SourceType.local;
   return object;
 }
@@ -6894,14 +6907,16 @@ P _videoSourceDeserializeProp<P>(
     case 12:
       return (reader.readStringOrNull(offset)) as P;
     case 13:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 14:
+      return (reader.readString(offset)) as P;
+    case 15:
       return (_VideoSourcesourceTypeValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SourceType.local) as P;
-    case 15:
-      return (reader.readStringOrNull(offset) ?? '') as P;
     case 16:
+      return (reader.readStringOrNull(offset) ?? '') as P;
+    case 17:
       return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -7983,6 +7998,159 @@ extension VideoSourceQueryFilter
   }
 
   QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'mimeType',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'mimeType',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> mimeTypeEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> mimeTypeBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'mimeType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition> mimeTypeMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'mimeType',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'mimeType',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
+      mimeTypeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'mimeType',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VideoSource, VideoSource, QAfterFilterCondition>
       resolutionEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -8446,14 +8614,19 @@ const AudioSourceSchema = Schema(
       name: r'label',
       type: IsarType.string,
     ),
-    r'sourceType': PropertySchema(
+    r'mimeType': PropertySchema(
       id: 10,
+      name: r'mimeType',
+      type: IsarType.string,
+    ),
+    r'sourceType': PropertySchema(
+      id: 11,
       name: r'sourceType',
       type: IsarType.byte,
       enumMap: _AudioSourcesourceTypeEnumValueMap,
     ),
     r'url': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'url',
       type: IsarType.string,
     )
@@ -8496,6 +8669,12 @@ int _audioSourceEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.mimeType;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   bytesCount += 3 + object.url.length * 3;
   return bytesCount;
 }
@@ -8521,8 +8700,9 @@ void _audioSourceSerialize(
   writer.writeByte(offsets[7], object.downloadStatus.index);
   writer.writeString(offsets[8], object.format);
   writer.writeString(offsets[9], object.label);
-  writer.writeByte(offsets[10], object.sourceType.index);
-  writer.writeString(offsets[11], object.url);
+  writer.writeString(offsets[10], object.mimeType);
+  writer.writeByte(offsets[11], object.sourceType.index);
+  writer.writeString(offsets[12], object.url);
 }
 
 AudioSource _audioSourceDeserialize(
@@ -8536,7 +8716,8 @@ AudioSource _audioSourceDeserialize(
     byteSize: reader.readLongOrNull(offsets[2]),
     format: reader.readStringOrNull(offsets[8]),
     label: reader.readStringOrNull(offsets[9]),
-    url: reader.readStringOrNull(offsets[11]) ?? '',
+    mimeType: reader.readStringOrNull(offsets[10]),
+    url: reader.readStringOrNull(offsets[12]) ?? '',
   );
   object.audioSource = reader.readObjectOrNull<AudioSource>(
     offsets[0],
@@ -8551,7 +8732,7 @@ AudioSource _audioSourceDeserialize(
           reader.readByteOrNull(offsets[7])] ??
       DownloadStatus.none;
   object.sourceType =
-      _AudioSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[10])] ??
+      _AudioSourcesourceTypeValueEnumMap[reader.readByteOrNull(offsets[11])] ??
           SourceType.local;
   return object;
 }
@@ -8590,10 +8771,12 @@ P _audioSourceDeserializeProp<P>(
     case 9:
       return (reader.readStringOrNull(offset)) as P;
     case 10:
+      return (reader.readStringOrNull(offset)) as P;
+    case 11:
       return (_AudioSourcesourceTypeValueEnumMap[
               reader.readByteOrNull(offset)] ??
           SourceType.local) as P;
-    case 11:
+    case 12:
       return (reader.readStringOrNull(offset) ?? '') as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -9519,6 +9702,159 @@ extension AudioSourceQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'label',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'mimeType',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'mimeType',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> mimeTypeEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> mimeTypeBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'mimeType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'mimeType',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition> mimeTypeMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'mimeType',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'mimeType',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AudioSource, AudioSource, QAfterFilterCondition>
+      mimeTypeIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'mimeType',
         value: '',
       ));
     });

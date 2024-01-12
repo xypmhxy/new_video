@@ -133,7 +133,8 @@ class VideoDataHelper {
     final format = info.codec.subtype;
     final byteSize = info.size.totalBytes;
     final bitrate = info.bitrate.bitsPerSecond;
-    return AudioSource(url: url, format: format, byteSize: byteSize, bitrate: bitrate);
+    final mimeType = info.codec.type;
+    return AudioSource(url: url, format: format, byteSize: byteSize, bitrate: bitrate,mimeType: mimeType);
   }
 
   VideoSource? getTargetVideoUrl(int target, MediaInfo mediaInfo) {
