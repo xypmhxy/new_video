@@ -90,6 +90,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noRecommended": MessageLookupByLibrary.simpleMessage("No recommended"),
         "paramsVideos": m1,
         "pauseAll": MessageLookupByLibrary.simpleMessage("Pause all"),
+        "playDownloadedSetting":
+            MessageLookupByLibrary.simpleMessage("play downloaded first"),
         "playlist": MessageLookupByLibrary.simpleMessage("Playlist"),
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
         "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),

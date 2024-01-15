@@ -839,6 +839,16 @@ class S {
       args: [params, params1],
     );
   }
+
+  /// `play downloaded first`
+  String get playDownloadedSetting {
+    return Intl.message(
+      'play downloaded first',
+      name: 'playDownloadedSetting',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

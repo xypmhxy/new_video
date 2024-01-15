@@ -21,6 +21,7 @@ import 'package:free_tube_player/utils/date_utils.dart';
 import 'package:free_tube_player/utils/file_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
+import 'package:free_tube_player/utils/setting_utils.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
 import 'package:free_tube_player/utils/toast_utils.dart';
 import 'package:free_tube_player/utils/video_data_helper.dart';
@@ -97,8 +98,10 @@ class UserPlayerController {
     playStatus.value = PlayStatus.loading;
     await stop();
     if (videoSource == null) {
-      videoSource = mediaInfo.getDownloadedSource();
-      if(videoSource == null){
+      if (SettingUtils.getBoolConfig('play_downloaded_first', defaultValue: true)) {
+        videoSource = mediaInfo.getDownloadedSource();
+      }
+      if (videoSource == null) {
         const targetResolution = defaultResolution;
         videoSource = VideoDataHelper.get.getTargetVideoUrl(targetResolution, mediaInfo);
       }
