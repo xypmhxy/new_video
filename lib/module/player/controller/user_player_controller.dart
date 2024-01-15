@@ -118,8 +118,7 @@ class UserPlayerController {
         ToastUtils.show(S.current.getPlaySourceFailed, isCorrect: false);
         return;
       }
-      const targetResolution = defaultResolution;
-      videoSource = VideoDataHelper.get.getTargetVideoUrl(targetResolution, mediaInfo);
+      videoSource = VideoDataHelper.get.getTargetVideoUrl(defaultResolution, mediaInfo);
       if (videoSource == null) {
         playStatus.value = PlayStatus.none;
         fetchPlayInfoProgress.value = 0.0;
@@ -136,7 +135,19 @@ class UserPlayerController {
         if (audioPath != null) {
           audioUrl = await FileUtils.getDownloadFilePath(audioPath);
         }
-      } else {
+      } else if(mediaInfo.isUrlAvailable() == false){
+        videoUrl = videoSource.url;
+        audioUrl = videoSource.audioSource?.url;
+        final media = await VideoDataHelper.get.requestVideoSource(mediaInfo, isNeedRetry: true);
+        if(media != null){
+          final targetVideoSource = VideoDataHelper.get.getTargetVideoUrl(videoSource.getResolution(), media);
+          if (targetVideoSource != null){
+            videoUrl = videoSource.url;
+            audioUrl = videoSource.audioSource?.url;
+            videoSource = targetVideoSource;
+          }
+        }
+      }else{
         videoUrl = videoSource.url;
         audioUrl = videoSource.audioSource?.url;
       }
@@ -146,8 +157,8 @@ class UserPlayerController {
       audioUrl = videoSource.audioSource?.url;
     }
     this.videoSource.value = videoSource;
-    saveHistoryPosition();
     fetchPlayInfoProgress.value = 0.5;
+    saveHistoryPosition();
     setupStreams();
     final errorMsg = await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
     if (errorMsg != null) {
@@ -399,11 +410,13 @@ class UserPlayerController {
     _playStatusSubs = _chewiePlayerImpl.watchPlayState.listen((status) async {
       playStatus.value = status;
       if (playStatus.value == PlayStatus.initialized) {
-        startPositionRecordTimer();
-        // if (isRelease) {
+        final playPosition = nowPlayingMedia?.playHistory?.playPosition;
+        if (playPosition != null && playPosition > 0) {
+          seekTo(Duration(milliseconds: playPosition));
+        }
         await ADUtils.instance.waitPlayADShow?.future;
         play();
-        // }
+        startPositionRecordTimer();
       }
     });
 

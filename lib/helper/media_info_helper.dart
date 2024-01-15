@@ -47,7 +47,7 @@ class MediaInfoHelper {
   Future<int> savePlayPosition(MediaInfo mediaInfo, int position) {
     final nowDateMs = DateUtil.getNowDateMs();
     mediaInfo.playHistory ??= PlayHistory();
-    mediaInfo.playHistory?.playPosition = position;
+    mediaInfo.playHistory?.playPosition = position == 0 ? mediaInfo.playHistory?.playPosition : position;
     mediaInfo.playHistory?.firstPlayDate ??= nowDateMs;
     mediaInfo.playHistory?.recentPlayDate = nowDateMs;
     return _mediaInfoDao.insert(mediaInfo);

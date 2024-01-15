@@ -149,12 +149,7 @@ class ChewiePlayerImpl implements PlayerInterface {
 
   void _videoPlayerListener() {
     final isPlaying = chewieController?.isPlaying ?? false;
-    var playStatus = PlayStatus.none;
-    if (isPlaying) {
-      playStatus = PlayStatus.playing;
-    } else {
-      playStatus = PlayStatus.pause;
-    }
+    var playStatus = isPlaying ? PlayStatus.playing : PlayStatus.pause;
     if (_playStatus != playStatus) {
       _playStatus = playStatus;
       _playStateController.add(playStatus);
