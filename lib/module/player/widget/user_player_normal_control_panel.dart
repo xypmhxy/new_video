@@ -12,6 +12,7 @@ import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/extension/duration_extension.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/share_utils.dart';
 import 'package:free_tube_player/utils/x_screen.dart';
 import 'package:free_tube_player/widget/divider.dart';
@@ -72,7 +73,7 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
         top: XScreen.getStatusBarH(context) + 12,
         right: 16,
         child: Row(
-          children: [_share(), _qualityDropDown(),  Width(playerController.isLive ? 0 : 20), _playSpeed()],
+          children: [_share(), _qualityDropDown(), Width(playerController.isLive ? 0 : 20), _playSpeed()],
         ));
   }
 
@@ -232,6 +233,14 @@ class _PlayerNormalControlPanelState extends State<UserPlayerNormalControlPanel>
             insideThumbRadius: 3,
             insideThumbColor: AppThemeController.primaryThemeColor(context),
             timeLabelLocation: TimeLabelLocation.none,
+            onDragUpdate: (position) {
+              playerController.showControlPanelLongTime();
+              playerController.updateDragPosition(position.timeStamp);
+            },
+            onDragEnd: () {
+              playerController.startDelayCloseControlPanel();
+              playerController.updateDragPosition(null);
+            },
             onSeek: (position) {
               playerController.seekTo(position);
             },

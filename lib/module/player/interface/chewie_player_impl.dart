@@ -27,14 +27,14 @@ class ChewiePlayerImpl implements PlayerInterface {
 
   bool _isFullScreen = false;
   final StreamController<bool> _fullScreenController = StreamController.broadcast();
-  late Stream watchFullScreen = _fullScreenController.stream;
+  late Stream<bool> watchFullScreen = _fullScreenController.stream;
 
   Duration _duration = Duration.zero;
   final StreamController<Duration> _durationController = StreamController.broadcast();
-  late Stream watchDuration = _durationController.stream;
+  late Stream<Duration> watchDuration = _durationController.stream;
 
   final StreamController<Duration> _positionController = StreamController.broadcast();
-  late Stream watchPosition = _positionController.stream;
+  late Stream<Duration> watchPosition = _positionController.stream;
 
   // final StreamController<bool> _playerAvailableController = StreamController.broadcast();
   // late Stream watchPlayerAvailable = _playerAvailableController.stream;

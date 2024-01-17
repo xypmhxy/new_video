@@ -26,6 +26,7 @@ class RecommendController {
     } else {
       isAllowRetry = true;
       viewStatus.value = ViewStatus.success;
+      userPlayerController.updatePlaylist(recommendVideos);
     }
   }
 }

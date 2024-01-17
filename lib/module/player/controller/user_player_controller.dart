@@ -54,6 +54,8 @@ class UserPlayerController {
 
   final _nowPlayingMedia = Rxn<MediaInfo>();
   final videoSource = Rxn<VideoSource>();
+  final playlist = <MediaInfo>[].obs;
+  final playIndex = 0.obs;
   final playStatus = PlayStatus.none.obs;
   final duration = Duration.zero.obs;
   final position = Duration.zero.obs;
@@ -135,19 +137,19 @@ class UserPlayerController {
         if (audioPath != null) {
           audioUrl = await FileUtils.getDownloadFilePath(audioPath);
         }
-      } else if(mediaInfo.isUrlAvailable() == false){
+      } else if (mediaInfo.isUrlAvailable() == false) {
         videoUrl = videoSource.url;
         audioUrl = videoSource.audioSource?.url;
         final media = await VideoDataHelper.get.requestVideoSource(mediaInfo, isNeedRetry: true);
-        if(media != null){
+        if (media != null) {
           final targetVideoSource = VideoDataHelper.get.getTargetVideoUrl(videoSource.getResolution(), media);
-          if (targetVideoSource != null){
+          if (targetVideoSource != null) {
             videoUrl = videoSource.url;
             audioUrl = videoSource.audioSource?.url;
             videoSource = targetVideoSource;
           }
         }
-      }else{
+      } else {
         videoUrl = videoSource.url;
         audioUrl = videoSource.audioSource?.url;
       }
@@ -160,6 +162,7 @@ class UserPlayerController {
     fetchPlayInfoProgress.value = 0.5;
     saveHistoryPosition();
     setupStreams();
+    updatePlayIndex();
     final errorMsg = await _chewiePlayerImpl.playNewSource(videoUrl, audioUrl: audioUrl);
     if (errorMsg != null) {
       if (isDebug) {
@@ -173,6 +176,16 @@ class UserPlayerController {
     LogUtils.i('播放--初始化耗时 ${playSuccessDate - getUrlDate}');
   }
 
+  void updatePlaylist(List<MediaInfo> playlist) {
+    this.playlist.value = playlist;
+    updatePlayIndex();
+  }
+
+  void updatePlayIndex() {
+    playIndex.value = playlist.indexWhere((element) => element.identify == nowPlayingMedia?.identify);
+    playIndex.value = playIndex.value < 0 ? 0 : playIndex.value;
+  }
+
   Future<void> play({bool isByUser = false}) async {
     await _chewiePlayerImpl.play(isByUser: isByUser);
   }
@@ -183,7 +196,12 @@ class UserPlayerController {
 
   Future<void> previous({bool isByUser = false}) async {}
 
-  Future<void> next({bool isByUser = false}) async {}
+  Future<void> next({bool isByUser = false}) async {
+    final nextIndex = playIndex.value + 1;
+    if (nextIndex >= playlist.length) return;
+    final nextPlayMedia = playlist[nextIndex];
+    playNewSource(nextPlayMedia);
+  }
 
   Future<void> setPlaybackSpeed(double speed, {bool isByUser = false}) async {
     playSpeed.value = speed;
@@ -273,7 +291,6 @@ class UserPlayerController {
   }
 
   void setLoop(bool isLoop) {
-    _chewiePlayerImpl.setLoop(isLoop);
     this.isLoop.value = isLoop;
     SPUtils.setBool('play_loop', isLoop);
     FirebaseEvent.instance
@@ -313,6 +330,10 @@ class UserPlayerController {
     dragPosition.value = null;
     dragStartX = null;
     await seekTo(position!);
+  }
+
+  void updateDragPosition(Duration? duration){
+    dragPosition.value = duration;
   }
 
   Future<void> onMoveVerticalStart(double dx, double dy) async {
@@ -423,6 +444,14 @@ class UserPlayerController {
     _positionSubs = _chewiePlayerImpl.watchPosition.listen((pos) {
       if (isLive) return;
       position.value = pos;
+      final durationMs = duration.value.inMilliseconds;
+      if (durationMs > 0 && pos.inMilliseconds >= durationMs) {
+        if (isLoop.value) {
+          seekTo(Duration.zero).then((value) => play());
+        } else if (playlist.isNotEmpty) {
+          next();
+        }
+      }
     });
 
     _durationSubs = _chewiePlayerImpl.watchDuration.listen((dur) {
