@@ -14,9 +14,10 @@ import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/home/page/tmdb_page.dart';
 import 'package:free_tube_player/module/home/page/video_home_page.dart';
-import 'package:free_tube_player/module/short/page/short_video_page.dart';
 import 'package:free_tube_player/module/userHome/controller/user_home_tab_page_controller.dart';
 import 'package:free_tube_player/module/userHome/page/user_youtube_home.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
+import 'package:free_tube_player/utils/rate_utils.dart';
 import 'package:free_tube_player/widget/play_bottom_bar.dart';
 import 'package:free_tube_player/widget/svg_view.dart';
 import 'package:get/get.dart';
@@ -44,6 +45,14 @@ class _UserModePageState extends State<UserHomeTabPage> {
       }
     });
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (TickerMode.of(context)) {
+      RateUtils.tryShowRateDialog();
+    }
+    super.didChangeDependencies();
   }
 
   @override

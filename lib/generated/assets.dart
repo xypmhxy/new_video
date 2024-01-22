@@ -49,6 +49,7 @@ class Assets {
   static const String svgPause = 'assets/svg/pause.svg';
   static const String svgPlay = 'assets/svg/play.svg';
   static const String svgPlaySpeed = 'assets/svg/play_speed.svg';
+  static const String svgRate = 'assets/svg/rate.svg';
   static const String svgSelect = 'assets/svg/select.svg';
   static const String svgSetting = 'assets/svg/setting.svg';
   static const String svgShare = 'assets/svg/share.svg';

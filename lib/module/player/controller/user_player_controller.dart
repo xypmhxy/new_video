@@ -21,6 +21,7 @@ import 'package:free_tube_player/utils/date_utils.dart';
 import 'package:free_tube_player/utils/file_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
+import 'package:free_tube_player/utils/rate_utils.dart';
 import 'package:free_tube_player/utils/setting_utils.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
 import 'package:free_tube_player/utils/toast_utils.dart';
@@ -173,6 +174,7 @@ class UserPlayerController {
       FirebaseEvent.instance.logEvent('play_video_error', params: {'value': mediaInfo.youtubeId, 'value1': errorMsg});
     }
     final playSuccessDate = DateUtil.getNowDateMs();
+    RateUtils.recordAction();
     LogUtils.i('播放--初始化耗时 ${playSuccessDate - getUrlDate}');
   }
 

@@ -55,13 +55,7 @@ class _SearchPageState extends State<SearchPage> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: Column(
-        children: [
-          const Height(16),
-          _searchBar(),
-          const Height(16),
-          _content(),
-          _playBottomBar()
-        ],
+        children: [const Height(16), _searchBar(), const Height(16), _content(), _playBottomBar()],
       )),
     );
   }
@@ -166,7 +160,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _content() {
     return Obx(() {
-      Widget replacement = const SizedBox();
+      Widget replacement = const Expanded(child: SizedBox());
       if (_searchPageController.inputText.isEmpty) {
         replacement = _searchHistory();
       } else if (_searchPageController.searchLoadState.value == ViewStatus.empty ||

@@ -78,6 +78,8 @@
   "pauseAll": "Pause all",
   "continueAll": "Continue all",
   "libDownloadCount": "downloading: {params}  - complete: {params1}",
-  "playDownloadedSetting": "play downloaded first"
+  "playDownloadedSetting": "play downloaded first",
+  "rateTitle": "Please give a good review and encouragement, thank you.",
+  "thanksRate": "Thanks for your rating."
 
 }

@@ -13,6 +13,7 @@ import 'package:free_tube_player/db/dao/search_history_info_dao.dart';
 import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/utils/date_utils.dart';
+import 'package:free_tube_player/utils/rate_utils.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -86,6 +87,7 @@ class SearchPageController extends BaseController {
       searchLoadState.value = ViewStatus.empty;
     } else {
       searchLoadState.value = ViewStatus.success;
+      RateUtils.recordAction();
     }
     FirebaseEvent.instance.logEvent('search_complete');
   }

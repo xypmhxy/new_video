@@ -94,6 +94,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("play downloaded first"),
         "playlist": MessageLookupByLibrary.simpleMessage("Playlist"),
         "privacy": MessageLookupByLibrary.simpleMessage("Privacy"),
+        "rateTitle": MessageLookupByLibrary.simpleMessage(
+            "Please give a good review and encouragement, thank you."),
         "recommended": MessageLookupByLibrary.simpleMessage("Recommended"),
         "remove": MessageLookupByLibrary.simpleMessage("Remove"),
         "removeAllConfirm": MessageLookupByLibrary.simpleMessage(
@@ -119,6 +121,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "shorts": MessageLookupByLibrary.simpleMessage("Shorts"),
+        "thanksRate":
+            MessageLookupByLibrary.simpleMessage("Thanks for your rating."),
         "toAuthorize": MessageLookupByLibrary.simpleMessage("To authorize"),
         "today": MessageLookupByLibrary.simpleMessage("Today"),
         "top": MessageLookupByLibrary.simpleMessage("Top"),

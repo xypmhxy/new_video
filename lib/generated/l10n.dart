@@ -849,6 +849,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Please give a good review and encouragement, thank you.`
+  String get rateTitle {
+    return Intl.message(
+      'Please give a good review and encouragement, thank you.',
+      name: 'rateTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thanks for your rating.`
+  String get thanksRate {
+    return Intl.message(
+      'Thanks for your rating.',
+      name: 'thanksRate',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
