@@ -67,7 +67,8 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   pull_to_refresh_flutter3: ^2.0.1
   cupertino_icons: ^1.0.2
-  google_mobile_ads: ^3.0.0
+  google_mobile_ads: ^4.0.0
+  applovin_max: ^3.6.0
   uuid: ^4.0.0
   crypto: ^3.0.2
   youtube_explode_dart:
