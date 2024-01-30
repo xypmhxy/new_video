@@ -60,6 +60,6 @@ class MediaInfoDao {
   }
 
   Future<bool> delete(int id) {
-    return _isar.mediaInfos.delete(id);
+    return _isar.writeTxn(() => _isar.mediaInfos.delete(id));
   }
 }

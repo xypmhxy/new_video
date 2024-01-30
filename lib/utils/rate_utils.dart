@@ -47,6 +47,7 @@ class RateUtils {
     addShowRateCount();
     setRecentlyShowTime();
     isUserAction = false;
+    FirebaseEvent.instance.logEvent('rate_dialog_expose');
     DialogUtils.showCenterDialog(DialogRate(onRatingUpdate: (rating) async {
       DialogUtils.dismiss();
       FirebaseEvent.instance.logEvent('rate', params: {'value': '$rating'});

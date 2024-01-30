@@ -9,6 +9,7 @@ import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/module/userHome/controller/user_youtube_child_controller.dart';
 import 'package:free_tube_player/utils/dialog_utils.dart';
+import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/refresh_header.dart';
@@ -30,12 +31,20 @@ class _UserYoutubeChildPageState extends State<UserYoutubeChildPage> with Automa
 
   @override
   void initState() {
-    if (widget.youtubeHomeTab.isAll == false) {
+    if (widget.youtubeHomeTab.isAll == false && widget.youtubeHomeTab.isSearchRecommend == false) {
       onBuildWidgetFinish(() {
         youtubeController.requestRefresh();
       });
     }
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant UserYoutubeChildPage oldWidget) {
+    if (widget.youtubeHomeTab.mediaInfos?.first.identify == oldWidget.youtubeHomeTab.mediaInfos?.first.identify) return;
+    youtubeController = UserYoutubeChildController(widget.youtubeHomeTab);
+    youtubeController.viewStatus = ViewStatus.success;
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

@@ -11,8 +11,15 @@ class YoutubeHomeTab {
   String clickParams = "";
   List<MediaInfo>? mediaInfos;
   bool isAll = false;
+  bool isSearchRecommend = false;
 
-  YoutubeHomeTab({required this.text, required this.continuation, required this.clickParams, this.isAll = false});
+  YoutubeHomeTab({
+    required this.text,
+    required this.continuation,
+    required this.clickParams,
+    this.isAll = false,
+    this.isSearchRecommend = false,
+  });
 
   YoutubeHomeTab.fromMap(Map info) {
     text = info['text'] ?? "";
@@ -23,7 +30,7 @@ class YoutubeHomeTab {
   }
 
   Map toJson() {
-    return {'text': text, 'token': continuation, 'clickParams': clickParams, 'isAll':isAll,'videos': videosMapList};
+    return {'text': text, 'token': continuation, 'clickParams': clickParams, 'isAll': isAll, 'videos': videosMapList};
   }
 
   List<MediaInfo> getMediaInfos(var list) {

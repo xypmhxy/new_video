@@ -3,6 +3,7 @@
 * 时间  2023/12/17 11:03
 */
 import 'dart:async';
+import 'dart:io';
 
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
@@ -48,6 +49,13 @@ class UserLibraryPageController {
       historyViewStatus.value = ViewStatus.loading;
     }
     historyVideos.value = await _mediaDao.queryAllPlayHistory(limit: 15);
+    historyVideos.removeWhere((video) {
+      if (video.isLocalVideo == false || video.localPath == null) return false;
+      final file = File(video.localPath!);
+      final notExists = file.existsSync() == false;
+      if (notExists) _mediaDao.delete(video.id);
+      return notExists;
+    });
     if (historyVideos.isEmpty) {
       historyViewStatus.value = ViewStatus.empty;
     } else {
