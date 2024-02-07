@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_volume_controller/flutter_volume_controller.dart';
 import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/common/common.dart';
+import 'package:free_tube_player/bean/play/channel_info.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/db/dao/media_info_dao.dart';
 import 'package:free_tube_player/firebase/firebase_event.dart';
@@ -35,15 +36,16 @@ import 'player_controller.dart';
 Future<void> startUserPlayPage(
     {required MediaInfo mediaInfo,
     required String from,
+    ChannelInfo? channelInfo,
     VideoSource? videoSource,
     bool isCloseCurrent = false,
     BuildContext? context}) async {
   ADUtils.instance.showPlayAD();
   userPlayerController.playNewSource(mediaInfo, videoSource: videoSource);
   if (isCloseCurrent) {
-    PageNavigation.startNewPageAndClose(const UserPlayerPage(), preventDuplicates: false);
+    PageNavigation.startNewPageAndClose(UserPlayerPage(channelInfo: channelInfo), preventDuplicates: false);
   } else {
-    PageNavigation.startNewPage(const UserPlayerPage());
+    PageNavigation.startNewPage(UserPlayerPage(channelInfo: channelInfo));
   }
   FirebaseEvent.instance.logEvent('play_click', params: {'value': mediaInfo.youtubeId ?? 'none', 'value1': from});
 }
@@ -334,7 +336,7 @@ class UserPlayerController {
     await seekTo(position!);
   }
 
-  void updateDragPosition(Duration? duration){
+  void updateDragPosition(Duration? duration) {
     dragPosition.value = duration;
   }
 

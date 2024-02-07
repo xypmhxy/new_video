@@ -8,6 +8,7 @@ import 'package:free_tube_player/ad/ad_utils.dart';
 import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
+import 'package:free_tube_player/bean/play/channel_info.dart';
 import 'package:free_tube_player/extension/comment_extension.dart';
 import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/assets.dart';
@@ -29,7 +30,9 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'recommend_tab_page.dart';
 
 class UserPlayerPage extends StatefulWidget {
-  const UserPlayerPage({super.key});
+  final ChannelInfo? channelInfo;
+
+  const UserPlayerPage({super.key, this.channelInfo});
 
   @override
   State<UserPlayerPage> createState() => _UserPlayerPageState();
@@ -44,7 +47,8 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
     _userPlayerPageController
         .requestWatchPageInfo(userPlayerController.nowPlayingMedia!)
         .then((value) => _commentController.requestComment(_userPlayerPageController.video.value));
-    _userPlayerPageController.requestAuthorInfo(userPlayerController.nowPlayingMedia?.authorId ?? '');
+    _userPlayerPageController.requestAuthorInfo(userPlayerController.nowPlayingMedia?.authorId ?? '',
+        channelInfo: widget.channelInfo);
     _userPlayerPageController.setup();
     ADUtils.instance.loadPlayAD();
     super.initState();
@@ -64,7 +68,7 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
       maxHeight: screenHeight * .71,
       color: Colors.transparent,
       controller: _userPlayerPageController.panelController,
-      onPanelOpened: (){
+      onPanelOpened: () {
         FirebaseEvent.instance.logEvent('comment_expose');
       },
       panelBuilder: (scrollController) {

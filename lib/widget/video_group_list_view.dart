@@ -99,7 +99,7 @@ class VideoGroupListView extends StatelessWidget {
                           onItemClick?.call(mediaInfo);
                         },
                         child: ClipRRect(
-                            borderRadius: getBorderRadius(4),
+                            borderRadius: getBorderRadius(8),
                             child: Stack(
                               children: [
                                 AutoImageView(

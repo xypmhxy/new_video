@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
+import 'package:free_tube_player/bean/play/channel_info.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/channel/page/channel_detail_page.dart';
 import 'package:free_tube_player/module/download/bean/download_info.dart';
 import 'package:free_tube_player/module/download/controller/global_download_controller.dart';
+import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
 import 'package:free_tube_player/widget/image_view.dart';
@@ -63,12 +66,20 @@ class VideoItemView extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipOval(
+            GestureDetector(
+              onTap: (){
+                final channelInfo = ChannelInfo();
+                channelInfo.name = mediaInfo.author;
+                channelInfo.authorId = mediaInfo.authorId;
+                channelInfo.bigAvatar = mediaInfo.authorThumbnail ?? '';
+                PageNavigation.startNewPage(ChannelDetailPage(channelInfo:channelInfo));
+              },
+                child: ClipOval(
               child: ImageView.network(
                 imageUrl: mediaInfo.authorThumbnail ?? '',
                 size: 48,
               ),
-            ),
+            )),
             const Width(12),
             Expanded(
                 child: Column(

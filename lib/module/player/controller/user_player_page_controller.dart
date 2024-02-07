@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/base/base_controller.dart';
-import 'package:free_tube_player/bean/play/author_info.dart';
+import 'package:free_tube_player/bean/play/channel_info.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/bean/play/playlist.dart';
 import 'package:free_tube_player/db/dao/playlist_dao.dart';
@@ -22,7 +22,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 class UserPlayerPageController extends BaseController {
   final _channelApi = ChannelApi();
   final _youtubeExplode = YoutubeExplode();
-  final authorInfo = Rxn<AuthorInfo>();
+  final authorInfo = Rxn<ChannelInfo>();
   final video = Rxn<Video>();
   final _videoActionHelper = VideoActionHelper();
   final _playlistDao = PlaylistDao();
@@ -74,8 +74,8 @@ class UserPlayerPageController extends BaseController {
     } catch (_) {}
   }
 
-  Future<void> requestAuthorInfo(String channelId) async {
-    final authorInfo = await _channelApi.requestAuthorInfo(channelId);
+  Future<void> requestAuthorInfo(String channelId,{ChannelInfo? channelInfo}) async {
+    final authorInfo = channelInfo ?? await _channelApi.requestAuthorInfo(channelId);
     if (authorInfo == null) return;
     this.authorInfo.value = authorInfo;
   }

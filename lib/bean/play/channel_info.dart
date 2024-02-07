@@ -6,11 +6,12 @@
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:isar/isar.dart';
 
-class AuthorInfo {
+class ChannelInfo {
   String name = 'No Name';
   String? authorId;
   String avatar = '';
   String bigAvatar = '';
+  String banner = '';
   String subscribeCount = '';
   String description = '';
   String keywords = '';
