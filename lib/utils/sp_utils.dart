@@ -33,4 +33,8 @@ class SPUtils {
     bool? value = prefs.getBool(key);
     return value ?? defaultValue;
   }
+
+  static Future<bool> removeForKey(String key) async{
+    return prefs.remove(key);
+  }
 }
