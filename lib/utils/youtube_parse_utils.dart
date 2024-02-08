@@ -50,7 +50,6 @@ class YoutubeParseUtils {
     }
 
     final publishedTimeText = videoRenderer['publishedTimeText']?['simpleText'];
-
     int duration = 0;
     String durationString = videoRenderer['lengthText']?['simpleText'] ?? '';
     duration = DurationUtils.parseDurationText(durationString);

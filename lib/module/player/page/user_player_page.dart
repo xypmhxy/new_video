@@ -13,6 +13,7 @@ import 'package:free_tube_player/extension/comment_extension.dart';
 import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/assets.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/channel/page/channel_detail_page.dart';
 import 'package:free_tube_player/module/player/controller/comment_controller.dart';
 import 'package:free_tube_player/module/player/controller/player_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_page_controller.dart';
@@ -309,36 +310,41 @@ class _UserPlayerPageState extends State<UserPlayerPage> {
         final authorInfo = _userPlayerPageController.authorInfo;
         final subscribeCount = authorInfo.value?.subscribeCount;
         final videoCount = authorInfo.value?.videoCountText;
-        return Row(
-          children: [
-            ClipOval(
-              child: AutoImageView(
-                imageUrl: mediaInfo?.authorThumbnail ?? '',
-                size: 50,
-              ),
-            ),
-            const Width(12),
-            Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: screenWidth * .7),
-                child: TextView.primary(
-                  mediaInfo?.author ?? '',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+        return GestureDetector(
+            onTap: () {
+              if (mediaInfo == null) return;
+              ChannelDetailPage.startDetailPage(mediaInfo);
+            },
+            child: Row(
+              children: [
+                ClipOval(
+                  child: AutoImageView(
+                    imageUrl: mediaInfo?.authorThumbnail ?? '',
+                    size: 50,
+                  ),
                 ),
-              ),
-              const Height(4),
-              Visibility(
-                  visible: subscribeCount != null || videoCount != null,
-                  child: TextView.accent(
-                    '${subscribeCount ?? ''}  ·  ${S.current.paramsVideos('$videoCount')}',
-                    fontSize: 12,
-                  ))
-            ])
-          ],
-        );
+                const Width(12),
+                Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: screenWidth * .7),
+                    child: TextView.primary(
+                      mediaInfo?.author ?? '',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const Height(4),
+                  Visibility(
+                      visible: subscribeCount != null || videoCount != null,
+                      child: TextView.accent(
+                        '${subscribeCount ?? ''}  ·  ${S.current.paramsVideos('$videoCount')}',
+                        fontSize: 12,
+                      ))
+                ])
+              ],
+            ));
       }),
     );
   }

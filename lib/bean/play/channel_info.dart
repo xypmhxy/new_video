@@ -18,6 +18,17 @@ class ChannelInfo {
   String videoCountText = '';
   @ignore
   List<AuthorVideoGroup> authorVideoGroups = [];
+  @ignore
+  List<ChannelTab> channelTabs = [];
+}
+
+class ChannelTab {
+  String browseId;
+  String params;
+
+  ChannelTab({required this.browseId, required this.params});
+
+  ChannelTab.empty({this.browseId = '', this.params = ''});
 }
 
 class AuthorVideoGroup {

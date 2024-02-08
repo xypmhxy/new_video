@@ -10,6 +10,7 @@ import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/generated/l10n.dart';
+import 'package:free_tube_player/module/channel/page/channel_detail_page.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 
@@ -81,41 +82,47 @@ class SearchItem extends StatelessWidget {
           Expanded(
               child: Align(
             alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+            child: GestureDetector(
+                onTap: () {
+                  ChannelDetailPage.startDetailPage(mediaInfo);
+                },
+                child: Row(
                   children: [
-                    TextView.accent(
-                      mediaInfo.author,
-                      fontSize: 12,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    TextView.accent(
-                      mediaInfo.publishedTime ?? '',
-                      fontSize: 12,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    )
+                    ClipOval(child: ImageView.network(imageUrl: mediaInfo.authorThumbnail ?? '', size: 28)),
+                    const Width(6),
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextView.accent(
+                          mediaInfo.author,
+                          fontSize: 12,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        TextView.accent(
+                          mediaInfo.publishedTime ?? '',
+                          fontSize: 12,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ],
+                    )),
+                    const Width(2),
+                    GestureDetector(
+                        onTap: onClickMore,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          color: Colors.transparent,
+                          child: Icon(
+                            Icons.more_vert_rounded,
+                            size: 20,
+                            color: AppThemeController.textAccentColor(context),
+                          ),
+                        ))
                   ],
                 )),
-                const Width(2),
-                GestureDetector(
-                    onTap: onClickMore,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      color: Colors.transparent,
-                      child: Icon(
-                        Icons.more_vert_rounded,
-                        size: 20,
-                        color: AppThemeController.textAccentColor(context),
-                      ),
-                    ))
-              ],
-            ),
           ))
         ],
       ),

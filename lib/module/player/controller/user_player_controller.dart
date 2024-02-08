@@ -41,6 +41,10 @@ Future<void> startUserPlayPage(
     bool isCloseCurrent = false,
     BuildContext? context}) async {
   ADUtils.instance.showPlayAD();
+  if (userPlayerController.nowPlayingMedia?.identify == mediaInfo.identify) {
+    PageNavigation.startNewPage(UserPlayerPage(channelInfo: channelInfo));
+    return;
+  }
   userPlayerController.playNewSource(mediaInfo, videoSource: videoSource);
   if (isCloseCurrent) {
     PageNavigation.startNewPageAndClose(UserPlayerPage(channelInfo: channelInfo), preventDuplicates: false);

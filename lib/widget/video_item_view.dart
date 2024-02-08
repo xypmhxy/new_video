@@ -68,11 +68,7 @@ class VideoItemView extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: (){
-                final channelInfo = ChannelInfo();
-                channelInfo.name = mediaInfo.author;
-                channelInfo.authorId = mediaInfo.authorId;
-                channelInfo.bigAvatar = mediaInfo.authorThumbnail ?? '';
-                PageNavigation.startNewPage(ChannelDetailPage(channelInfo:channelInfo));
+                ChannelDetailPage.startDetailPage(mediaInfo);
               },
                 child: ClipOval(
               child: ImageView.network(

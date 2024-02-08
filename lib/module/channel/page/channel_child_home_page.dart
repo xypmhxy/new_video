@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
-import 'package:free_tube_player/app/common/decoration.dart';
-import 'package:free_tube_player/app/resource/color_res.dart';
 import 'package:free_tube_player/bean/play/channel_info.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/generated/l10n.dart';
-import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/module/channel/controller/channel_child_home_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/widget/divider.dart';
+import 'package:free_tube_player/widget/grid_video_item.dart';
 import 'package:free_tube_player/widget/image_view.dart';
-import 'package:free_tube_player/widget/loading_view.dart';
-import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
 
@@ -24,32 +20,22 @@ class ChannelChildHomePage extends StatefulWidget {
   State<ChannelChildHomePage> createState() => _ChannelChildHomePageState();
 }
 
-class _ChannelChildHomePageState extends State<ChannelChildHomePage> {
+class _ChannelChildHomePageState extends State<ChannelChildHomePage> with AutomaticKeepAliveClientMixin {
   final _pageController = ChannelChildHomeController();
 
   @override
   void initState() {
-    _pageController.initChannelInfo(widget.channelInfo);
-    _pageController.requestHomeData();
+    _pageController.setupChannelInfo(widget.channelInfo);
     super.initState();
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      final viewStatus = _pageController.viewStatus.value;
-      if (viewStatus == ViewStatus.loading) {
-        return const Center(child: LoadingView());
-      } else if (viewStatus == ViewStatus.failed) {
-        return Center(
-            child: NoDataView(
-                text: S.current.noDataClickRetry,
-                onClick: () {
-                  _pageController.requestHomeData();
-                }));
-      }
-      return _content();
-    });
+    super.build(context);
+    return _content();
   }
 
   Widget _content() {
@@ -109,89 +95,20 @@ class _ChannelChildHomePageState extends State<ChannelChildHomePage> {
 
   Widget _childListView(List<MediaInfo> mediaInfoList) {
     return SizedBox(
-      height: 130,
+      height: 145,
       child: ListView.separated(
           addAutomaticKeepAlives: true,
           scrollDirection: Axis.horizontal,
           itemBuilder: (_, index) {
             final mediaInfo = mediaInfoList[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    startUserPlayPage(mediaInfo: mediaInfo, from: 'channel_home', channelInfo: channelInfo);
-                  },
-                  child: ClipRRect(
-                      borderRadius: getBorderRadius(8),
-                      child: Stack(
-                        children: [
-                          AutoImageView(
-                            width: 144,
-                            height: 86,
-                            imageUrl: mediaInfo.thumbnail ?? '',
-                          ),
-                          Positioned(
-                              bottom: 4,
-                              right: 4,
-                              child: Container(
-                                decoration: allRadiusDecoration(8,
-                                    color: mediaInfo.isLive ? ColorRes.themeColor : ColorRes.backgroundColor),
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                child: TextView.primary(mediaInfo.isLive ? S.current.live : mediaInfo.durationFormat,
-                                    color: Colors.white, fontSize: 12, fontWeight: FontWeight.normal),
-                              )),
-                          if (mediaInfo.isLive == false &&
-                              mediaInfo.historyProgress != null &&
-                              mediaInfo.historyProgress! > 0)
-                            Positioned(
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: ClipRRect(
-                                  borderRadius: getBorderRadius(2),
-                                  child: LinearProgressIndicator(
-                                    minHeight: 2,
-                                    value: mediaInfo.historyProgress!,
-                                    backgroundColor: Colors.black26,
-                                  ),
-                                ))
-                        ],
-                      )),
-                ),
-                const Height(4),
-                SizedBox(
-                  width: 144,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                          child: TextView.primary(
-                        mediaInfo.title,
-                        fontSize: 13,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      )),
-                      GestureDetector(
-                        onTap: () {
-                          _pageController.showMoreAction(mediaInfo);
-                        },
-                        child: Container(
-                            color: Colors.transparent,
-                            padding: const EdgeInsets.only(left: 4, right: 4, bottom: 8, top: 3),
-                            child: const Icon(
-                              Icons.more_vert_rounded,
-                              color: Colors.white,
-                              size: 16,
-                            )),
-                      )
-                    ],
-                  ),
-                )
-                // ConstrainedBox(
-                //     constraints: const BoxConstraints(maxWidth: 144),
-                //     child:)
-              ],
+            return GridVideoItem(
+              mediaInfo: mediaInfo,
+              onClickItem: () {
+                startUserPlayPage(mediaInfo: mediaInfo, from: 'channel_home', channelInfo: channelInfo);
+              },
+              onClickMore: () {
+                _pageController.showMoreAction(mediaInfo);
+              },
             );
           },
           separatorBuilder: (_, index) {

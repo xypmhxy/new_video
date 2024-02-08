@@ -3,13 +3,16 @@ import 'package:free_tube_player/app/app_theme_controller.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/app/common/decoration.dart';
 import 'package:free_tube_player/bean/play/channel_info.dart';
+import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/channel/controller/channel_detail_controller.dart';
 import 'package:free_tube_player/module/channel/page/channel_child_home_page.dart';
+import 'package:free_tube_player/module/channel/page/channel_child_video_page.dart';
 import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/image_button.dart';
-import 'package:free_tube_player/widget/image_view.dart';
+import 'package:free_tube_player/widget/loading_view.dart';
+import 'package:free_tube_player/widget/no_data_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
 import 'package:get/get.dart';
 
@@ -20,6 +23,14 @@ class ChannelDetailPage extends StatefulWidget {
 
   @override
   State<ChannelDetailPage> createState() => _ChannelDetailPageState();
+
+  static startDetailPage(MediaInfo mediaInfo) {
+    final channelInfo = ChannelInfo();
+    channelInfo.name = mediaInfo.author;
+    channelInfo.authorId = mediaInfo.authorId;
+    channelInfo.bigAvatar = mediaInfo.authorThumbnail ?? '';
+    PageNavigation.startNewPage(ChannelDetailPage(channelInfo: channelInfo),preventDuplicates: false);
+  }
 }
 
 class _ChannelDetailPageState extends State<ChannelDetailPage> {
@@ -27,8 +38,8 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
 
   @override
   void initState() {
-    _channelController.initChannelInfo(widget.channelInfo);
-    // _channelController.requestDetail();
+    _channelController.setupChannelInfo(widget.channelInfo);
+    _channelController.requestChannelInfo();
     super.initState();
   }
 
@@ -43,7 +54,7 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          children: [_appbar(), _tabContent()],
+          children: [_appbar(), _content()],
         ),
       ),
     );
@@ -63,6 +74,27 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
           )),
       title: TextView.primary(widget.channelInfo.name, fontWeight: FontWeight.bold, fontSize: 18),
     );
+  }
+
+  Widget _content() {
+    return Obx(() {
+      if (_channelController.viewStatus.value == ViewStatus.loading) {
+        return const Expanded(
+            child: Center(
+          child: LoadingView(),
+        ));
+      } else if (_channelController.viewStatus.value == ViewStatus.failed) {
+        return Expanded(
+            child: Center(
+          child: GestureDetector(
+              onTap: () {
+                _channelController.requestChannelInfo();
+              },
+              child: NoDataView(text: S.current.noDataClickRetry)),
+        ));
+      }
+      return _tabContent();
+    });
   }
 
   Widget _tabContent() {
@@ -95,8 +127,8 @@ class _ChannelDetailPageState extends State<ChannelDetailPage> {
     return Expanded(
         child: TabBarView(
       children: [
-        ChannelChildHomePage(channelInfo: widget.channelInfo),
-        ChannelChildHomePage(channelInfo: widget.channelInfo)
+        ChannelChildHomePage(channelInfo: _channelController.channelInfo.value),
+        ChannelChildVideoPage(channelInfo: _channelController.channelInfo.value)
       ],
     ));
   }
