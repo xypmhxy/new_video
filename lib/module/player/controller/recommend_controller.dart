@@ -1,6 +1,7 @@
 import 'package:free_tube_player/api/play_api.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +9,7 @@ class RecommendController {
   final _playApi = PlayApi();
   final recommendVideos = <MediaInfo>[].obs;
   final viewStatus = ViewStatus.none.obs;
+  final _videoActionHelper = VideoActionHelper();
   bool isAllowRetry = true;
 
   Future<void> requestRecommend(String youtubeId) async {
@@ -28,5 +30,9 @@ class RecommendController {
       viewStatus.value = ViewStatus.success;
       userPlayerController.updatePlaylist(recommendVideos);
     }
+  }
+
+  void showMoreAction(MediaInfo mediaInfo){
+    _videoActionHelper.showActionDialog(mediaInfo: mediaInfo, from: 'recommend');
   }
 }

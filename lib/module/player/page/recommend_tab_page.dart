@@ -12,6 +12,7 @@ import 'package:free_tube_player/utils/page_navigation.dart';
 import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/loading_view.dart';
 import 'package:free_tube_player/widget/no_data_view.dart';
+import 'package:free_tube_player/widget/search_item.dart';
 import 'package:free_tube_player/widget/video_item_view.dart';
 import 'package:get/get.dart';
 
@@ -62,7 +63,12 @@ class _RecommendTabPageState extends State<RecommendTabPage> with AutomaticKeepA
               onTap: () {
                 startUserPlayPage(mediaInfo: mediaInfo, isCloseCurrent: true,context: context, from: 'recomment');
               },
-              child: VideoItemView(mediaInfo: mediaInfo));
+              child: SearchItem(
+                mediaInfo: mediaInfo,
+                onClickMore: () {
+                  _recommendController.showMoreAction(mediaInfo);
+                },
+              ));
         },
         separatorBuilder: (_, index) {
           return const Height(20);
