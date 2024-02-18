@@ -31,7 +31,11 @@ class _UserYoutubeChildPageState extends State<UserYoutubeChildPage> with Automa
 
   @override
   void initState() {
-    if (widget.youtubeHomeTab.isAll == false && widget.youtubeHomeTab.isSearchRecommend == false) {
+    if (widget.youtubeHomeTab.isAll) {
+      onBuildWidgetFinish(() {
+        youtubeController.checkTabAllMediaInfoList();
+      });
+    } else if (widget.youtubeHomeTab.isAll == false && widget.youtubeHomeTab.isSearchRecommend == false) {
       onBuildWidgetFinish(() {
         youtubeController.requestRefresh();
       });

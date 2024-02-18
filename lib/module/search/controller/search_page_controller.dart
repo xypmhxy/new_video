@@ -17,6 +17,7 @@ import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/module/player/controller/recommend_controller.dart';
+import 'package:free_tube_player/module/userHome/controller/user_youtube_child_controller.dart';
 import 'package:free_tube_player/module/userHome/controller/user_youtube_home_controller.dart';
 import 'package:free_tube_player/utils/date_utils.dart';
 import 'package:free_tube_player/utils/rate_utils.dart';
@@ -96,6 +97,7 @@ class SearchPageController extends BaseController {
       searchLoadState.value = ViewStatus.success;
       RateUtils.recordAction();
       requestRecommend(keyword);
+      UserYoutubeChildController.setAllContinuation(null);
     }
     FirebaseEvent.instance.logEvent('search_complete');
   }
