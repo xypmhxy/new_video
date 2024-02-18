@@ -88,7 +88,12 @@ class SearchItem extends StatelessWidget {
                 },
                 child: Row(
                   children: [
-                    ClipOval(child: ImageView.network(imageUrl: mediaInfo.authorThumbnail ?? '', size: 28)),
+                    ClipOval(
+                        child: ImageView.network(
+                      imageUrl: mediaInfo.authorThumbnail ?? '',
+                      size: 28,
+                      placeholderIconSize: 18,
+                    )),
                     const Width(6),
                     Expanded(
                         child: Column(
