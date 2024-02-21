@@ -12,6 +12,7 @@ class YoutubeHomeTab {
   List<MediaInfo>? mediaInfos;
   bool isAll = false;
   bool isSearchRecommend = false;
+  MediaInfo? recommendMediaInfo;
 
   YoutubeHomeTab({
     required this.text,
@@ -19,6 +20,7 @@ class YoutubeHomeTab {
     required this.clickParams,
     this.isAll = false,
     this.isSearchRecommend = false,
+    this.recommendMediaInfo,
   });
 
   YoutubeHomeTab.fromMap(Map info) {

@@ -2,13 +2,16 @@
 * 作者 Ren
 * 时间  2023/9/10 20:59
 */
+import 'dart:math';
+
 import 'package:free_tube_player/api/youtube_home_api.dart';
 import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/home/youtube_home_tab.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
 import 'package:free_tube_player/helper/video_action_helper.dart';
+import 'package:free_tube_player/module/channel/api/channel_api.dart';
+import 'package:free_tube_player/module/player/controller/recommend_controller.dart';
 import 'package:free_tube_player/utils/date_utils.dart';
-import 'package:free_tube_player/utils/dialog_utils.dart';
 import 'package:free_tube_player/utils/log_utils.dart';
 import 'package:free_tube_player/utils/sp_utils.dart';
 import 'package:get/get.dart';
@@ -20,6 +23,8 @@ class UserYoutubeChildController extends BaseController {
   final mediaInfos = <MediaInfo>[].obs;
   final refreshController = RefreshController();
   final _videoActionHelper = VideoActionHelper();
+  final _channelApi = ChannelApi();
+  final _recommendController = RecommendController();
   String continuation = '';
   bool isAllowRetry = true;
 
@@ -42,7 +47,7 @@ class UserYoutubeChildController extends BaseController {
     final allContinuationGetDate = getAllContinuationDate();
     final nowDate = DateTime.now().millisecondsSinceEpoch;
     final intervalDate = nowDate - allContinuationGetDate;
-    if (allContinuation?.isNotEmpty == true && intervalDate <= 48 * DateUtil.HOUR) {
+    if (allContinuation?.isNotEmpty == true && intervalDate <= 36 * DateUtil.HOUR) {
       youtubeHomeTab.continuation = allContinuation!;
       youtubeHomeTab.mediaInfos?.clear();
       refreshController.requestRefresh();
@@ -53,10 +58,32 @@ class UserYoutubeChildController extends BaseController {
   }
 
   Future<void> queryTabVideos() async {
+    if (youtubeHomeTab.recommendMediaInfo != null) {
+      loadRecommendVideos();
+      return;
+    }
     if (youtubeHomeTab.continuation.isEmpty) {
       refreshController.refreshCompleted(resetFooterState: true);
       return;
     }
+    loadTabVideos();
+  }
+
+  Future<void> loadMoreVideos() async {
+    final result = await _youtubeHomeApi.requestHomeChildVideos(
+        token: youtubeHomeTab.continuation,
+        clickParams: youtubeHomeTab.clickParams,
+        onContinuation: (continuation) {
+          youtubeHomeTab.continuation = continuation ?? '';
+        });
+    mediaInfos.addAll(result);
+    refreshController.loadComplete();
+    if (youtubeHomeTab.continuation.isEmpty) {
+      refreshController.loadNoData();
+    }
+  }
+
+  Future<void> loadTabVideos() async {
     mediaInfos.value = await _youtubeHomeApi.requestHomeChildVideos(
         token: youtubeHomeTab.continuation,
         clickParams: youtubeHomeTab.clickParams,
@@ -82,16 +109,30 @@ class UserYoutubeChildController extends BaseController {
     }
   }
 
-  Future<void> loadMoreVideos() async {
-    final result = await _youtubeHomeApi.requestHomeChildVideos(
-        token: youtubeHomeTab.continuation,
-        clickParams: youtubeHomeTab.clickParams,
-        onContinuation: (continuation) {
-          youtubeHomeTab.continuation = continuation ?? '';
-        });
-    mediaInfos.addAll(result);
-    refreshController.loadComplete();
-    if (youtubeHomeTab.continuation.isEmpty) {
+  Future<void> loadRecommendVideos() async {
+    refreshController.loadNoData();
+    final recommendMedia = youtubeHomeTab.recommendMediaInfo!;
+    final channel = await _channelApi.requestAuthorInfo(recommendMedia.authorId!, needVideo: true);
+    final tempMediaInfoList = <MediaInfo>[];
+    if (channel != null) {
+      final channelAllMediaList = <MediaInfo>[];
+      for (final group in channel.authorVideoGroups) {
+        channelAllMediaList.addAll(group.mediaInfos);
+      }
+      if (channelAllMediaList.isNotEmpty) {
+        channelAllMediaList.shuffle();
+        final end = channelAllMediaList.length >= 6 ? 6 : channelAllMediaList.length;
+        final mediaInfoList = channelAllMediaList.getRange(0, end);
+        tempMediaInfoList.addAll(mediaInfoList);
+      }
+    }
+    await _recommendController.requestRecommend(recommendMedia.youtubeId!);
+    tempMediaInfoList.addAll(_recommendController.recommendVideos);
+    mediaInfos.addAll(tempMediaInfoList);
+    if (mediaInfos.isNotEmpty) {
+      refreshController.refreshCompleted(resetFooterState: true);
+      refreshController.loadNoData();
+    } else {
       refreshController.loadNoData();
     }
   }
