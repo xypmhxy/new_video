@@ -8,6 +8,7 @@ import 'package:free_tube_player/api/youtube_home_api.dart';
 import 'package:free_tube_player/base/base_controller.dart';
 import 'package:free_tube_player/bean/home/youtube_home_tab.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/helper/video_action_helper.dart';
 import 'package:free_tube_player/module/channel/api/channel_api.dart';
 import 'package:free_tube_player/module/player/controller/recommend_controller.dart';
@@ -99,9 +100,11 @@ class UserYoutubeChildController extends BaseController {
         return;
       }
       setEmpty();
+      FirebaseEvent.instance.logEvent('request_home_child_videos_empty');
     } else {
       isAllowRetry = true;
       setSuccess();
+      FirebaseEvent.instance.logEvent('request_home_child_videos_success');
     }
     refreshController.refreshCompleted(resetFooterState: true);
     if (youtubeHomeTab.continuation.isEmpty) {

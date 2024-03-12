@@ -45,10 +45,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate
       ],
       supportedLocales: S.delegate.supportedLocales,
-      fallbackLocale: const Locale("en", "us"),
-      localeResolutionCallback: (locale, list) {
-        return locale;
-      },
+      fallbackLocale: const Locale("en"),
       builder:FlutterSmartDialog.init(),
       home: const SplashPage(),
     );

@@ -29,7 +29,7 @@ class DialogRate extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
-        children: [const Height(8), _image(), const Height(8), _title(), const Height(12), _rate(), const Height(16)],
+        children: [const Height(8), _image(), const Height(8), _title(), const Height(12), _rate(), const Height(20)],
       ),
     );
   }
@@ -60,18 +60,20 @@ class DialogRate extends StatelessWidget {
   }
 
   Widget _rate() {
-    return RatingBar.builder(
-      initialRating: 5,
-      minRating: 1,
-      itemSize: 30,
-      direction: Axis.horizontal,
-      allowHalfRating: false,
-      itemCount: 5,
-      itemPadding: const EdgeInsets.symmetric(horizontal: 4),
-      itemBuilder: (context, _) => const SVGView(assetName: Assets.svgLikeSelect, color: ColorRes.themeColor),
-      onRatingUpdate: (rating) {
-        onRatingUpdate?.call(rating);
-      },
-    );
+    return RatingBar(
+        initialRating: 1,
+        glowColor: Colors.transparent,
+        minRating: 1,
+        maxRating: 5,
+        allowHalfRating: false,
+        ratingWidget: RatingWidget(
+            full: const SVGView(assetName: Assets.svgLikeSelect, color: ColorRes.themeColor),
+            half: const SVGView(assetName: Assets.svgLikeSelect, color: ColorRes.themeColor),
+            empty: const SVGView(
+              assetName: Assets.svgLikeNormal,
+            )),
+        onRatingUpdate: (rating) {
+          onRatingUpdate?.call(rating);
+        });
   }
 }

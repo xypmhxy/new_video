@@ -30,10 +30,12 @@ class UserYoutubeHomeController extends BaseController {
         await Future.delayed(const Duration(seconds: 2));
         isAllowRetry = false;
         LogUtils.i('获取首页tab出错了准备重试');
+        setEmpty();
         requestTabs();
         return;
       }
       setEmpty();
+      FirebaseEvent.instance.logEvent('request_tabs_empty');
     } else {
       final lastRecommendYoutubeId = getRecommendTabYoutubeId() ?? '';
       final historyMediaList = await _mediaInfoDao.queryAllPlayHistory(limit: 20);
@@ -46,6 +48,8 @@ class UserYoutubeHomeController extends BaseController {
       }
       isAllowRetry = true;
       setSuccess();
+      final allTabLength = youtubeHomeTabs.first.mediaInfos?.length ?? 0;
+      FirebaseEvent.instance.logEvent('request_tabs_success', params: {'value': '$allTabLength'});
     }
   }
 

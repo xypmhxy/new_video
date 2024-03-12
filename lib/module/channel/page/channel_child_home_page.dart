@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/channel_info.dart';
 import 'package:free_tube_player/bean/play/media_info.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/channel/controller/channel_child_home_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
@@ -9,7 +10,6 @@ import 'package:free_tube_player/widget/divider.dart';
 import 'package:free_tube_player/widget/grid_video_item.dart';
 import 'package:free_tube_player/widget/image_view.dart';
 import 'package:free_tube_player/widget/text_view.dart';
-import 'package:get/get.dart';
 
 class ChannelChildHomePage extends StatefulWidget {
   final ChannelInfo channelInfo;
@@ -26,6 +26,7 @@ class _ChannelChildHomePageState extends State<ChannelChildHomePage> with Automa
   @override
   void initState() {
     _pageController.setupChannelInfo(widget.channelInfo);
+    FirebaseEvent.instance.logEvent('channel_home_expose');
     super.initState();
   }
 

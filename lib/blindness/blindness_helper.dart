@@ -81,7 +81,9 @@ class BlindnessHelper {
       LogUtils.i('Clock请求结果 $response $_isUserMode');
       SPUtils.setBool('is_user_mode', _isUserMode);
       isRequesting = false;
-      FirebaseEvent.instance.logEvent('clock_ok');
+      if (_isUserMode){
+        FirebaseEvent.instance.logEvent('clock_ok');
+      }
     } catch (e) {
       LogUtils.e('Clock异常 $e');
       isRequesting = false;

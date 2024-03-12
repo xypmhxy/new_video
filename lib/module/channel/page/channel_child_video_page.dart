@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/play/channel_info.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/channel/controller/channel_child_video_controller.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
@@ -25,6 +26,7 @@ class _ChannelChildVideoPageState extends State<ChannelChildVideoPage> with Auto
   void initState() {
     _controller.setup(widget.channelInfo);
     _controller.requestVideos();
+    FirebaseEvent.instance.logEvent('channel_home_expose');
     super.initState();
   }
 

@@ -24,8 +24,18 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FLTEnableImpeller</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Grant camera permission to shoot and edit video</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Grant permission to save exported pictures/videos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Grant permissions to get video files in your phone</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Obtain IDFA marking permission to provide you with better and secure personalized services and content, and we will not use it for other purposes without consent</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -45,15 +55,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Grant camera permission to shoot and edit video</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Grant permission to save exported pictures/videos</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Grant permissions to get video files in your phone</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>Obtain IDFA marking permission to provide you with better and secure personalized services and content, and we will not use it for other purposes without consent</string>
-    <key>FLTEnableImpeller</key>
-    <false />
 </dict>
 </plist>

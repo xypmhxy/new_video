@@ -8,8 +8,8 @@ class FirebaseEvent {
   FirebaseEvent._();
 
   Future<void> logEvent(String event, {Map<String, dynamic>? params}) async {
+    LogUtils.i('事件上报 $event - $params');
     if (isDebug) return;
     await FirebaseAnalytics.instance.logEvent(name: event, parameters: params);
-    LogUtils.i('事件上报 $event - $params');
   }
 }

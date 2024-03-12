@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:free_tube_player/app/common/common.dart';
 import 'package:free_tube_player/bean/home/youtube_home_tab.dart';
+import 'package:free_tube_player/firebase/firebase_event.dart';
 import 'package:free_tube_player/generated/l10n.dart';
 import 'package:free_tube_player/module/player/controller/user_player_controller.dart';
 import 'package:free_tube_player/module/userHome/controller/user_youtube_child_controller.dart';
@@ -40,6 +41,7 @@ class _UserYoutubeChildPageState extends State<UserYoutubeChildPage> with Automa
         youtubeController.requestRefresh();
       });
     }
+    FirebaseEvent.instance.logEvent('youtube_child_tab_expose',params: {'value':widget.youtubeHomeTab.text});
     super.initState();
   }
 

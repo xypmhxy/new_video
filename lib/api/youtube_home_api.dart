@@ -48,6 +48,7 @@ class YoutubeHomeApi extends BaseDio {
         'value': {e.toString()}
       });
     }
+    FirebaseEvent.instance.logEvent('request_tabs_empty');
     return [];
   }
 
